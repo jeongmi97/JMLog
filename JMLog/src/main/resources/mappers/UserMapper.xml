@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.dao.UserDAO">
+	
+	<select id="pwChk" parameterType="com.spring.vo.UserVO" resultType="com.spring.vo.UserVO">
+		select * from user where email=#{email}
+	</select>
+	
+	<insert id="join" parameterType="com.spring.vo.UserVO">
+		insert into user(email, pw, nickname) values(#{email}, #{pw}, #{nickname})
+	</insert>
+	
+	<select id="emailCheck" parameterType="String" resultType="int">
+		select count(email) from user where email=#{email}
+	</select>
+	
+	<select id="getUser" parameterType="String" resultType="com.spring.vo.UserVO">
+		select * from user where nickname=#{nickname}
+	</select>
+</mapper>

@@ -1,15 +1,29 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page session="false" %>
+<c:set var="cpath" value="${pageContext.request.contextPath }" />
 <html>
 <head>
-	<title>Home</title>
+	<title>JMLog</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
+	
+<header>
+	JMLog 
+	<P><a href="${cpath }/login">로그인하러가기</a></P>
+</header>
+<nav>
+	
+</nav>
+<section>
+	
+</section>
+<aside>
+	
+</aside>
+<footer>
+	
+</footer>
 
-<P>  The time on the server is ${serverTime}. </P>
 </body>
 </html>
