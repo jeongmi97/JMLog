@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="cpath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>${user.nickname }</title>
 
 <style>
 	header#header { width:1700px; margin:0 auto; background: #fdd; }
-	div#wrap { width:1200px; margin:0 auto; background:#ddd; }
+	div#wrap { width:1200px; margin:0 auto; text-align: center; background:#ddd; }
 	nav#nav { background: #dfd; }
 	section#container { background: #ddf; }
 		div.content { background: #eee; }
@@ -20,7 +21,11 @@
     section#container, div.content, aside#aside,
     footer#footer { padding:10px; }
     
-    nav#nav ul { margin:0; padding:0; list-style:none; }
+    div.headerLeft { width:50%; float: lefft; }
+    div.headerRight { width:50%; float: right; }
+    div.profile	{ float: right; }
+    
+    nav#nav ul { margin:0; padding:0; list-style:none; display: inline-block; }
     nav#nav ul li { background:#eee; padding:10px; display:inline-block; }
     
     div.content { width: 850px; float:right; }
@@ -39,30 +44,47 @@
     	aside#aside { width:calc(100% - 20px); float:none; }
 	}
     
+    a { text-decoration: none }
+    
 </style>
 </head>
 <body>
 
+<script type="text/javascript">
+
+</script>
+
 <header id="header">
-	<c:out value="${user.nickname }"/>.Log
+	<div>
+		<div class="headerLeft">
+			<a href="${cpath }/${user.nickname}">${user.nickname }.Log</a>
+		</div>
+		<div class="headerRight">
+			<a href="">검색</a>
+			<button type="button" onclick="location.href='${cpath}/write'">새글쓰기</button>
+			<div class="profile">프로필</div>
+		</div>
+	</div>
 </header>
+
 <div id="wrap">
 
 <nav id="nav">
 	<ul>
-		<li>글</li>
-		<li>방명록</li>
-		<li>소개</li>
+		<li><a href="${cpath }/${user.nickname}">글</a></li>
+		<li><a href="${cpath }/${user.nickname}/guestbook">방명록</a></li>
+		<li><a href="${cpath }/${user.nickname}/about">소개</a></li>
 	</ul>
 </nav>
 
 <section id="container">
-	<div class="content">
-		본문
-	</div>
 	<aside id="aside">
-		전체보기
+		전체보기()
 	</aside>
+	
+	<div class="content">
+		글 목록
+	</div>
 </section>
 
 <footer id="footer">

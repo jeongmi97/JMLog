@@ -4,7 +4,7 @@ import com.spring.vo.UserVO;
 
 public interface UserDAO {
 	
-	UserVO pwChk(UserVO vo);
+	UserVO pwChk(String email);
 
 	int join(UserVO vo);
 

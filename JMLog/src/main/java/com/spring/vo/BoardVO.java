@@ -11,6 +11,7 @@ public class BoardVO {
 	private int hit;
 	private String email;
 	private int lock_post;
+	private String cate;
 	
 	public int getIdx() {
 		return idx;
@@ -53,6 +54,12 @@ public class BoardVO {
 	}
 	public void setLock_post(int lock_post) {
 		this.lock_post = lock_post;
+	}
+	public String getCate() {
+		return cate;
+	}
+	public void setCate(String cate) {
+		this.cate = cate;
 	}
 	
 	
