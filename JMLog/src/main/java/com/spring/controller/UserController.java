@@ -44,12 +44,12 @@ public class UserController {
 	@GetMapping("emailCheck")
 	public @ResponseBody int emailCheck(@RequestParam("email")String email) {
 		int chk = us.emailCheck(email);
-		System.out.println("이메일 중복확인===" + email);
 		return chk;
 	}
 	
-	@RequestMapping(value="{nickname}", method = RequestMethod.GET)
-	public ModelAndView board(@PathVariable("nickname") String nickname) {
-		return us.getUsBoard(nickname);
+	@GetMapping("{email:.+}")
+	public ModelAndView board(@PathVariable("email")String email) {
+		return us.userBoard(email);
 	}
+	
 }

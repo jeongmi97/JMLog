@@ -44,7 +44,7 @@
     	aside#aside { width:calc(100% - 20px); float:none; }
 	}
     
-    a { text-decoration: none }
+    a { text-decoration: none; color: #000000; }
     
 </style>
 </head>
@@ -57,7 +57,7 @@
 <header id="header">
 	<div>
 		<div class="headerLeft">
-			<a href="${cpath }/${user.nickname}">${user.nickname }.Log</a>
+			<a href="${cpath }/${user.email}">${user.nickname }.Log</a>
 		</div>
 		<div class="headerRight">
 			<a href="">검색</a>
@@ -79,11 +79,14 @@
 
 <section id="container">
 	<aside id="aside">
-		전체보기()
+		전체보기(${listAll })
 	</aside>
 	
 	<div class="content">
 		글 목록
+		<c:forEach items="${uBList}" var="uBList">
+			<div><c:out value="${uBList.title } " /></div>
+		</c:forEach>
 	</div>
 </section>
 

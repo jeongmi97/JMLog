@@ -15,7 +15,7 @@ public class UserBoardService {
 	@Autowired UserBoardDAO dao;
 	
 	public ModelAndView write(BoardVO vo, UserVO login, RedirectAttributes ra) {
-		ModelAndView mav = new ModelAndView("redirect:/"+login.getEmail()+"/"+vo.getTitle());
+		ModelAndView mav = new ModelAndView("redirect:/"+login.getEmail());
 		
 		vo.setEmail(login.getEmail());
 		dao.write(vo);

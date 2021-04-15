@@ -1,16 +1,21 @@
 package com.spring.dao;
 
+import java.util.List;
+
+import com.spring.vo.BoardVO;
 import com.spring.vo.UserVO;
 
 public interface UserDAO {
 	
-	UserVO pwChk(String email);
+	UserVO userChk(String email);
 
 	int join(UserVO vo);
 
 	int emailCheck(String email);
 
-	UserVO getUser(String nickname);
+	List<BoardVO> userBoardList(String email);
 
-	
+	int listAll(String email);
+
+
 }

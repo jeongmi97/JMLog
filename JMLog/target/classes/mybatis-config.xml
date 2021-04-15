@@ -4,8 +4,11 @@
 
 <configuration> 
 
-	<!-- <typeAliases>
-		<typeAlias alias="" type=""/>
-	</typeAliases> -->
+	<typeAliases>
+		<typeAlias alias="UserVO" type="com.spring.vo.UserVO"/>
+		<typeAlias alias="BoardVO" type="com.spring.vo.BoardVO"/>
+		<typeAlias alias="CategoryVO" type="com.spring.vo.CategoryVO"/>
+		<typeAlias alias="ReplyVO" type="com.spring.vo.ReplyVO"/>
+	</typeAliases>
 
 </configuration>

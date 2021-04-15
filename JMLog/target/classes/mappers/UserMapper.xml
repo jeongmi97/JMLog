@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.dao.UserDAO">
 	
-	<select id="pwChk" parameterType="String" resultType="com.spring.vo.UserVO">
+	<select id="userChk" parameterType="String" resultType="UserVO">
 		select * from user where email=#{email}
 	</select>
 	
-	<insert id="join" parameterType="com.spring.vo.UserVO">
+	<insert id="join" parameterType="UserVO">
 		insert into user(email, pw, nickname) values(#{email}, #{pw}, #{nickname})
 	</insert>
 	
@@ -14,7 +14,14 @@
 		select count(email) from user where email=#{email}
 	</select>
 	
-	<select id="getUser" parameterType="String" resultType="com.spring.vo.UserVO">
-		select * from user where nickname=#{nickname}
+	<select id="userBoardList" parameterType="String" resultType="BoardVO">
+		select *
+		from board
+		where email=#{email}
+		order by idx
+	</select>
+	
+	<select id="listAll" parameterType="String" resultType="int">
+		select count(idx) from board where email=#{email}
 	</select>
 </mapper>

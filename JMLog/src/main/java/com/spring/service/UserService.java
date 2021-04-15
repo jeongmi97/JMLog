@@ -1,5 +1,7 @@
 package com.spring.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.dao.UserDAO;
+import com.spring.vo.BoardVO;
 import com.spring.vo.UserVO;
 
 @Service
@@ -29,30 +32,34 @@ public class UserService {
 		ModelAndView mav = new ModelAndView();
 		
 		session.getAttribute("login");	// login 새션 생성
-		UserVO login = dao.pwChk(vo.getEmail());	// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
-		boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
+		UserVO login = dao.userChk(vo.getEmail());	// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
+		System.out.println("로그인 유저 : " + login);
 		
-		if(login != null & pwChk == true) {	// login객체에 유저 정보가 있고, 비밀번호 체크가 true일 경우
-			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
-			mav.setViewName("redirect:/"+login.getNickname());	// 유저 블로그로 이동
+		if(login != null) {	// login객체에 유저 정보가 있을 때
+			boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
+			if(pwChk == true) {	// 비밀번호 일치 시 로그인 실행
+				session.setAttribute("login", login);	// login새션에 유저 정보 넣기
+				mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
+			}
 		}else {
-			mav.setViewName("redirect:/");	// 로그인 페이지로 리다이렉트
+			System.out.println("로그인 실패");
+			mav.setViewName("redirect:/login");	// 로그인 페이지로 리다이렉트
 		}
+		
 		return mav;
 	}
 	
 	// 회원가입 기능
 	public ModelAndView join(UserVO vo) {
-		ModelAndView mav = new ModelAndView("redirect:/login");
+		ModelAndView mav = new ModelAndView("redirect:/login");	// 회원가입 성공 시 로그인 페이지로 이동
 		
-		String enPw = pwEncoder.encode(vo.getPw());
-		vo.setPw(enPw);
+		String enPw = pwEncoder.encode(vo.getPw());	// 입력받은 비밀번호 암호화
+		vo.setPw(enPw);	// 암호화 한 비밀번호 유저객체의 비밀번호에 셋팅
 		
-		if(dao.join(vo) != 1) {
+		if(dao.join(vo) != 1) {	// 유저정보 insert 실패 시
 			System.out.println("회원가입 실패");
-			mav.setViewName("redirect:/");
+			mav.setViewName("redirect:/join");	// 회원가입 페이지로 다시 이동
 		}
-
 		return mav;
 	}
 	
@@ -62,14 +69,21 @@ public class UserService {
 		return chk;
 	}
 	
-	// 유저 블로그 가져오기
-	public ModelAndView getUsBoard(String nickname) {
+	// 유저 블로그로 이동
+	public ModelAndView userBoard(String email) {
 		ModelAndView mav = new ModelAndView("userBoard");
-		UserVO user = dao.getUser(nickname);
-		mav.addObject("user",user);
+	
+		System.out.println("넘어온 이메일 : " + email);
+		
+		UserVO user = dao.userChk(email);
+		List<BoardVO> uBList = dao.userBoardList(email);
+		int listAll = dao.listAll(email);
+		
+		mav.addObject("user", user);
+		mav.addObject("uBoard",uBList);
+		mav.addObject("listAll", listAll);
+		
 		return mav;
 	}
-
 	
-
 }
