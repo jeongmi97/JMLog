@@ -47,9 +47,6 @@ public class UserController {
 		return chk;
 	}
 	
-	@GetMapping("{email:.+}")
-	public ModelAndView board(@PathVariable("email")String email) {
-		return us.userBoard(email);
-	}
+	
 	
 }

@@ -14,14 +14,5 @@
 		select count(email) from user where email=#{email}
 	</select>
 	
-	<select id="userBoardList" parameterType="String" resultType="BoardVO">
-		select *
-		from board
-		where email=#{email}
-		order by idx
-	</select>
 	
-	<select id="listAll" parameterType="String" resultType="int">
-		select count(idx) from board where email=#{email}
-	</select>
 </mapper>

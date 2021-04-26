@@ -2,6 +2,7 @@ package com.spring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,11 @@ import com.spring.vo.UserVO;
 public class UserBoardController {
 	
 	@Autowired UserBoardService ubs;
+	
+	@GetMapping("{email:.+}")
+	public ModelAndView board(@PathVariable("email")String email) {
+		return ubs.userBoard(email);
+	}
 	
 	@RequestMapping("write")
 	public void write() {

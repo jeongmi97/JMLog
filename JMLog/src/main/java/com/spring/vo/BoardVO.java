@@ -1,6 +1,6 @@
 package com.spring.vo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class BoardVO {
 	
@@ -8,10 +8,10 @@ public class BoardVO {
 	private String title;
 	private String content;
 	private Date reporting_date;
-	private int hit;
-	private String email;
-	private int lock_post;
-	private String cate;
+	private int hit;		// 조회수
+	private String email;	// 작성자 이메일
+	private int lock_post;	// 비밀글 설정
+	private String cate;	// 카테고리
 	
 	public int getIdx() {
 		return idx;
@@ -62,5 +62,9 @@ public class BoardVO {
 		this.cate = cate;
 	}
 	
+	@Override
+	public String toString() {
+		return "유저보드 date : " + getReporting_date() + ", title : " + getTitle();
+	}
 	
 }

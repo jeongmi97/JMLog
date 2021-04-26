@@ -69,21 +69,6 @@ public class UserService {
 		return chk;
 	}
 	
-	// 유저 블로그로 이동
-	public ModelAndView userBoard(String email) {
-		ModelAndView mav = new ModelAndView("userBoard");
 	
-		System.out.println("넘어온 이메일 : " + email);
-		
-		UserVO user = dao.userChk(email);
-		List<BoardVO> uBList = dao.userBoardList(email);
-		int listAll = dao.listAll(email);
-		
-		mav.addObject("user", user);
-		mav.addObject("uBoard",uBList);
-		mav.addObject("listAll", listAll);
-		
-		return mav;
-	}
 	
 }

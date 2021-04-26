@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="cpath" value="${pageContext.request.contextPath }" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,13 +81,15 @@
 
 <section id="container">
 	<aside id="aside">
-		전체보기(${listAll })
+		전체보기(${fn:length(uBoard) })
 	</aside>
 	
 	<div class="content">
-		글 목록
-		<c:forEach items="${uBList}" var="uBList">
-			<div><c:out value="${uBList.title } " /></div>
+		글 목록<br><br>
+		<c:forEach items="${uBoard}" var="uBoard"> 
+			<div><a href=""><c:out value="${uBoard.title } " /></a></div>
+			<div><c:out value="${uBoard.content } " /></div>
+			<div><c:out value="${uBoard.reporting_date }" /></div><br>
 		</c:forEach>
 	</div>
 </section>

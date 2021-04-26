@@ -2,11 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
-	<insert id="write" parameterType="com.spring.vo.BoardVO">
+	<insert id="write" parameterType="BoardVO">
 		insert into board(title, content, email) values(#{title}, #{content}, #{email})
 	</insert>
 	
-	<select id="getPost" parameterType="int" resultType="com.spring.vo.BoardVO">
+	<select id="getPost" parameterType="int" resultType="BoardVO">
 		select * from board where idx=#{postid}
 	</select>
+	
+	<select id="userBoardList" parameterType="String" resultType="BoardVO">
+		select title, content, reporting_date, hit, email, lock_post, cate
+		from board
+		where email=#{email}
+		order by idx desc
+	</select>
+	
 </mapper>
