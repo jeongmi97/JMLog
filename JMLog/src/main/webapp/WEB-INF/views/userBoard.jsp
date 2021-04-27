@@ -64,7 +64,7 @@
 		<div class="headerRight">
 			<a href="">검색</a>
 			<button type="button" onclick="location.href='${cpath}/write'">새글쓰기</button>
-			<div class="profile">프로필</div>
+			<div class="setting"><a href="${cpath }/${user.email}/${setting}">설정</a></div>
 		</div>
 	</div>
 </header>
@@ -73,21 +73,21 @@
 
 <nav id="nav">
 	<ul>
-		<li><a href="${cpath }/${user.nickname}">글</a></li>
-		<li><a href="${cpath }/${user.nickname}/guestbook">방명록</a></li>
-		<li><a href="${cpath }/${user.nickname}/about">소개</a></li>
+		<li><a href="${cpath }/${user.email}">글</a></li>
+		<li><a href="${cpath }/${user.email}/guestbook">방명록</a></li>
+		<li><a href="${cpath }/${user.email}/about">소개</a></li>
 	</ul>
 </nav>
 
 <section id="container">
 	<aside id="aside">
-		전체보기(${fn:length(uBoard) })
+		<a href="${cpath }/${user.email}">전체보기(${fn:length(uBoard) })</a>
 	</aside>
 	
 	<div class="content">
 		글 목록<br><br>
 		<c:forEach items="${uBoard}" var="uBoard"> 
-			<div><a href=""><c:out value="${uBoard.title } " /></a></div>
+			<div><a href="${cpath }/${user.email}/${uBoard.title }"><c:out value="${uBoard.title } " /></a></div>
 			<div><c:out value="${uBoard.content } " /></div>
 			<div><c:out value="${uBoard.reporting_date }" /></div><br>
 		</c:forEach>

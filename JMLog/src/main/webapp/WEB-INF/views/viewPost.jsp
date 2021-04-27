@@ -7,7 +7,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-	포스트화면
-	${post.title }
+	포스트화면<br>
+	${post.title }<br>
+	${post.content }<br>
+	<div>
+		<div><span>${post.email }</span><span> | </span><span>${post.reporting_date }</span><span> |</span></div>
+		<div><span><a href="">수정</a></span> | <span><a href="">삭제</a></span></div>
+	</div>
 </body>
 </html>

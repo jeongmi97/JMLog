@@ -3,12 +3,9 @@
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
 	<insert id="write" parameterType="BoardVO">
-		insert into board(title, content, email) values(#{title}, #{content}, #{email})
+		insert into board(title, content, email) 
+		values(#{title}, #{content}, #{email})
 	</insert>
-	
-	<select id="getPost" parameterType="int" resultType="BoardVO">
-		select * from board where idx=#{postid}
-	</select>
 	
 	<select id="userBoardList" parameterType="String" resultType="BoardVO">
 		select title, content, reporting_date, hit, email, lock_post, cate
@@ -17,4 +14,9 @@
 		order by idx desc
 	</select>
 	
+	<select id="getPost" parameterType="HashMap" resultType="BoardVO">
+		select * 
+		from board 
+		where email=#{email} and title=#{title}
+	</select>
 </mapper>
