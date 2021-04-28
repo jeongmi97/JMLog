@@ -64,7 +64,7 @@
 		<div class="headerRight">
 			<a href="">검색</a>
 			<button type="button" onclick="location.href='${cpath}/write'">새글쓰기</button>
-			<div class="setting"><a href="${cpath }/${user.email}/${setting}">설정</a></div>
+			<div class="setting"><a href="${cpath }/${user.email}/setting">설정</a></div>
 		</div>
 	</div>
 </header>
@@ -87,7 +87,7 @@
 	<div class="content">
 		글 목록<br><br>
 		<c:forEach items="${uBoard}" var="uBoard"> 
-			<div><a href="${cpath }/${user.email}/${uBoard.title }"><c:out value="${uBoard.title } " /></a></div>
+			<div><a href="${cpath }/${user.email}/${uBoard.idx }"><c:out value="${uBoard.title } " /></a></div>
 			<div><c:out value="${uBoard.content } " /></div>
 			<div><c:out value="${uBoard.reporting_date }" /></div><br>
 		</c:forEach>

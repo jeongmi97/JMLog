@@ -30,14 +30,14 @@ public class UserBoardController {
 	
 	// 글쓰기 페이지 이동
 	@RequestMapping("write")
-	public void write() {
+	public void write(@ModelAttribute("post")BoardVO vo) {
 		System.out.println("write 페이지 이동");
 	}
 	
 	// 글쓰기 실행
 	@PostMapping("write")
-	public ModelAndView write(BoardVO vo, @ModelAttribute("login") UserVO login,RedirectAttributes ra) {
-		return ubs.write(vo, login, ra);
+	public ModelAndView write(BoardVO vo, @ModelAttribute("login") UserVO login,RedirectAttributes ra, @RequestParam("mode")String mode) {
+		return ubs.write(vo, login, ra, mode);
 	}
 	
 	// 방명록
@@ -50,10 +50,9 @@ public class UserBoardController {
 	}
 	
 	// 게시글 이동
-	@GetMapping("{email:.+}/{title}")
-	public ModelAndView viewPost(@PathVariable("email")String email, @PathVariable("title")String title) {
-		System.out.println("게시글 이동 email : " + email + ", title : " + title);
-		return ubs.viewPost(email, title);
+	@GetMapping("{email:.+}/{idx}")
+	public ModelAndView viewPost(@PathVariable("idx")int idx) {
+		return ubs.viewPost(idx);
 	}
 	
 	// 소개
@@ -62,8 +61,15 @@ public class UserBoardController {
 		return ubs.about(email);
 	}
 	
-	@GetMapping("{email:.+}/setting")
-	public ModelAndView setting(@PathVariable("email")String email) {
-		return ubs.setting(email);
+	// 게시글 수정 선택 시
+	@GetMapping("editPost")
+	public ModelAndView editPost(@RequestParam("idx")int idx,@RequestParam("mode")String mode) {
+		return ubs.editPost(idx, mode);
 	}
+	
+	@GetMapping("delPost/{idx}")
+	public ModelAndView delPost(@PathVariable("idx")int idx,@ModelAttribute("login") UserVO login) {
+		return ubs.delPost(idx, login);
+	}
+	
 }

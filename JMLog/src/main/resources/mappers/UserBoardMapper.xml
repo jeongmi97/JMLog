@@ -8,15 +8,33 @@
 	</insert>
 	
 	<select id="userBoardList" parameterType="String" resultType="BoardVO">
-		select title, content, reporting_date, hit, email, lock_post, cate
+		select *
 		from board
 		where email=#{email}
 		order by idx desc
 	</select>
 	
-	<select id="getPost" parameterType="HashMap" resultType="BoardVO">
+	<select id="getPostnum" parameterType="String" resultType="int">
+		select idx
+		from board
+		where email=#{email}
+		order by idx desc limit 1
+	</select>
+	
+	<select id="getPost" parameterType="int" resultType="BoardVO">
 		select * 
 		from board 
-		where email=#{email} and title=#{title}
+		where idx=#{idx}
 	</select>
+	
+	<update id="updatePost" parameterType="BoardVO">
+		update board
+		set title=#{title}, content=#{content}
+		where idx=#{idx}
+	</update>
+	
+	<delete id="delPost" parameterType="int">
+		delete from board
+		where idx=#{idx}
+	</delete>
 </mapper>

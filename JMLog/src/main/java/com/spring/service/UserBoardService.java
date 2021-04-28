@@ -1,9 +1,5 @@
 package com.spring.service;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,30 +29,30 @@ public class UserBoardService {
 		}
 	
 	// 글 쓰기
-	public ModelAndView write(BoardVO vo, UserVO login, RedirectAttributes ra) {
+	public ModelAndView write(BoardVO vo, UserVO login, RedirectAttributes ra, String mode) {
 		ModelAndView mav = new ModelAndView();
 		
-		vo.setEmail(login.getEmail());
-		dao.write(vo);
+		int postNum = 0;
 		
-		HashMap<String, String> param = new HashMap<String, String>();
-		param.put("email", vo.getEmail());
-		param.put("title", vo.getTitle());
-		vo = dao.getPost(param);
+		if(mode.equals("edit")) {
+			dao.updatePost(vo);
+			postNum = vo.getIdx();
+		}else {
+			vo.setEmail(login.getEmail());	// 입력폼에서 이메일 받게 수정하기~~~~~~~
+			dao.write(vo);
+			postNum = dao.getPostnum(login.getEmail());
+		}
 		
-		mav.setViewName("redirect:/"+login.getEmail()+"/"+vo.getTitle());
+		mav.setViewName("redirect:/"+vo.getEmail()+"/"+postNum);
 		
 		return mav;
 	}
 
 	// 게시글 이동
-	public ModelAndView viewPost(String email, String title) {
+	public ModelAndView viewPost(int idx) {
 		ModelAndView mav = new ModelAndView("viewPost");
 		
-		HashMap<String, String> param = new HashMap<String, String>();
-		param.put("email", email);
-		param.put("title", title);
-		BoardVO post = dao.getPost(param);
+		BoardVO post = dao.getPost(idx);
 		
 		mav.addObject("post",post);
 		
@@ -70,9 +66,22 @@ public class UserBoardService {
 		return mav;
 	}
 
-	// 수정
-	public ModelAndView setting(String email) {
-		ModelAndView mav = new ModelAndView("setting");
+	// 게시글 수정
+	public ModelAndView editPost(int idx, String mode) {
+		ModelAndView mav = new ModelAndView("write");
+		
+		BoardVO post = dao.getPost(idx);
+		mav.addObject("post",post);
+		mav.addObject("mode", mode);
+		
+		return mav;
+	}
+
+	// 게시글 삭제
+	public ModelAndView delPost(int idx, UserVO login) {
+		ModelAndView mav = new ModelAndView("redirect:/"+login.getEmail());
+		
+		dao.delPost(idx);
 		
 		return mav;
 	}

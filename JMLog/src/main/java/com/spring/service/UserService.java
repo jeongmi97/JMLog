@@ -68,6 +68,14 @@ public class UserService {
 		int chk = dao.emailCheck(email);
 		return chk;
 	}
+
+	public ModelAndView setting(String email) {
+		ModelAndView mav = new ModelAndView("setting");
+		
+		
+		
+		return mav;
+	}
 	
 	
 	

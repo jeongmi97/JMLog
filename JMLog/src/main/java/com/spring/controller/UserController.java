@@ -47,6 +47,9 @@ public class UserController {
 		return chk;
 	}
 	
-	
+	@GetMapping("{email:.+}/setting")
+	public ModelAndView setting(@PathVariable("email")String email) {
+		return us.setting(email);
+	}
 	
 }
