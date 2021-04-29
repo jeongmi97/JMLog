@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.dao.UserBoardDAO;
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
+import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
 
 @Service
@@ -52,9 +53,8 @@ public class UserBoardService {
 	public ModelAndView viewPost(int idx) {
 		ModelAndView mav = new ModelAndView("viewPost");
 		
-		BoardVO post = dao.getPost(idx);
-		
-		mav.addObject("post",post);
+		mav.addObject("post",dao.getPost(idx));
+		mav.addObject("reply",dao.getReply(idx));
 		
 		return mav;
 	}
@@ -84,6 +84,12 @@ public class UserBoardService {
 		dao.delPost(idx);
 		
 		return mav;
+	}
+
+	// 댓글 작성
+	public int saveReply(ReplyVO reply) {
+		dao.saveReply(reply);
+		return 1;
 	}
 
 }

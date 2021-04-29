@@ -3,6 +3,7 @@ package com.spring.dao;
 import java.util.List;
 
 import com.spring.vo.BoardVO;
+import com.spring.vo.ReplyVO;
 
 public interface UserBoardDAO {
 
@@ -17,6 +18,10 @@ public interface UserBoardDAO {
 	void updatePost(BoardVO vo);	// 게시물 수정
 
 	void delPost(int idx);	// 게시글 삭제
+
+	List<ReplyVO> getReply(int post_num);	// 댓글리스트 가져오기
+
+	void saveReply(ReplyVO reply);	// 댓글 저장
 
 	
 	

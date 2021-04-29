@@ -6,9 +6,9 @@ public class ReplyVO {
 	
 	private int idx;
 	private int post_num;
-	private String email;
+	private String nickname;
 	private int lock_reply;
-	private String content;
+	private String comment;
 	private Date reply_date;
 	
 	public int getIdx() {
@@ -23,29 +23,29 @@ public class ReplyVO {
 	public void setPost_num(int post_num) {
 		this.post_num = post_num;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
 	public int getLock_reply() {
 		return lock_reply;
 	}
 	public void setLock_reply(int lock_reply) {
 		this.lock_reply = lock_reply;
 	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
 	public Date getReply_date() {
 		return reply_date;
 	}
 	public void setReply_date(Date reply_date) {
 		this.reply_date = reply_date;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 	

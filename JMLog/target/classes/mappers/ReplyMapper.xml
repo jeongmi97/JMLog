@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.dao.UserBoardDAO">
+	
+	<select id="getReply" parameterType="int" resultType="ReplyVO">
+		select *
+		from reply
+		where post_num=#{post_num}
+		order by idx
+	</select>
+	
+	<insert id="saveReply" parameterType="ReplyVO">
+		insert into reply (nickname, comment, post_num)
+		values (#{nickname}, #{comment}, #{post_num})
+	</insert>
+</mapper>

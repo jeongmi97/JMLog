@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.service.UserBoardService;
 import com.spring.vo.BoardVO;
+import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
 
 @Controller
@@ -67,9 +68,16 @@ public class UserBoardController {
 		return ubs.editPost(idx, mode);
 	}
 	
+	// 게시글 삭제
 	@GetMapping("delPost/{idx}")
 	public ModelAndView delPost(@PathVariable("idx")int idx,@ModelAttribute("login") UserVO login) {
 		return ubs.delPost(idx, login);
+	}
+	
+	@PostMapping("{email}/{idx}/saveReply")
+	public int saveReply(@RequestParam ReplyVO vo) {
+		System.out.println("들어옴");
+		return ubs.saveReply(vo);
 	}
 	
 }
