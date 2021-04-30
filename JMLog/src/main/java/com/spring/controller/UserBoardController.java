@@ -74,10 +74,6 @@ public class UserBoardController {
 		return ubs.delPost(idx, login);
 	}
 	
-	@PostMapping("{email}/{idx}/saveReply")
-	public int saveReply(@RequestParam ReplyVO vo) {
-		System.out.println("들어옴");
-		return ubs.saveReply(vo);
-	}
+	
 	
 }

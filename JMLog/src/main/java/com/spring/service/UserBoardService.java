@@ -81,15 +81,31 @@ public class UserBoardService {
 	public ModelAndView delPost(int idx, UserVO login) {
 		ModelAndView mav = new ModelAndView("redirect:/"+login.getEmail());
 		
-		dao.delPost(idx);
+		dao.delPostReply(idx);
+		dao.delPost(idx);	// 외래키 on delete 해결하기
 		
 		return mav;
 	}
 
 	// 댓글 작성
-	public int saveReply(ReplyVO reply) {
+	public void saveReply(ReplyVO reply) {
 		dao.saveReply(reply);
-		return 1;
+	}
+
+	// 댓글 삭제
+	public void delReply(int idx) {
+		dao.delReply(idx);
+	}
+	
+	// 댓글 인덱스 가져오기
+	public int getReplyIdx(String nickname) {
+		return dao.getReplyIdx(nickname);
+	}
+
+	// 댓글 수정
+	public void updateReply(ReplyVO reply) {
+		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
+		dao.updateReply(reply);
 	}
 
 }

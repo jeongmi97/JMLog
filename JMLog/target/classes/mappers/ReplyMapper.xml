@@ -13,4 +13,28 @@
 		insert into reply (nickname, comment, post_num)
 		values (#{nickname}, #{comment}, #{post_num})
 	</insert>
+	
+	<delete id="delPostReply" parameterType="int">
+		delete from reply
+		where post_num=#{idx}
+	</delete>
+	
+	<delete id="delReply" parameterType="int">
+		delete from reply
+		where idx=#{idx}
+	</delete>
+	
+	<select id="getReplyIdx" parameterType="String" resultType="int">
+		select idx
+		from reply
+		where nickname=#{nickname}
+		order by idx desc limit 1
+	</select>
+	
+	<update id="updateReply" parameterType="ReplyVO">
+		update reply
+		set	comment=#{comment}
+		where idx=#{idx}
+		
+	</update>
 </mapper>

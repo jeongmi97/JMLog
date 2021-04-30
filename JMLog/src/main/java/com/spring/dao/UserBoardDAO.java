@@ -23,6 +23,14 @@ public interface UserBoardDAO {
 
 	void saveReply(ReplyVO reply);	// 댓글 저장
 
+	void delPostReply(int idx);	// 게시글삭제 시 댓글 삭제
+
+	void delReply(int idx);	// 댓글 삭제
+
+	int getReplyIdx(String nickname);	// 댓글 번호 가져오기
+
+	void updateReply(ReplyVO reply);	// 댓글 수정
+
 	
 	
 }
