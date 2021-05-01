@@ -1,5 +1,7 @@
 package com.spring.service;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -8,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.dao.UserBoardDAO;
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
+import com.spring.vo.Pagination;
 import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
 
@@ -18,14 +21,26 @@ public class UserBoardService {
 	@Autowired UserDAO udao;
 	
 	// 유저 블로그로 이동
-		public ModelAndView userBoard(String email) {
+		public ModelAndView userBoard(String email,int page, int range) {
 			ModelAndView mav = new ModelAndView("userBoard");
 		
 			System.out.println("넘어온 이메일 : " + email);
 			
-			mav.addObject("user", udao.userChk(email));
-			mav.addObject("uBoard",dao.userBoardList(email));
-			System.out.println(dao.userBoardList(email).get(0).toString());
+			int listCnt = dao.getBoardListCnt(email);	// 계정 전체 게시글 개수
+			System.out.println("listCnt: " + listCnt + "page&range : " + page + "&" + range);
+			
+			Pagination pagination = new Pagination();	// 페이징 정보 셋팅
+			pagination.pageinfo(page, range, listCnt);
+			System.out.println("pagination : " + pagination.getEndPage());
+			
+			HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개 가져오기 위해 param 설정
+			param.put("email", email);
+			param.put("startList", pagination.getStartList());
+			
+			mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
+			mav.addObject("uBoard",dao.userBoardList(param));	// 이메일, 10
+			mav.addObject("pagination",pagination);
+			
 			return mav;
 		}
 	

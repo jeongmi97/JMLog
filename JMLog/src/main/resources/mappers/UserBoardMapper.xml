@@ -7,11 +7,11 @@
 		values(#{title}, #{content}, #{email})
 	</insert>
 	
-	<select id="userBoardList" parameterType="String" resultType="BoardVO">
+	<select id="userBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
 		where email=#{email}
-		order by idx desc
+		order by idx desc limit #{startList},10
 	</select>
 	
 	<select id="getPostnum" parameterType="String" resultType="int">
@@ -37,4 +37,10 @@
 		delete from board
 		where idx=#{idx}
 	</delete>
+	
+	<select id="getBoardListCnt" parameterType="String" resultType="int">
+		select count(*) as listCnt
+		from board
+		where email=#{email}
+	</select>
 </mapper>

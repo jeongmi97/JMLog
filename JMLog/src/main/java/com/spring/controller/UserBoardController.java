@@ -25,8 +25,10 @@ public class UserBoardController {
 	
 	// 유저 보드 페이지
 	@GetMapping("{email:.+}")
-	public ModelAndView board(@PathVariable("email")String email) {
-		return ubs.userBoard(email);
+	public ModelAndView board(@PathVariable("email")String email
+			, @RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
+			, @RequestParam(required = false, defaultValue = "1") int range) {
+		return ubs.userBoard(email, page, range);
 	}
 	
 	// 글쓰기 페이지 이동

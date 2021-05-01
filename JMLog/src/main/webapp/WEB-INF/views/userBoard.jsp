@@ -50,10 +50,29 @@
     
 </style>
 </head>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
 <body>
 
 <script type="text/javascript">
-
+	// 이전 버튼 이벤트
+	function prev(page, range, rangeSize){
+		var page = ((range)-2 * rangeSize) + 1;	// 무조건 이전 페이지 범위의 가장 앞 페이지로 이동하기 위해 처리
+		var range = range - 1; 
+		
+		// email?page=page&range=range
+		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range;
+		
+		location.href = url;
+	}
+	
+	// 페이지 번호 클릭
+	function pagination(page, range, rangeSize){
+		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range;
+		
+		location.href = url;
+	}
 </script>
 
 <header id="header">
@@ -73,6 +92,7 @@
 
 <nav id="nav">
 	<ul>
+	<!-- user로 받을 필요 있는지 확인하기 -->
 		<li><a href="${cpath }/${user.email}">글</a></li>
 		<li><a href="${cpath }/${user.email}/guestbook">방명록</a></li>
 		<li><a href="${cpath }/${user.email}/about">소개</a></li>
@@ -91,7 +111,30 @@
 			<div><c:out value="${uBoard.content } " /></div>
 			<div><c:out value="${uBoard.reporting_date }" /></div><br>
 		</c:forEach>
+		<!-- 페이징 -->
+	<div id="paginationBox">
+	페이지 : <c:out value="${pagination.next}" />
+			<!-- 이전 버튼 -->
+			<c:if test="${pagination.prev}">
+				<span>
+					<button onclick="prev(${pagination.page},${pagination.range },${pagination.rangeSize })">Prev</button>
+				</span>
+			</c:if>
+			
+			<!-- 페이지 -->
+			<c:forEach begin="${pagination.startPage }" end="${pagination.endPage }" var="idx">
+					<a href="#" onclick="pagination(${idx}, ${pagination.range }, ${pagination.rangeSize })"> ${idx }</a>
+			</c:forEach>
+			
+			<!-- 다음 버튼 -->
+			<c:if test="${pagination.next }">
+				<span>
+					<button onclick="next(${pagination.range}, ${pagination.range }, ${pagination.rangeSize })">Next</button>
+				</span>
+			</c:if>
 	</div>
+	</div>
+	
 </section>
 
 <footer id="footer">

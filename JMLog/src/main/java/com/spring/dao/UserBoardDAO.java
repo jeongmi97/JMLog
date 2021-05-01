@@ -1,5 +1,6 @@
 package com.spring.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.spring.vo.BoardVO;
@@ -9,7 +10,7 @@ public interface UserBoardDAO {
 
 	void write(BoardVO vo);	// 글 작성
 	
-	List<BoardVO> userBoardList(String email);	// 유저 보드 리스트 가져오기
+	List<BoardVO> userBoardList(HashMap<String, Object> param);	// 유저 보드 리스트 가져오기
 
 	int getPostnum(String email);	// 작성한 글 번호 가져오기
 	
@@ -30,6 +31,8 @@ public interface UserBoardDAO {
 	int getReplyIdx(String nickname);	// 댓글 번호 가져오기
 
 	void updateReply(ReplyVO reply);	// 댓글 수정
+
+	int getBoardListCnt(String email);	// 총 게시글 개수 확인
 
 	
 	
