@@ -113,7 +113,6 @@
 		</c:forEach>
 		<!-- 페이징 -->
 	<div id="paginationBox">
-	페이지 : <c:out value="${pagination.next}" />
 			<!-- 이전 버튼 -->
 			<c:if test="${pagination.prev}">
 				<span>

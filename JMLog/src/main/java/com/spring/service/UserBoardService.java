@@ -29,9 +29,21 @@ public class UserBoardService {
 			int listCnt = dao.getBoardListCnt(email);	// 계정 전체 게시글 개수
 			System.out.println("listCnt: " + listCnt + "page&range : " + page + "&" + range);
 			
-			Pagination pagination = new Pagination();	// 페이징 정보 셋팅
-			pagination.pageinfo(page, range, listCnt);
-			System.out.println("pagination : " + pagination.getEndPage());
+			// 페이징 정보 셋팅
+			Pagination pagination = new Pagination();	
+			pagination.setPage(page); pagination.setRange(range); pagination.setListCnt(listCnt);
+			pagination.setPageCnt((int)Math.ceil((double)(listCnt)/(double)pagination.getListSize()));	// 총 개시물 개수/10(올림)
+			System.out.println("pagecnt : " + pagination.getPageCnt());
+			pagination.setStartPage((range-1) * pagination.getRangeSize() + 1);	// 시작 페이지
+			pagination.setStartList((page-1) * pagination.getListSize());
+			pagination.setEndPage(range * pagination.getRangeSize()); 			// 끝 페이지
+			pagination.setPrev(range == 1 ? false : true);
+			pagination.setNext(pagination.getEndPage() > pagination.getPageCnt() ? false : true);
+			System.out.println("endPage&pageCnt : " + pagination.getEndPage() + "," + pagination.getPageCnt());
+			if(pagination.getEndPage() > pagination.getPageCnt()) {
+				pagination.setEndPage(pagination.getPageCnt());
+				pagination.setNext(false);
+			}
 			
 			HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개 가져오기 위해 param 설정
 			param.put("email", email);
