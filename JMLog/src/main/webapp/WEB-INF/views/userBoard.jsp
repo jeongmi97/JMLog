@@ -83,7 +83,7 @@
 		<div class="headerRight">
 			<a href="">검색</a>
 			<button type="button" onclick="location.href='${cpath}/write'">새글쓰기</button>
-			<div class="setting"><a href="${cpath }/${user.email}/setting">설정</a></div>
+			<div class="setting"><a href="${cpath }/setting">설정</a></div>
 		</div>
 	</div>
 </header>

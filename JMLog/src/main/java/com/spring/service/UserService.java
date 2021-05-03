@@ -69,10 +69,16 @@ public class UserService {
 		return chk;
 	}
 
-	public ModelAndView setting(String email) {
+	// 프로필 설정 페이지 이동
+	public ModelAndView setting(HttpSession session) {
 		ModelAndView mav = new ModelAndView("setting");
 		
-		
+		return mav;
+	}
+
+	// 카테고리 설정 페이지 이동
+	public ModelAndView category(HttpSession session) {
+		ModelAndView mav = new ModelAndView("category");
 		
 		return mav;
 	}

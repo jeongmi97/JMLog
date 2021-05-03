@@ -10,19 +10,6 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <body>
-
-글쓰기=============
-
-<form:form method="post" modelAttribute="post" action="${cpath }/write">
-	<form:hidden path="idx"/>
-	<input type="hidden" name="mode">
-	
-	<label for="title">제목</label><form:input path="title" type="text" name="title" id="title" /><br>
-	<label for="content">내용</label><form:textarea path="content" name="content" id="content" /><br>
-	
-	<input type="submit" value="작성하기">
-</form:form>
-
 <script type="text/javascript">
 	
 	$(document).ready(function() {
@@ -38,15 +25,21 @@
 		}
 	});
 	
-	ClassicEditor 
-		.create( document.querySelector('#content' ) ) 
-		.then( editor => { 
-			console.log( editor ); 
-		} ) 
-		.catch( error => { 
-			console.error( error ); 
-		} );
-	
 </script>
+
+글쓰기=============
+
+<form:form method="post" modelAttribute="post" action="${cpath }/write">
+	<form:hidden path="idx"/>
+	<input type="hidden" name="mode">
+	
+	<label for="title">제목</label><form:input path="title" type="text" name="title" id="title" /><br>
+	<label for="content">내용</label><form:textarea path="content" name="content" id="content" /><br>
+	
+	<input type="submit" value="작성하기">
+</form:form>
+
+<script src="/resources/js/ckeditor.js"></script>
+
 </body>
 </html>

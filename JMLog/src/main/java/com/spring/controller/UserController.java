@@ -47,9 +47,14 @@ public class UserController {
 		return chk;
 	}
 	
-	@GetMapping("{email:.+}/setting")
-	public ModelAndView setting(@PathVariable("email")String email) {
-		return us.setting(email);
+	@GetMapping("setting")
+	public ModelAndView setting(HttpSession session) {
+		return us.setting(session);
+	}
+	
+	@GetMapping("setting/category")
+	public ModelAndView category(HttpSession session) {
+		return us.category(session);
 	}
 	
 }

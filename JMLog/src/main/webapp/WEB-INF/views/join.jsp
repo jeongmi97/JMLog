@@ -13,7 +13,7 @@
 	
 	// 이메일 & 비밀번호 정규표현식
 	const patternEmail = RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
-	const patternPw = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/);
+	const patternPw = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/);	// 영문자 숫자 조합 8자 이상
 	
 	
 	
