@@ -14,5 +14,15 @@
 		select count(email) from user where email=#{email}
 	</select>
 	
+	<select id="getProfileImg" parameterType="String" resultType="String">
+		select profileimg from user where email=#{email}
+	</select>
+	
+	<update id="setProfileImg" parameterType="HashMap">
+		update user
+		set	profileimg=#{fileName}
+		where email=#{email}
+	</update>
+	
 	
 </mapper>

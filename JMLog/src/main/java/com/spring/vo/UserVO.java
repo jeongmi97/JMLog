@@ -8,6 +8,7 @@ public class UserVO {
 	private String pw;
 	private String nickname;
 	private Date reservedate;
+	private String profileimg;
 	
 	public String getEmail() {
 		return email;
@@ -32,6 +33,12 @@ public class UserVO {
 	}
 	public void setReservedate(Date reservedate) {
 		this.reservedate = reservedate;
+	}
+	public String getProfileimg() {
+		return profileimg;
+	}
+	public void setProfileimg(String profileimg) {
+		this.profileimg = profileimg;
 	}
 	
 	

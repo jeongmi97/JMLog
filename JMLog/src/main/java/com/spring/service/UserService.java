@@ -1,5 +1,8 @@
 package com.spring.service;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.dao.UserDAO;
@@ -81,6 +85,32 @@ public class UserService {
 		ModelAndView mav = new ModelAndView("category");
 		
 		return mav;
+	}
+
+	public void addProfileImg(MultipartFile profileImg, String basePath, UserVO user) throws IOException {
+		S3Service s3 = S3Service.getInstance();
+		
+		// 이전 사진 파일 삭제
+		String beforeFileName = dao.getProfileImg(user.getEmail());
+		if(!beforeFileName.equals("default.png")) {
+			String beforeFilePath = basePath + "/" + beforeFileName;
+			s3.delete(beforeFilePath);
+		}
+		
+		String sourceFileName = profileImg.getOriginalFilename();
+		
+		int dateTimeInteger = (int) (new Date().getTime()/1000);
+        String fileName = dateTimeInteger+sourceFileName;
+        
+        s3.upload(profileImg, basePath, fileName);
+        
+        HashMap<String, String>param = new HashMap<String, String>();
+        param.put("email", user.getEmail());
+        param.put("filename", fileName);
+        dao.setProfileImg(param);
+		
+		
+		
 	}
 	
 	

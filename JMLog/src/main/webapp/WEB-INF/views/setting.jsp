@@ -80,13 +80,15 @@
 
 <form method="POST">
 	<input type="hidden" id="email" value="${login.email }">
+	<label for="profileimg">파일 업로드</label>
+	<input type="file" id="profileimg"><br>
 	<label for="nickname">닉네임</label>
-	<input type="text" id="nickname" value="${login.nickname }">
+	<input type="text" id="nickname" name="nickname" value="${login.nickname }">
 	<p id="nnamemsg"></p>
 	<label for="oldPw">현재 비밀번호</label>
-	<input type="password" id="oldPw"><br>
+	<input type="password" id="oldPw" name="oldPw"><br>
 	<label for="oldPw">새 비밀번호</label>
-	<input type="password" id="pw">
+	<input type="password" id="pw" name="pw">
 	<p id="pwmsg"></p> 
 	<label for="oldPw">새 비밀번호 확인</label>
 	<input type="password" id="pwChk">

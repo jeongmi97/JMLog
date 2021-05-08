@@ -1,5 +1,7 @@
 package com.spring.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.service.UserService;
@@ -57,4 +61,17 @@ public class UserController {
 		return us.category(session);
 	}
 	
+	@PostMapping("setting/profileImg")
+	public String updateProfileImg(@SessionAttribute("login")UserVO user , MultipartFile profileImg) throws IOException{
+		String basePath = "profile";
+		String fileName = profileImg.getOriginalFilename();
+		
+		if(profileImg.isEmpty()) return "redirect:/setting";
+		if(fileName.equals("default.png")) {
+			throw new RuntimeException("Invalid file name");
+		}
+		us.addProfileImg(profileImg, basePath, user);
+		
+		return "redirect:/member/setting";
+	}
 }
