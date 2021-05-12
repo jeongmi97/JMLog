@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.service.UserService;
@@ -61,17 +63,23 @@ public class UserController {
 		return us.category(session);
 	}
 	
-	@PostMapping("setting/profileImg")
-	public String updateProfileImg(@SessionAttribute("login")UserVO user , MultipartFile profileImg) throws IOException{
-		String basePath = "profile";
-		String fileName = profileImg.getOriginalFilename();
-		
-		if(profileImg.isEmpty()) return "redirect:/setting";
-		if(fileName.equals("default.png")) {
-			throw new RuntimeException("Invalid file name");
-		}
-		us.addProfileImg(profileImg, basePath, user);
-		
-		return "redirect:/member/setting";
+	@GetMapping("nicknameChk")
+	public @ResponseBody int nicknameChk(@RequestParam("nickname")String nickname) {
+		int chk = us.nicknameChk(nickname);
+		return chk;
+	}
+	
+	// 프로필 수정
+	@PostMapping("setting")
+	public ModelAndView updateProfileImg(MultipartHttpServletRequest req){
+		System.out.println("img : " + req.getFile("profileimg"));
+		System.out.println("email : " + req.getParameter("email"));
+		return us.settingUser(req);
+	}
+	
+	// 프로필 이미지 가져오기
+	@RequestMapping("{email:.+}/getProfileImg")
+	public ResponseEntity<byte[]> getProfileImg(@PathVariable("email")String email){
+		return us.getProfileImg(email);
 	}
 }

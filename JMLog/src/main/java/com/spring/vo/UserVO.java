@@ -2,13 +2,16 @@ package com.spring.vo;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserVO {
 	
 	private String email;
 	private String pw;
 	private String nickname;
 	private Date reservedate;
-	private String profileimg;
+	private MultipartFile profileimg;
+	private String imgtype;
 	
 	public String getEmail() {
 		return email;
@@ -34,12 +37,17 @@ public class UserVO {
 	public void setReservedate(Date reservedate) {
 		this.reservedate = reservedate;
 	}
-	public String getProfileimg() {
+	public MultipartFile getProfileimg() {
 		return profileimg;
 	}
-	public void setProfileimg(String profileimg) {
+	public void setProfileimg(MultipartFile profileimg) {
 		this.profileimg = profileimg;
 	}
-	
+	public String getImgtype() {
+		return imgtype;
+	}
+	public void setImgtype(String imgtype) {
+		this.imgtype = imgtype;
+	}
 	
 }

@@ -14,15 +14,27 @@
 		select count(email) from user where email=#{email}
 	</select>
 	
-	<select id="getProfileImg" parameterType="String" resultType="String">
-		select profileimg from user where email=#{email}
-	</select>
-	
 	<update id="setProfileImg" parameterType="HashMap">
 		update user
-		set	profileimg=#{fileName}
+		set	profileimg=#{img}, imgtype=#{imgtype}
 		where email=#{email}
 	</update>
 	
+	<select id="nicknameChk" parameterType="String" resultType="int">
+		select count(nickname)
+		from user
+		where nickname=#{nickname}
+	</select>
 	
+	<update id="setNickname" parameterType="UserVO">
+		update user
+		set nickname=#{nickname}
+		where email=#{email}
+	</update>
+	
+	<select id="getProfileImg" parameterType="String" resultType="java.util.Map">
+		select profileimg, imgtype
+		from user 
+		where email=#{email}
+	</select>
 </mapper>

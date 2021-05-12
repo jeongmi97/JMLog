@@ -1,6 +1,7 @@
 package com.spring.dao;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.spring.vo.UserVO;
 
@@ -12,9 +13,15 @@ public interface UserDAO {
 
 	int emailCheck(String email);
 
-	String getProfileImg(String email);
+	void setProfileImg(HashMap<String, Object> param);
 
-	void setProfileImg(HashMap<String, String> param);
+	void settingUser(UserVO vo);
+
+	int nicknameChk(String nickname);
+
+	void setNickname(UserVO vo);
+
+	Map<String, Object> getProfileImg(String email);
 
 
 }

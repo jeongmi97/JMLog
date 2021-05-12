@@ -8,49 +8,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+.profile {
+	width: 150px;
+	height: 150px;
+	border-radius: 70%;	/* 테두리 원으로 */
+	overflow: hidden;	/* 넘치는 부분 안보이게 */
+}
+.image {
+	width: 200;
+	height: 200;
+	/* object-fit: cover;	 비율 그대로 유지 */
+}
+</style>
 </head>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
-
 <script type="text/javascript">
 
-	const patternPw = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/);
-	
 	$(function(){
 		
-		// 비밀번호 정규표현식 확인
-		$('#pw').blur(function(){
-			const pw = $('#pw').val();
-			var pwmsg = $('#pwmsg');
-			
-			if(pw == ''){
-				pwmsg.text("비밀번호를 입력해주세요");
-				return;
-			}else if(!patternPw.test(pw)){
-				pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상");
-				return;
-			}else{
-				pwmsg.hide();
-			}
-		});
-		
-		// 비밀번호 확인
-		$('#pwChk').blur(function(){
-			const pw = $('#pw').val();
-			const pwChk = $('#pwChk').val();
-			var cpwmsg = $('#cpwmsg');
-			
-			if(pwChk == ''){
-				cpwmsg.text("비밀번호 확인을 입력해주세요")
-				return;
-			}else if(pw != pwChk){
-				cpwmsg.text("비밀번호가 일치하지 않습니다")
-				return;
-			}else{
-				cpwmsg.hide();
-			}
-		});
-		
-		// 닉네임 중복 확인
+		// 닉네임 중복 확인 (수정필요)
 		$('#nickname').blur(function() {
 			const nickname = $('#nickname').val();
 			var nnamemsg = $('#nnamemsg');
@@ -78,21 +56,18 @@
 	<a href="${cpath }/setting/category">카테고리</a>
 </div>
 
-<form method="POST">
-	<input type="hidden" id="email" value="${login.email }">
+<div class="profile" style="background: #BDBDBD;">
+	<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
+	<img class="img" src="${cpath }/${login.email}/getProfileImg">
+</div>
+
+<form method="POST" enctype="multipart/form-data" action="${capth }/setting">
+	<input type="hidden" id="email" name="email" value="${login.email }">
 	<label for="profileimg">파일 업로드</label>
-	<input type="file" id="profileimg"><br>
+	<input type="file" id="profileimg" name="profileimg"><br>
 	<label for="nickname">닉네임</label>
-	<input type="text" id="nickname" name="nickname" value="${login.nickname }">
+	<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
 	<p id="nnamemsg"></p>
-	<label for="oldPw">현재 비밀번호</label>
-	<input type="password" id="oldPw" name="oldPw"><br>
-	<label for="oldPw">새 비밀번호</label>
-	<input type="password" id="pw" name="pw">
-	<p id="pwmsg"></p> 
-	<label for="oldPw">새 비밀번호 확인</label>
-	<input type="password" id="pwChk">
-	<p id="cpwmsg"></p>
 	
 	<input type="submit" value="회원정보 수정">
 </form>

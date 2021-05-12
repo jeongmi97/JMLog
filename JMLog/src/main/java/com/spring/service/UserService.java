@@ -1,17 +1,22 @@
 package com.spring.service;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.dao.UserDAO;
@@ -86,33 +91,59 @@ public class UserService {
 		
 		return mav;
 	}
+	
+	// 닉네임 중복 확인
+	public int nicknameChk(String nickname) {
+		return dao.nicknameChk(nickname);	// 입력한 닉네임과 일치하는 닉네임 개수 반환
+	}
 
-	public void addProfileImg(MultipartFile profileImg, String basePath, UserVO user) throws IOException {
-		S3Service s3 = S3Service.getInstance();
+	// 프로필 수정
+	public ModelAndView settingUser(MultipartHttpServletRequest req) {
+		ModelAndView mav = new ModelAndView("redirect:/setting");
 		
-		// 이전 사진 파일 삭제
-		String beforeFileName = dao.getProfileImg(user.getEmail());
-		if(!beforeFileName.equals("default.png")) {
-			String beforeFilePath = basePath + "/" + beforeFileName;
-			s3.delete(beforeFilePath);
+		UserVO vo = new UserVO();
+		vo.setEmail(req.getParameter("email"));
+		vo.setNickname(req.getParameter("nickname"));
+		
+		MultipartFile mfile = req.getFile("profileimg");
+		
+		String imgType = mfile.getContentType();
+		
+		if(req.getFile("profileimg") != null) {	// 이미지 파일 선택 했을 때
+			try {
+				mfile = req.getFile("profileimg");
+				// 이메일 일치하는 유저의 프로필 사진 업데이트
+				HashMap<String, Object>param = new HashMap<String, Object>();
+				param.put("email", vo.getEmail());
+				param.put("img", mfile.getBytes());	// byte 데이터 map 형식으로 넣으면 blob 컬럼에 그냥 들어가진다
+				param.put("imgtype", mfile.getContentType());	// 파일 확장자
+				dao.setProfileImg(param);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
-		String sourceFileName = profileImg.getOriginalFilename();
+		dao.setNickname(vo);
 		
-		int dateTimeInteger = (int) (new Date().getTime()/1000);
-        String fileName = dateTimeInteger+sourceFileName;
-        
-        s3.upload(profileImg, basePath, fileName);
-        
-        HashMap<String, String>param = new HashMap<String, String>();
-        param.put("email", user.getEmail());
-        param.put("filename", fileName);
-        dao.setProfileImg(param);
-		
-		
-		
+		return mav;	// 수정 완료하고 다시 setting 화면으로 돌아감
 	}
-	
+
+	// 프로필 이미지 가져오기
+	public ResponseEntity<byte[]> getProfileImg(String email) {
+		// 이메일 이용해서 프로필 이미지 데이터와 확장자 map형식으로 가져오기
+		Map<String, Object> map = dao.getProfileImg(email);
+		byte[] profileImg = (byte[])map.get("profileimg");
+		
+		// 파일을 클라이언트로 전송하기 위해 전송정보 담을 헤더 설정
+		final HttpHeaders headers = new HttpHeaders();
+		String type = (String)map.get("imgtype");
+		String[] types = type.split("/");
+		
+		// 전송헤더에 파일정보와 확장자 셋팅
+		headers.setContentType(new MediaType(types[0],types[1]));
+		
+		return new ResponseEntity<byte[]>(profileImg, headers, HttpStatus.OK);
+	}
 	
 	
 }
