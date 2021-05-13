@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,18 @@ public class UserService {
 		headers.setContentType(new MediaType(types[0],types[1]));
 		
 		return new ResponseEntity<byte[]>(profileImg, headers, HttpStatus.OK);
+	}
+
+	public ModelAndView setCategory(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView("category");
+		
+		String[] categorys = req.getParameterValues("catename");
+		
+		for(int i=0; i<categorys.length; i++) {
+			System.out.println(categorys[i]);
+		}
+		
+		return mav;
 	}
 	
 	

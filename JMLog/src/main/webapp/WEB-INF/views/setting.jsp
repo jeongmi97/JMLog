@@ -10,15 +10,15 @@
 <title>Insert title here</title>
 <style>
 .profile {
-	width: 150px;
-	height: 150px;
+	width: 130px;
+	height: 130px;
 	border-radius: 70%;	/* 테두리 원으로 */
 	overflow: hidden;	/* 넘치는 부분 안보이게 */
 }
-.image {
-	width: 200;
-	height: 200;
-	/* object-fit: cover;	 비율 그대로 유지 */
+.img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;	 /* 비율 그대로 유지 */
 }
 </style>
 </head>
@@ -63,8 +63,9 @@
 
 <form method="POST" enctype="multipart/form-data" action="${capth }/setting">
 	<input type="hidden" id="email" name="email" value="${login.email }">
-	<label for="profileimg">파일 업로드</label>
-	<input type="file" id="profileimg" name="profileimg"><br>
+	<!-- 이미지 아닌 파일 예외처리하기 -->
+	<label class="imgBtn" for="profileimg">이미지 업로드</label>
+	<input type="file" id="profileimg" name="profileimg" style={{display:none}}><br>
 	<label for="nickname">닉네임</label>
 	<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
 	<p id="nnamemsg"></p>

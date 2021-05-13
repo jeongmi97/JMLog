@@ -2,6 +2,7 @@ package com.spring.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,11 @@ public class UserController {
 	@RequestMapping("{email:.+}/getProfileImg")
 	public ResponseEntity<byte[]> getProfileImg(@PathVariable("email")String email){
 		return us.getProfileImg(email);
+	}
+	
+	// 카테고리 설정
+	@PostMapping("setting/category")
+	public ModelAndView setCategory(HttpServletRequest req) {
+		return us.setCategory(req);
 	}
 }
