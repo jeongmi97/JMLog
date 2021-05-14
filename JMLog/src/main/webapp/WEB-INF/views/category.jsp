@@ -12,17 +12,67 @@
 <body>
 <script type="text/javascript">
 
+	
 	$(function(){
+		
+		var orderArr = $('input[name="catename"]').length;
+		// 카테고리 폼 저장 비활성화
+		if(orderArr="undefiend"){ // 생성된 카테고리 div 아무것도 없을 때
+			console.log('없다아앙');
+			$('.saveBtn').prop("disabled",true);
+		}
+		
+		/* $(document).on('DOMNodeInserted','form',function(){
+			if(orderArr="undefiend"){
+				$('.saveBtn').prop("disabled",true);
+			}
+			else{
+				$('.saveBtn').prop("disabled",false);
+			}
+		}); */
+		
+		// 카테고리 행 추가/삭제
 		$('.add_order').click(function(){
-			var $div = $('<div><input type="text" name="catename" required></input></div>');
+			var $div = $('<div><input type="text" "name="catename"><button class="cancelBtn">취소</button></div>');
 			
-			$('#addCate').append($div);
+			$('#addCate').append($div);	// addCate란 id를 가진 폼에 태그 추가
+			$('.saveBtn').prop("disabled",false);	// 카테고리 폼 저장 버튼 활성화
+			
+			$('.cancelBtn').on('click', function(){	// 취소 버튼 클릭 시
+				$(this).parent().remove();			// this(취소 버튼)의 부모요소인 div(해당 행) 삭제
+				if(orderArr="undefiend") $('.saveBtn').prop("disabled",true);	//모든 행 삭제 시 카테고리 폼 저장 버튼 비활성화
+			});
 		});
 		
+		// 생성 된 카테고리 폼 전송
 		$('.saveBtn').click(function(){
-			$('form').submit();
+			console.log('들어옴');
+			var orders = new Array(orderArr);
+			orders = $('input[name="catename"]').values;
+			console.log('orders1 : ' + oreders[0]);
+			for(var i=0; i<orderArr; i++){
+				if(!orders[i])
+					alert('카테고리명을 입력해 주세요!');
+				else
+					$('form').submit();
+			}
+			
+		/* 	else if(orderArr != 0){
+				var orders = new Array(orderArr);
+				for(var i=0; i<orders; i++){
+					orders[i] = 
+				}
+				$('form').submit();
+			}
+			else{
+				console.log("000000000");
+			} */
+			
 		});
-	})
+		
+	});
+	
+	
 	
 </script>
 
