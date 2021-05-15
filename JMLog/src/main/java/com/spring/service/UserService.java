@@ -89,6 +89,9 @@ public class UserService {
 	// 카테고리 설정 페이지 이동
 	public ModelAndView category(HttpSession session) {
 		ModelAndView mav = new ModelAndView("category");
+		UserVO vo = (UserVO) session.getAttribute("login");
+		
+		mav.addObject("category",dao.getCategory(vo.getEmail()));
 		
 		return mav;
 	}
@@ -146,14 +149,17 @@ public class UserService {
 		return new ResponseEntity<byte[]>(profileImg, headers, HttpStatus.OK);
 	}
 
+	// 카테고리 추가
 	public ModelAndView setCategory(HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("category");
+		ModelAndView mav = new ModelAndView("redirect:/category");
 		
 		String[] categorys = req.getParameterValues("catename");
 		
-		for(int i=0; i<categorys.length; i++) {
-			System.out.println(categorys[i]);
-		}
+		HashMap<String, Object>param = new HashMap<String, Object>();
+		param.put("email", req.getParameter("email"));
+		param.put("category", categorys);
+		
+		dao.setCategory(param);
 		
 		return mav;
 	}

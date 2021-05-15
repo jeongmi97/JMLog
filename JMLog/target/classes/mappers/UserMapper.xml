@@ -37,4 +37,19 @@
 		from user 
 		where email=#{email}
 	</select>
+	
+	<insert id="setCategory" parameterType="HashMap">
+		insert into category(email, catename)
+		values 
+		<foreach collection="category" item="catename" separator=",">
+			(#{email}, #{catename})
+		</foreach>
+	</insert>
+	
+	<select id="getCategory" parameterType="String" resultType="CategoryVO">
+		select *
+		from category
+		where email=#{email}
+		order by idx
+	</select>
 </mapper>

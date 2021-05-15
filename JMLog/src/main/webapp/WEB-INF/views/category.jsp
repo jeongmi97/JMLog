@@ -15,58 +15,45 @@
 	
 	$(function(){
 		
-		var orderArr = $('input[name="catename"]').length;
+		var orderArr = $('#catename').length;
 		// 카테고리 폼 저장 비활성화
-		if(orderArr="undefiend"){ // 생성된 카테고리 div 아무것도 없을 때
+		if(!'${category}'){ // 생성된 카테고리 div 아무것도 없을 때
 			console.log('없다아앙');
 			$('.saveBtn').prop("disabled",true);
 		}
 		
-		/* $(document).on('DOMNodeInserted','form',function(){
-			if(orderArr="undefiend"){
-				$('.saveBtn').prop("disabled",true);
-			}
-			else{
-				$('.saveBtn').prop("disabled",false);
-			}
-		}); */
-		
-		// 카테고리 행 추가/삭제
+		// 카테고리 행 추가
 		$('.add_order').click(function(){
-			var $div = $('<div><input type="text" "name="catename"><button class="cancelBtn">취소</button></div>');
+			var $div = $('<div><input type="text" name="catename" value=""><button class="cancelBtn">취소</button></div>');
 			
 			$('#addCate').append($div);	// addCate란 id를 가진 폼에 태그 추가
 			$('.saveBtn').prop("disabled",false);	// 카테고리 폼 저장 버튼 활성화
 			
-			$('.cancelBtn').on('click', function(){	// 취소 버튼 클릭 시
-				$(this).parent().remove();			// this(취소 버튼)의 부모요소인 div(해당 행) 삭제
-				if(orderArr="undefiend") $('.saveBtn').prop("disabled",true);	//모든 행 삭제 시 카테고리 폼 저장 버튼 비활성화
-			});
+		});
+		
+		// 카테고리 행 삭제
+		$('.cancelBtn').on('click', function(){	// 취소 버튼 클릭 시
+			$(this).parent().remove();			// this(취소 버튼)의 부모요소인 div(해당 행) 삭제
+			orderArr = $('input[name=catename]').length;
+			if(orderArr==0) $('.saveBtn').prop("disabled",true);	//모든 행 삭제 시 카테고리 폼 저장 버튼 비활성화
 		});
 		
 		// 생성 된 카테고리 폼 전송
 		$('.saveBtn').click(function(){
-			console.log('들어옴');
-			var orders = new Array(orderArr);
-			orders = $('input[name="catename"]').values;
-			console.log('orders1 : ' + oreders[0]);
-			for(var i=0; i<orderArr; i++){
-				if(!orders[i])
+			console.log('들어옴 : ' + $('input[name=catename]').length);
+			var checkNull = false;
+			$('input[name=catename]').each(function(idx){
+				if(!$('input[name=catename]:eq('+idx+')').val()){
 					alert('카테고리명을 입력해 주세요!');
-				else
-					$('form').submit();
-			}
-			
-		/* 	else if(orderArr != 0){
-				var orders = new Array(orderArr);
-				for(var i=0; i<orders; i++){
-					orders[i] = 
+					checkNull = true;
+					return false;
 				}
+			});
+			if(checkNull != true)
 				$('form').submit();
-			}
-			else{
-				console.log("000000000");
-			} */
+		});
+		
+		$('.deleteBtn').click(function(){
 			
 		});
 		
@@ -83,6 +70,9 @@
 			</div>
 			<form id="addCate" method="post" action="">
 				<input type="hidden" name="email" value="${login.email }">
+				<c:forEach var="category" items="${category }">
+					<div>${category.catename }<button class="updateBtn">수정</button><button class="deleteBtn">삭제</button></div>
+				</c:forEach>
 			</form>
 		</div>
 		<div class="add_order">

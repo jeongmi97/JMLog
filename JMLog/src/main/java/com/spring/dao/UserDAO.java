@@ -1,8 +1,10 @@
 package com.spring.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.spring.vo.CategoryVO;
 import com.spring.vo.UserVO;
 
 public interface UserDAO {
@@ -22,6 +24,10 @@ public interface UserDAO {
 	void setNickname(UserVO vo);
 
 	Map<String, Object> getProfileImg(String email);
+
+	void setCategory(HashMap<String, Object> param);
+
+	List<CategoryVO> getCategory(String email);
 
 
 }
