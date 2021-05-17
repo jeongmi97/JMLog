@@ -29,5 +29,7 @@ public interface UserDAO {
 
 	List<CategoryVO> getCategory(String email);
 
+	void delCate(int idx);
+
 
 }

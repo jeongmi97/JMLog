@@ -89,4 +89,15 @@ public class UserController {
 	public ModelAndView setCategory(HttpServletRequest req) {
 		return us.setCategory(req);
 	}
+	
+	@GetMapping("setting/category/delCategory")
+	public @ResponseBody String delCate(@RequestParam("idx")int idx) {
+		try {
+			us.delCate(idx);
+			return "ok";
+		}catch (Exception e) {
+			e.printStackTrace();
+			return "false";
+		}
+	}
 }

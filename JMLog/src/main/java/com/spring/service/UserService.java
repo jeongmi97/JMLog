@@ -163,6 +163,10 @@ public class UserService {
 		
 		return mav;
 	}
+
+	public void delCate(int idx) {
+		dao.delCate(idx);
+	}
 	
 	
 }

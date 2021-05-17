@@ -52,4 +52,9 @@
 		where email=#{email}
 		order by idx
 	</select>
+	
+	<delete id="delCate" parameterType="int">
+		delete from category
+		where idx=#{idx}
+	</delete>
 </mapper>
