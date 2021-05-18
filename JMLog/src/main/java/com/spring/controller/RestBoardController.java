@@ -15,6 +15,7 @@ public class RestBoardController {
 	
 	@Autowired UserBoardService ubs;
 	
+	// 댓글 저장
 	@PostMapping(value="{email}/{idx}/saveReply")
 	public int saveReply(@RequestBody ReplyVO reply) {
 		try {
@@ -27,6 +28,7 @@ public class RestBoardController {
 		}
 	}
 	
+	// 댓글 삭제
 	@GetMapping(value="{email}/{idx}/delReply")
 	public String delReply(@RequestParam("idx")int idx) {
 		System.out.println("들어옴");
@@ -39,6 +41,7 @@ public class RestBoardController {
 		}
 	}
 	
+	// 댓글 수정
 	@PostMapping(value="{email}/{idx}/updateReply")
 	public int updateReply(@RequestBody ReplyVO reply) {
 		System.out.println("수정 들어옴");

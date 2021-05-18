@@ -76,5 +76,8 @@ public class UserBoardController {
 		return ubs.delPost(idx, login);
 	}
 	
-	
+	@GetMapping("{email:.+}/category/{catename}")
+	public ModelAndView getCateList(@PathVariable("email")String email, @PathVariable("catename")String catename) {
+		return ubs.getCateList(email,catename);
+	}
 }

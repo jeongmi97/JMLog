@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
+import com.spring.vo.CategoryVO;
 import com.spring.vo.UserVO;
 
 @Service
@@ -164,8 +165,14 @@ public class UserService {
 		return mav;
 	}
 
+	// 카테고리 삭제
 	public void delCate(int idx) {
 		dao.delCate(idx);
+	}
+	
+	// 카테고리 수정
+	public void updateCate(CategoryVO category) {
+		dao.updateCate(category);
 	}
 	
 	

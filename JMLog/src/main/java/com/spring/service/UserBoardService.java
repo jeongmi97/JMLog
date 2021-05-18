@@ -45,10 +45,11 @@ public class UserBoardService {
 				pagination.setNext(false);
 			}
 			
-			HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개 가져오기 위해 param 설정
+			HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개씩 가져오기 위해 param 설정
 			param.put("email", email);
 			param.put("startList", pagination.getStartList());
 			
+			mav.addObject("category", dao.getCategory(email));	// 유저 카테고리 정보 가져오기
 			mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
 			mav.addObject("uBoard",dao.userBoardList(param));	// 이메일, 10
 			mav.addObject("pagination",pagination);
@@ -133,6 +134,13 @@ public class UserBoardService {
 	public void updateReply(ReplyVO reply) {
 		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
 		dao.updateReply(reply);
+	}
+
+	public ModelAndView getCateList(String email, String catename) {
+		ModelAndView mav = new ModelAndView("userboard");
+		
+		
+		return mav;
 	}
 
 }

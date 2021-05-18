@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.spring.vo.BoardVO;
+import com.spring.vo.CategoryVO;
 import com.spring.vo.ReplyVO;
 
 public interface UserBoardDAO {
@@ -33,6 +34,9 @@ public interface UserBoardDAO {
 	void updateReply(ReplyVO reply);	// 댓글 수정
 
 	int getBoardListCnt(String email);	// 총 게시글 개수 확인
+
+	List<CategoryVO> getCategory(String email);	// 유저 카테고리 가져오기
+
 
 	
 	

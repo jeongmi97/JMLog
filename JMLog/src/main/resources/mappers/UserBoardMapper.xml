@@ -43,4 +43,11 @@
 		from board
 		where email=#{email}
 	</select>
+	
+	<select id="getCategory" parameterType="String" resultType="CategoryVO">
+		select *
+		from category
+		where email=#{email}
+	</select>
+	
 </mapper>

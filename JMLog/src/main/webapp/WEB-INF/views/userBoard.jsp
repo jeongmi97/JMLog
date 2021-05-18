@@ -101,7 +101,10 @@
 
 <section id="container">
 	<aside id="aside">
-		<a href="${cpath }/${user.email}">전체보기(${fn:length(uBoard) })</a>
+		<a href="${cpath }/${user.email}">전체보기 (${fn:length(uBoard) })</a><br>
+		<c:forEach items="${category }" var="category">
+			<a href="${cpath }/${user.email}/category/${category.catename}"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
+		</c:forEach>
 	</aside>
 	
 	<div class="content">

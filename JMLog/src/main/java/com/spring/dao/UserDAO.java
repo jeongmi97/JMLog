@@ -31,5 +31,7 @@ public interface UserDAO {
 
 	void delCate(int idx);
 
+	void updateCate(CategoryVO category);
+
 
 }
