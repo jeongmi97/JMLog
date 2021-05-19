@@ -27,8 +27,9 @@ public class UserBoardController {
 	@GetMapping("{email:.+}")
 	public ModelAndView board(@PathVariable("email")String email
 			, @RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
-			, @RequestParam(required = false, defaultValue = "1") int range) {
-		return ubs.userBoard(email, page, range);
+			, @RequestParam(required = false, defaultValue = "1") int range
+			, @RequestParam(required = false, defaultValue = "nocate")String category) {
+		return ubs.userBoard(email, page, range, category);
 	}
 	
 	// 글쓰기 페이지 이동
@@ -76,8 +77,4 @@ public class UserBoardController {
 		return ubs.delPost(idx, login);
 	}
 	
-	@GetMapping("{email:.+}/category/{catename}")
-	public ModelAndView getCateList(@PathVariable("email")String email, @PathVariable("catename")String catename) {
-		return ubs.getCateList(email,catename);
-	}
 }

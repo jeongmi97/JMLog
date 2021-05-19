@@ -14,6 +14,13 @@
 		order by idx desc limit #{startList},10
 	</select>
 	
+	<select id="cateBoardList" parameterType="HashMap" resultType="BoardVO">
+		select *
+		from board
+		where email=#{email} and cate=#{cate}
+		order by idx desc limit #{startList},10
+	</select>
+	
 	<select id="getPostnum" parameterType="String" resultType="int">
 		select idx
 		from board
@@ -42,6 +49,12 @@
 		select count(*) as listCnt
 		from board
 		where email=#{email}
+	</select>
+	
+	<select id="getCateBoardList" parameterType="HashMap" resultType="int">
+		select count(*)
+		from board
+		where email=#{email} and cate=#{cate}
 	</select>
 	
 	<select id="getCategory" parameterType="String" resultType="CategoryVO">

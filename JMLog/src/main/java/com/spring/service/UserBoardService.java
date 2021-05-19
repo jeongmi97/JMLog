@@ -21,12 +21,20 @@ public class UserBoardService {
 	@Autowired UserDAO udao;
 	
 	// 유저 블로그로 이동
-		public ModelAndView userBoard(String email,int page, int range) {
+		public ModelAndView userBoard(String email,int page, int range, String category) {
 			ModelAndView mav = new ModelAndView("userBoard");
 		
 			System.out.println("넘어온 이메일 : " + email);
 			
 			int listCnt = dao.getBoardListCnt(email);	// 계정 전체 게시글 개수
+			
+			if(!category.equals("nocate")) {
+				HashMap<String, Object> param = new HashMap<String, Object>();
+				param.put("email", email);
+				param.put("cate", category);
+				listCnt = dao.getCateBoardList(param);
+			}
+				
 			System.out.println("listCnt: " + listCnt + "page&range : " + page + "&" + range);
 			
 			// 페이징 정보 셋팅
@@ -47,12 +55,19 @@ public class UserBoardService {
 			
 			HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개씩 가져오기 위해 param 설정
 			param.put("email", email);
+			param.put("cate", category);
 			param.put("startList", pagination.getStartList());
 			
 			mav.addObject("category", dao.getCategory(email));	// 유저 카테고리 정보 가져오기
 			mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
-			mav.addObject("uBoard",dao.userBoardList(param));	// 이메일, 10
+			
+			if(category.equals("nocate"))
+				mav.addObject("uBoard",dao.userBoardList(param));	// 이메일, 10
+			else
+				mav.addObject("uBoard",dao.cateBoardList(param));	// 카테고리 별 보드 리스트
+			
 			mav.addObject("pagination",pagination);
+			mav.addObject("nowCate", category);
 			
 			return mav;
 		}
@@ -134,13 +149,6 @@ public class UserBoardService {
 	public void updateReply(ReplyVO reply) {
 		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
 		dao.updateReply(reply);
-	}
-
-	public ModelAndView getCateList(String email, String catename) {
-		ModelAndView mav = new ModelAndView("userboard");
-		
-		
-		return mav;
 	}
 
 }

@@ -62,14 +62,14 @@
 		var range = range - 1; 
 		
 		// email?page=page&range=range
-		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range;
+		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range + '&category=${nowCate}';
 		
 		location.href = url;
 	}
 	
 	// 페이지 번호 클릭
 	function pagination(page, range, rangeSize){
-		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range;
+		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range + '&category=${nowCate}';
 		
 		location.href = url;
 	}
@@ -103,10 +103,11 @@
 	<aside id="aside">
 		<a href="${cpath }/${user.email}">전체보기 (${fn:length(uBoard) })</a><br>
 		<c:forEach items="${category }" var="category">
-			<a href="${cpath }/${user.email}/category/${category.catename}"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
+			<a href="${cpath }/${user.email}?category=${category.catename }"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
 		</c:forEach>
 	</aside>
 	
+	<div>현재 카테고리 : <c:out value="${nowCate }" /></div>
 	<div class="content">
 		글 목록<br><br>
 		<c:forEach items="${uBoard}" var="uBoard"> 

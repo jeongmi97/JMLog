@@ -37,6 +37,10 @@ public interface UserBoardDAO {
 
 	List<CategoryVO> getCategory(String email);	// 유저 카테고리 가져오기
 
+	List<BoardVO> cateBoardList(HashMap<String, Object> param);	// 카테고리별 보드 리스트 가져오기
+
+	int getCateBoardList(HashMap<String, Object> param);	// 카테고리별 게시글 개수 가져오기
+
 
 	
 	
