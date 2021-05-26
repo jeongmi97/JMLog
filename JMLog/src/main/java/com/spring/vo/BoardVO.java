@@ -10,7 +10,7 @@ public class BoardVO {
 	private Date reporting_date;
 	private int hit;		// 조회수
 	private String email;	// 작성자 이메일
-	private int lock_post;	// 비밀글 설정
+	private String lock_post;	// 비밀글 설정
 	private String cate;	// 카테고리
 	
 	public int getIdx() {
@@ -49,10 +49,10 @@ public class BoardVO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getLock_post() {
+	public String getLock_post() {
 		return lock_post;
 	}
-	public void setLock_post(int lock_post) {
+	public void setLock_post(String lock_post) {
 		this.lock_post = lock_post;
 	}
 	public String getCate() {

@@ -23,6 +23,7 @@
 			$('#content').val('<c:out value="${post.content}"/>');
 
 		}
+		
 	});
 	
 </script>
@@ -31,10 +32,17 @@
 
 <form:form method="post" modelAttribute="post" action="${cpath }/write">
 	<form:hidden path="idx"/>
+	<form:hidden path="email" value="${login.email }"/>
 	<input type="hidden" name="mode">
 	
-	<label for="title">제목</label><form:input path="title" type="text" name="title" id="title" /><br>
+	<label for="title">제목</label><form:input path="title" type="text" name="title" id="title" />
+	<form:select path="cate">
+		<option value="nocate">선택안함</option>
+		<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
+		</form:select>
+	<label for="lock_post">비공개</label><form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><br>
 	<label for="content">내용</label><form:textarea path="content" name="content" id="content" /><br>
+	
 	
 	<input type="submit" value="작성하기">
 </form:form>

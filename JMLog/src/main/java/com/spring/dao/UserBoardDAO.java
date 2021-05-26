@@ -41,6 +41,10 @@ public interface UserBoardDAO {
 
 	int getCateBoardList(HashMap<String, Object> param);	// 카테고리별 게시글 개수 가져오기
 
+	int getCateCnt(HashMap<String, Object> param);	// 선택한 카테고리 개수 가져오기
+
+	void updateCateCnt(HashMap<String, Object> param);	// 추가된 카테고리 개수 업데이트 하기
+
 
 	
 	

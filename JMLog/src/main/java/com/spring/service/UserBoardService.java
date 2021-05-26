@@ -71,23 +71,42 @@ public class UserBoardService {
 			
 			return mav;
 		}
+		
+	// 글쓰기 페이지 이동
+	public ModelAndView goWrite(UserVO login) {
+		ModelAndView mav = new ModelAndView("write");
+		
+		mav.addObject("category", dao.getCategory(login.getEmail()));	// 글 생성 시 카테고리 선택을 위한 유저별 카테고리 넘김
+		
+		return mav;
+	}
 	
 	// 글 쓰기
-	public ModelAndView write(BoardVO vo, UserVO login, RedirectAttributes ra, String mode) {
+	public ModelAndView write(BoardVO vo, String mode) {
 		ModelAndView mav = new ModelAndView();
 		
 		int postNum = 0;
 		
-		if(mode.equals("edit")) {
-			dao.updatePost(vo);
-			postNum = vo.getIdx();
-		}else {
-			vo.setEmail(login.getEmail());	// 입력폼에서 이메일 받게 수정하기~~~~~~~
-			dao.write(vo);
-			postNum = dao.getPostnum(login.getEmail());
+		if(vo.getLock_post() != "y") vo.setLock_post("n");	// 비공개 체크 안했을 때 비공개 n 세팅
+		
+		if(mode.equals("edit")) {	// 게시물 수정모드일 때
+			dao.updatePost(vo);		// 게시물 수정
+			postNum = vo.getIdx();	// 수정한 게시물 번호
+		}else {						// 새로운 게시물 생성 시
+			dao.write(vo);			// 게시물 insert
+			postNum = dao.getPostnum(vo.getEmail());	// 작성한 게시물 번호
 		}
 		
-		mav.setViewName("redirect:/"+vo.getEmail()+"/"+postNum);
+		if(vo.getCate() != "nocate") {
+			HashMap<String, Object>param = new HashMap<String, Object>();
+			param.put("email", vo.getEmail());
+			param.put("cate", vo.getCate());
+			int cateCnt = dao.getCateCnt(param);
+			param.put("catecnt", cateCnt);
+			dao.updateCateCnt(param);
+		}
+		
+		mav.setViewName("redirect:/"+vo.getEmail()+"/"+postNum);	// 작성자 이메일/작성(수정)한 게시물번호로 이동
 		
 		return mav;
 	}
@@ -150,5 +169,7 @@ public class UserBoardService {
 		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
 		dao.updateReply(reply);
 	}
+
+	
 
 }

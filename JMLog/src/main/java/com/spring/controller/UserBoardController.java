@@ -34,14 +34,14 @@ public class UserBoardController {
 	
 	// 글쓰기 페이지 이동
 	@RequestMapping("write")
-	public void write(@ModelAttribute("post")BoardVO vo) {
-		System.out.println("write 페이지 이동");
+	public ModelAndView write(@ModelAttribute("post")BoardVO vo, @ModelAttribute("login") UserVO login) {
+		return ubs.goWrite(login);
 	}
 	
 	// 글쓰기 실행
 	@PostMapping("write")
-	public ModelAndView write(BoardVO vo, @ModelAttribute("login") UserVO login,RedirectAttributes ra, @RequestParam("mode")String mode) {
-		return ubs.write(vo, login, ra, mode);
+	public ModelAndView write(BoardVO vo, @RequestParam("mode")String mode) {
+		return ubs.write(vo, mode);
 	}
 	
 	// 방명록

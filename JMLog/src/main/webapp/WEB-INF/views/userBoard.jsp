@@ -112,8 +112,9 @@
 		글 목록<br><br>
 		<c:forEach items="${uBoard}" var="uBoard"> 
 			<div><a href="${cpath }/${user.email}/${uBoard.idx }"><c:out value="${uBoard.title } " /></a></div>
-			<div><c:out value="${uBoard.content } " /></div>
+			<div style="table-layout:fixed"><c:out value="${uBoard.content } " escapeXml="false"/></div>
 			<div><c:out value="${uBoard.reporting_date }" /></div><br>
+			<hr>
 		</c:forEach>
 		<!-- 페이징 -->
 	<div id="paginationBox">

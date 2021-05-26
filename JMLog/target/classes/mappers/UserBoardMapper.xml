@@ -3,8 +3,8 @@
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
 	<insert id="write" parameterType="BoardVO">
-		insert into board(title, content, email) 
-		values(#{title}, #{content}, #{email})
+		insert into board(title, content, email, lock_post, cate) 
+		values(#{title}, #{content}, #{email}, #{lock_post}, #{cate})
 	</insert>
 	
 	<select id="userBoardList" parameterType="HashMap" resultType="BoardVO">
@@ -36,7 +36,7 @@
 	
 	<update id="updatePost" parameterType="BoardVO">
 		update board
-		set title=#{title}, content=#{content}
+		set title=#{title}, content=#{content}, lock_post=#{lock_post}, cate=#{cate}
 		where idx=#{idx}
 	</update>
 	
@@ -63,4 +63,15 @@
 		where email=#{email}
 	</select>
 	
+	<select id="getCateCnt" parameterType="HashMap" resultType="int">
+		select count(*)
+		from board
+		where email=#{email} and cate=#{cate}
+	</select>
+	
+	<update id="updateCateCnt" parameterType="HashMap">
+		update category
+		set catecnt=#{catecnt}
+		where email=#{email} and catename=#{cate}
+	</update>
 </mapper>
