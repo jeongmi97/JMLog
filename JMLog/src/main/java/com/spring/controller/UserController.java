@@ -3,6 +3,7 @@ package com.spring.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class UserController {
 	}
 	
 	@PostMapping("login")
-	public ModelAndView login(UserVO vo, HttpSession session) {
-		return us.login(vo, session);
+	public ModelAndView login(UserVO vo, HttpSession session, HttpServletResponse response) throws IOException {
+		return us.login(vo, session, response);
 	}
 	
 	@RequestMapping("join")
