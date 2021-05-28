@@ -39,6 +39,9 @@
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 			
+	<!-- Security --> 
+	<bean id="pwEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
 	<context:component-scan base-package="com.spring.service" />
 	
 	<mybatis-spring:scan base-package="com.spring.dao"/>

@@ -63,4 +63,16 @@
 		set catename=#{catename}
 		where idx=#{idx}
 	</update>
+	
+	<update id="keepLogin" parameterType="HashMap">
+		update user
+		set sessionkey=#{sessionid}, sessionlimit=#{next}
+		where email=#{email}
+	</update>
+	
+	<select id="checkUserSession">
+		select *
+		from user
+		where sessionkey=#{sessionid} and sessionlimit > now()
+	</select>
 </mapper>

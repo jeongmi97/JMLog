@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,9 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
@@ -35,35 +38,74 @@ public class UserService {
 	
 	// 비밀번호 암호화 비크립트 사용
 	@Autowired BCryptPasswordEncoder pwEncoder;
-	// 빈 생성 오류 현상으로 빈 생성 해준 뒤 암호화 실행
-	@Bean
-	BCryptPasswordEncoder pwEncoer() {
-		return new BCryptPasswordEncoder();
-	}
 	
 	// 유저 로그인
-	public ModelAndView login(UserVO vo, HttpSession session, HttpServletResponse response) throws IOException {
+	public ModelAndView login(UserVO vo, HttpSession session, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		ModelAndView mav = new ModelAndView();
 		
-		session.getAttribute("login");	// login 새션 생성
-		UserVO login = dao.userChk(vo.getEmail());	// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
-		System.out.println("로그인 유저 : " + login);
-		
-		if(login != null) {	// login객체에 유저 정보가 있을 때
-			boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
-			if(pwChk == true) {	// 비밀번호 일치 시 로그인 실행
-				session.setAttribute("login", login);	// login새션에 유저 정보 넣기
-				mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
-			}
-		}else {
-			response.setContentType("text/html; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>alert('이메일/비밀번호를 확인해 주세요'); history.go(-1);</script>");
-			out.close();
-			System.out.println("로그인 실패");
-			mav.setViewName("redirect:/login");	// 로그인 페이지로 리다이렉트
+		if(session.getAttribute("login") != null) {
+			session.removeAttribute("login");	// 기존에 login 세션 존재할 시 기존값 제거
 		}
 		
+		// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
+		UserVO login = dao.userChk(vo.getEmail());	
+		System.out.println("로그인 유저 : " + login);
+		
+		boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
+		
+		if(login == null || pwChk == false) {	// login객체가 비어있거나 비밀번호 비교가 안맞을 경우 (로그인 실패)
+			res.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = res.getWriter();
+			out.println("<script>alert('이메일/비밀번호를 확인해 주세요'); history.go(-1);</script>");	// 알림창 띄운 뒤 다시 로그인 페이지로 이동하게 한다
+			out.close();
+		}else if(login != null && pwChk == true) {	// 로그인 성공
+			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
+			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
+				System.out.println("cookie");
+				// 쿠키 생성, 로그인할때 생성된 세션의 id 쿠키에 저장
+				Cookie loginCookie = new Cookie("loginCookie", session.getId());
+				loginCookie.setPath("/");	// 쿠키 찾을 경로 전체 경로로 변경
+				int amount = 60 * 60 * 24* 7;
+				loginCookie.setMaxAge(amount);	// 7일 유효시간 설정
+				res.addCookie(loginCookie);	// 쿠키 적용
+				// currentTimeMills()가 1/1000초 단위로 1000곱해서 더해야 한다
+				Date sessionlimit = new Date(System.currentTimeMillis() + (1000*amount));
+				HashMap<String, Object>param = new HashMap<String, Object>();
+				param.put("email", login.getEmail());
+				param.put("sessionid", session.getId());
+				param.put("sessionlimit", sessionlimit);
+				// 현재 세션 id와 유효시간을 사용자 테이블에 저장
+				dao.keepLogin(param);
+			}
+			mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
+		}
+		
+		return mav;
+	}
+	
+	// 로그아웃
+	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
+		ModelAndView mav = new ModelAndView("redirect:/");
+		
+		Object obj = session.getAttribute("login");
+		if(obj != null) {	// null이 아닐 경우 제거
+			UserVO user = (UserVO)obj;
+			session.removeAttribute("login");
+			session.invalidate();	// 세션 전체 삭제
+			Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
+			if(loginCookie != null) {	// 쿠키가 존재하면 삭제
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(0);
+				res.addCookie(loginCookie);
+				
+				Date date = new Date(System.currentTimeMillis());
+				HashMap<String, Object>param = new HashMap<String, Object>();
+				param.put("email", user.getEmail());
+				param.put("sessionid", session.getId());
+				param.put("sessionlimit", date);
+				dao.keepLogin(param);	// 사용자 테이블에도 유효기간을 현재시간으로 다시 세팅
+			}
+		}
 		return mav;
 	}
 	
@@ -83,8 +125,7 @@ public class UserService {
 	
 	// 이메일 중복 확인
 	public int emailCheck(String email) {
-		int chk = dao.emailCheck(email);
-		return chk;
+		return dao.emailCheck(email);	// 입력한 이메일과 일치하는 이메일 개수 반환
 	}
 
 	// 프로필 설정 페이지 이동
@@ -99,7 +140,7 @@ public class UserService {
 		ModelAndView mav = new ModelAndView("category");
 		UserVO vo = (UserVO) session.getAttribute("login");
 		
-		mav.addObject("category",dao.getCategory(vo.getEmail()));
+		mav.addObject("category",dao.getCategory(vo.getEmail()));	// 유저의 카테고리 정보 넣어주기
 		
 		return mav;
 	}
@@ -181,6 +222,9 @@ public class UserService {
 	public void updateCate(CategoryVO category) {
 		dao.updateCate(category);
 	}
+
+
+	
 	
 	
 }

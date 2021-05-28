@@ -31,6 +31,16 @@
 	
 	<context:component-scan base-package="com.spring.controller" />
 	
+	<!-- 인터셉터 빈 등록 -->
+	<beans:bean id="UserInterceptor" class="com.spring.interceptor.UserInterceptor"></beans:bean>
 	
+	<!-- 인터셉터 호출 위한 url mapping -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/write"/>
+			<mapping path="/setting"/>
+			<beans:ref bean="UserInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

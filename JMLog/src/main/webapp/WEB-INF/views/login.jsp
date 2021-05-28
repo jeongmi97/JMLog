@@ -37,7 +37,7 @@
     		<div class="col-sm-offset-2 col-sm-10">
       			<div class="checkbox">
         			<label>
-          				<input type="checkbox"> Remember me
+          				<input type="checkbox" name="useCookie"> 로그인유지
         			</label>
       			</div>
     		</div>

@@ -14,6 +14,10 @@ public interface UserDAO {
 	int join(UserVO vo);
 
 	int emailCheck(String email);
+	
+	void keepLogin(HashMap<String, Object> param);
+	
+	UserVO checkUserSession(String sessionid);
 
 	void setProfileImg(HashMap<String, Object> param);
 

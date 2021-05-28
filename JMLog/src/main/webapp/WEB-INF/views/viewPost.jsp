@@ -140,7 +140,10 @@
 	${post.content }<br>
 	<div>
 		<div><span>${post.email }</span><span> | </span><span>${post.reporting_date }</span><span> |</span></div>
-		<div><span><a href="${cpath }/editPost?idx=${post.idx}&mode=edit">수정</a></span> | <span><input type="button" value="삭제" id="btnDel"></span></div>
+		<!-- 로그인한 사용자와 글 작성자가 같을 때 수정/삭제 버튼 보이게 -->
+		<c:if test="${login.email eq post.email }">	
+			<div><span><a href="${cpath }/editPost?idx=${post.idx}&mode=edit">수정</a></span> | <span><input type="button" value="삭제" id="btnDel"></span></div>
+		</c:if>
 	</div>
 	
 	<!-- 댓글 작성 폼 -->

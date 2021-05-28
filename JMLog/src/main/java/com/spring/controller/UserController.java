@@ -37,8 +37,13 @@ public class UserController {
 	}
 	
 	@PostMapping("login")
-	public ModelAndView login(UserVO vo, HttpSession session, HttpServletResponse response) throws IOException {
-		return us.login(vo, session, response);
+	public ModelAndView login(UserVO vo, HttpSession session, HttpServletRequest req ,HttpServletResponse res) throws IOException {
+		return us.login(vo, session, req, res);
+	}
+	
+	@RequestMapping("logout")
+	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
+		return us.logout(session, req, res);
 	}
 	
 	@RequestMapping("join")
