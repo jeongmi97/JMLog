@@ -16,7 +16,7 @@
 <div class="container center_div">
 	<div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
-	<form method="post" class="form-horizontal">
+	<form method="post" action="${cpath }/login" class="form-horizontal">
 		<div class="form-group">
 			<div class="row">
 				<label for="email" class="col-sm-2 control-label ">이메일</label>

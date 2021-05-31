@@ -2,7 +2,7 @@ package com.spring.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +50,7 @@ public class UserService {
 		// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
 		UserVO login = dao.userChk(vo.getEmail());	
 		System.out.println("로그인 유저 : " + login);
+		System.out.println("로그인유지 체크 ::::: " + req.getParameter("useCookie"));
 		
 		boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
 		
@@ -58,8 +59,10 @@ public class UserService {
 			PrintWriter out = res.getWriter();
 			out.println("<script>alert('이메일/비밀번호를 확인해 주세요'); history.go(-1);</script>");	// 알림창 띄운 뒤 다시 로그인 페이지로 이동하게 한다
 			out.close();
-		}else if(login != null && pwChk == true) {	// 로그인 성공
+		}
+		if(login != null && pwChk == true) {	// 로그인 성공
 			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
+			
 			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
 				System.out.println("cookie");
 				// 쿠키 생성, 로그인할때 생성된 세션의 id 쿠키에 저장
@@ -77,7 +80,8 @@ public class UserService {
 				// 현재 세션 id와 유효시간을 사용자 테이블에 저장
 				dao.keepLogin(param);
 			}
-			mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
+			//mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
+			mav.setViewName("redirect:/");		// home 페이지로 이동
 		}
 		
 		return mav;
@@ -87,25 +91,8 @@ public class UserService {
 	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
 		ModelAndView mav = new ModelAndView("redirect:/");
 		
-		Object obj = session.getAttribute("login");
-		if(obj != null) {	// null이 아닐 경우 제거
-			UserVO user = (UserVO)obj;
-			session.removeAttribute("login");
-			session.invalidate();	// 세션 전체 삭제
-			Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
-			if(loginCookie != null) {	// 쿠키가 존재하면 삭제
-				loginCookie.setPath("/");
-				loginCookie.setMaxAge(0);
-				res.addCookie(loginCookie);
-				
-				Date date = new Date(System.currentTimeMillis());
-				HashMap<String, Object>param = new HashMap<String, Object>();
-				param.put("email", user.getEmail());
-				param.put("sessionid", session.getId());
-				param.put("sessionlimit", date);
-				dao.keepLogin(param);	// 사용자 테이블에도 유효기간을 현재시간으로 다시 세팅
-			}
-		}
+		req.getSession().removeAttribute("login");
+		
 		return mav;
 	}
 	

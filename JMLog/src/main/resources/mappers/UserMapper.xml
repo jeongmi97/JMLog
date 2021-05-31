@@ -66,13 +66,13 @@
 	
 	<update id="keepLogin" parameterType="HashMap">
 		update user
-		set sessionkey=#{sessionid}, sessionlimit=#{next}
+		set sessionkey=#{sessionid}, sessionlimit=#{sessionlimit}
 		where email=#{email}
 	</update>
 	
 	<select id="checkUserSession">
 		select *
 		from user
-		where sessionkey=#{sessionid} and sessionlimit > now()
+		where sessionkey=#{sessionid}
 	</select>
 </mapper>
