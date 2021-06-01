@@ -14,12 +14,24 @@
 <style type="text/css">
 
 a { text-decoration: none !important; color: #000000; }
-	
+
+.profile {
+	width: 40px;
+	height: 40px;
+	border-radius: 70%;	/* 테두리 원으로 */
+	overflow: hidden;	/* 넘치는 부분 안보이게 */
+}
+.img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;	 /* 비율 그대로 유지 */
+}
+
 </style>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
 <header>
@@ -28,16 +40,23 @@ a { text-decoration: none !important; color: #000000; }
 		<div class="col-md-8 "><h3><a href="${cpath }">JMLog</a></h3></div>
 		<c:choose>
 			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
-				<div class="col-md-4 text-right" style="margin-top: 20px">
+				<div class="col-md-3 text-right" style="margin-top: 20px">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}!
-					<span class="caret"></span></a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-					</ul>
+						
+				</div>
+				<div class="col-md-1 text-right" style="margin-top: 20px">
+					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
+					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
+						<img class="img" src="${cpath }/${login.email}/getProfileImg">
+					</div>
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
+						</ul>
 				</div>
 			</c:when>
 			<c:otherwise>	
@@ -49,7 +68,6 @@ a { text-decoration: none !important; color: #000000; }
 	</div>
 </header>
 <nav>
-	
 </nav>
 <section>
 	
