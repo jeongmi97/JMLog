@@ -74,4 +74,10 @@
 		set catecnt=#{catecnt}
 		where email=#{email} and catename=#{cate}
 	</update>
+	
+	<select id="getEmail" parameterType="String" resultType="String">
+		select email
+		from user
+		where nickname=#{nickname}
+	</select>
 </mapper>

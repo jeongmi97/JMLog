@@ -170,6 +170,14 @@ public class UserBoardService {
 		dao.updateReply(reply);
 	}
 
-	
+	// 닉네임 이용 해 유저보드 이동
+	public ModelAndView getEmail(String nickname) {
+		ModelAndView mav = new ModelAndView();
+		
+		String email = dao.getEmail(nickname);
+		mav.setViewName("redirect:/"+email);
+		
+		return mav;
+	}
 
 }

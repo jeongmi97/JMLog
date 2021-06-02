@@ -37,7 +37,7 @@ a { text-decoration: none !important; color: #000000; }
 <header>
 	<div class="container">
 	<div class="row mt-2">
-		<div class="col-md-8 "><h3><a href="${cpath }">JMLog</a></h3></div>
+		<div class="col-md-8 "><h2><a href="${cpath }">JMLog</a></h2></div>
 		<c:choose>
 			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
 				<div class="col-md-3 text-right" style="margin-top: 20px">

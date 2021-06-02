@@ -14,8 +14,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <style>
+
+@gray-light: lighten(#000, 46.7%);
     
-a { text-decoration: none; color: #000000; }
+a { text-decoration: none !important; color: #000000; }
     
 .profile {
 	width: 40px;
@@ -28,6 +30,10 @@ a { text-decoration: none; color: #000000; }
 	height: 100%;
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
+#reportDate{
+	margin-top: 20px;
+}
+
 </style>
 </head>
 
@@ -118,14 +124,14 @@ a { text-decoration: none; color: #000000; }
 					<div><strong>All</strong></div><hr>
 				</c:when>
 				<c:otherwise>
-					<div><c:out value="${nowCate }"></c:out></div><hr>
+					<div><strong><c:out value="${nowCate }"></c:out></strong></div><hr>
 				</c:otherwise>
 			</c:choose>
 			<div class="content">
 				<c:forEach items="${uBoard}" var="uBoard"> 
 					<div><a href="${cpath }/${user.email}/${uBoard.idx }"><h3><c:out value="${uBoard.title } " /></h3></a></div>
 					<div style="table-layout:fixed"><c:out value="${uBoard.content } " escapeXml="false"/></div>
-					<div><c:out value="${uBoard.reporting_date }" /></div><br>
+					<div class="text-dark" id="reportDate"><c:out value="${uBoard.reporting_date }" /></div>
 					<hr>
 				</c:forEach>
 				<!-- 페이징 -->

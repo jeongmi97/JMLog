@@ -103,6 +103,7 @@ public class UserController {
 		return us.setCategory(req);
 	}
 	
+	// 카테고리 삭제
 	@GetMapping("setting/category/delCategory")
 	public @ResponseBody String delCate(@RequestParam("idx")int idx) {
 		try {
@@ -114,6 +115,7 @@ public class UserController {
 		}
 	}
 	
+	// 카테고리 수정
 	@PostMapping("setting/category/updateCategory")
 	public @ResponseBody String updateCate(@RequestBody CategoryVO category) {
 		try {

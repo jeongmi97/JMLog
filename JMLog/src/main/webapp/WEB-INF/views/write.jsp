@@ -29,6 +29,11 @@ a{ text-decoration: none; color: #000000; }
 	border-top: 0;
 	border-left: 0;
 	border-right: 0;
+	width: 1140px;
+	height: 45px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-size: 20pt;
 }
 
 #category{
@@ -36,6 +41,9 @@ a{ text-decoration: none; color: #000000; }
 	height: 30px;
 }
 
+#lock_post{
+	margin-right: 8px;
+}
 </style>
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -101,15 +109,13 @@ a{ text-decoration: none; color: #000000; }
 		<form:hidden path="email" value="${login.email }"/>
 		<input type="hidden" name="mode">
 		
-		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요"/>
 		<form:select path="cate" id="category">
 			<option value="nocate">카테고리</option>
 			<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
-			</form:select>
-		<label for="lock_post">비공개</label><form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><br>
-		<form:textarea path="content" name="content" id="content" /><br>
-		
-		
+		</form:select>
+		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" />
+		<form:textarea path="content" name="content" id="content" rows="40" /><br>
+		<form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><label for="lock_post">비공개</label>
 		<input type="submit" value="작성하기">
 	</form:form>
 </div>

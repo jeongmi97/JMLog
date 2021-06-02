@@ -209,9 +209,5 @@ public class UserService {
 	public void updateCate(CategoryVO category) {
 		dao.updateCate(category);
 	}
-
-
-	
-	
 	
 }

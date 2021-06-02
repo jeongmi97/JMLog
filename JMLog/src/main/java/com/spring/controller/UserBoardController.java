@@ -77,4 +77,9 @@ public class UserBoardController {
 		return ubs.delPost(idx, login);
 	}
 	
+	// 닉네임 클릭 사용한 유저보드 이동
+	@GetMapping("reply/{nickname}")
+	public ModelAndView board(@PathVariable("nickname")String nickname) {
+		return ubs.getEmail(nickname);
+	}
 }

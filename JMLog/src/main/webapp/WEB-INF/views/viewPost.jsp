@@ -8,14 +8,55 @@
 <head>
 <meta charset="UTF-8">
 <title>${post.title }</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<style type="text/css">
+a{ text-decoration: none; color: #000000; }
+
+.profile {
+	width: 40px;
+	height: 40px;
+	border-radius: 70%;	/* 테두리 원으로 */
+	overflow: hidden;	/* 넘치는 부분 안보이게 */
+}
+.img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;	 /* 비율 그대로 유지 */
+}
+span{
+	margin-right: 10px;
+}
+#delPost{
+	margin-left: 10px;
+}
+#btnReply{
+	width: 160px;
+	height: 50px;
+	border-width: thin;
+	border-color: #DCDCDC;
+	background-color: white;
+}
+
+textarea {
+	box-shadow: none;
+}
+.hgroup{
+	margin-bottom: 60px;
+}
+#comment{
+	resize: none;
+}
+</style>
 </head>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	
 	$(function(){
 		// 게시글 삭제
-		$(btnDel).click(function(){
+		$('#btnDel').click(function(){
 			var idx = '${post.idx}';	// 게시글 번호
 			
 			var chk = confirm('삭제하시겠습니까?');	// 확인창 띄우기
@@ -131,26 +172,69 @@
 			error: function(error){
 				console.log(error);
 			}
-		})
+		});
 	}
 </script>
 
-	포스트화면<br>
-	${post.title }<br>
-	${post.content }<br>
-	<div>
-		<div><span>${post.email }</span><span> | </span><span>${post.reporting_date }</span><span> |</span></div>
-		<!-- 로그인한 사용자와 글 작성자가 같을 때 수정/삭제 버튼 보이게 -->
-		<c:if test="${login.email eq post.email }">	
-			<div><span><a href="${cpath }/editPost?idx=${post.idx}&mode=edit">수정</a></span> | <span><input type="button" value="삭제" id="btnDel"></span></div>
-		</c:if>
+<header>
+	<div class="container">
+	<div class="row mt-2">
+		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
+		<c:choose>
+			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
+				<div class="col-md-3 text-right" style="margin-top: 20px">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
+						
+				</div>
+				<div class="col-md-1 text-right" style="margin-top: 20px">
+					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
+					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
+						<img class="img" src="${cpath }/${login.email}/getProfileImg">
+					</div>
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
+						</ul>
+				</div>
+			</c:when>
+			<c:otherwise>	
+				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
+			</c:otherwise>
+		</c:choose>
+		
+	</div>
+	</div>
+	<hr>
+</header>
+
+<div class="container">
+	<h2><strong>${post.title }</strong></h2><br>
+	<div class="hgroup">
+		<div><span>${post.email }</span><span> | </span><span>${post.reporting_date }</span>
+			<!-- 로그인한 사용자와 글 작성자가 같을 때 수정/삭제 버튼 보이게 -->
+			<c:if test="${login.email eq post.email }">	
+				<span> |</span><span><a href="${cpath }/editPost?idx=${post.idx}&mode=edit">수정</a></span> | <span id="delPost"><a id="btnDel" href="#">삭제</a></span>
+			</c:if>
+		</div>
+		<hr>
+	</div>
+	<div class="cgroup">
+		<p>${post.content }</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<hr>
 	</div>
 	
 	<!-- 댓글 작성 폼 -->
 	<div>
-		<textarea rows="5" cols="50" id="comment" placeholder="댓글을 작성하세요"></textarea><br>
+		<textarea rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요"></textarea><br>
 		<button id="btnReply">댓글 작성</button>
-	</div><br>
+	</div>
+	<br>
 	
 	<!-- 댓글 리스트 -->
 	
@@ -159,7 +243,7 @@
 	<c:if test="${not empty reply }">	<!-- 댓글이 있을 때 -->
 		<c:forEach items="${reply }" var="reply">
 				<div id="reply${reply.idx }">
-					<div id="nickname"><c:out value="${reply.nickname }" /></div>
+					<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><c:out value="${reply.nickname }" /></a></div>
 					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
 					<div id="reply${reply.idx }actions">
 					<div>
@@ -174,6 +258,6 @@
 		</c:forEach>
 	</c:if>
 	</div>
-	
+</div>	
 </body>
 </html>

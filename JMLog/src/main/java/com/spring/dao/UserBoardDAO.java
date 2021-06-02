@@ -45,6 +45,8 @@ public interface UserBoardDAO {
 
 	void updateCateCnt(HashMap<String, Object> param);	// 추가된 카테고리 개수 업데이트 하기
 
+	String getEmail(String nickname);	// 닉네임으로 이메일 찾기
+
 
 	
 	

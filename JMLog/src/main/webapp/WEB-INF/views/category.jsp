@@ -7,9 +7,13 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리 관리</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
 	
@@ -121,6 +125,40 @@
 	
 	
 </script>
+
+<header>
+	<div class="container">
+	<div class="row mt-2">
+		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
+		<c:choose>
+			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
+				<div class="col-md-3 text-right" style="margin-top: 20px">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
+						
+				</div>
+				<div class="col-md-1 text-right" style="margin-top: 20px">
+					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
+					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
+						<img class="img" src="${cpath }/${login.email}/getProfileImg">
+					</div>
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
+						</ul>
+				</div>
+			</c:when>
+			<c:otherwise>	
+				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
+			</c:otherwise>
+		</c:choose>
+		
+	</div>
+	</div>
+</header>
 
 	<div class="set_order">
 		<div class="list_order">
