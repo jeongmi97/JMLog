@@ -9,6 +9,22 @@
 <title>카테고리 관리</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<style type="text/css">
+a { text-decoration: none; color: #000000; }
+
+.profile {
+	width: 40px;
+	height: 40px;
+	border-radius: 70%;	/* 테두리 원으로 */
+	overflow: hidden;	/* 넘치는 부분 안보이게 */
+}
+.img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;	 /* 비율 그대로 유지 */
+}
+</style>
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
@@ -160,15 +176,24 @@
 	</div>
 </header>
 
-	<div class="set_order">
+<div class="container">
+	<div class="row">
+			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
+				<li><a href="${cpath }/setting">프로필</a></li>
+				<li><a href="${cpath }/setting/category">카테고리</a></li>
+			</ol>
+	</div>	
+	<div class="set_order" style="text-align: center;">
 		<div class="list_order">
-			<div>
-				전체보기
+			<div class="row">
+				분류 전체보기
 			</div>
 			<form id="addCate" method="post" action="">
 				<input type="hidden" name="email" value="${login.email }">
 				<c:forEach var="category" items="${category }">
-					<div id="cate${category.idx }">${category.catename }<button type="button" class="updateBtn" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button><button type="button" class="deleteBtn" onclick="deleteBtn('${category.idx}')">삭제</button></div>
+					<div class="row">
+						<div id="cate${category.idx }">${category.catename }<button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button><button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('${category.idx}')">삭제</button></div>
+					</div>
 				</c:forEach>
 			</form>
 		</div>
@@ -182,6 +207,6 @@
 			<button class="saveBtn">저장</button>
 		</div>
 	</div>
-
+</div>
 </body>
 </html>

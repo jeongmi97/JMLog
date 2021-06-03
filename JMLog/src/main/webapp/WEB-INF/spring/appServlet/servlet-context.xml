@@ -39,6 +39,7 @@
 		<interceptor>
 			<mapping path="/write"/>
 			<mapping path="/setting"/>
+			<mapping path="/setting/category"/>
 			<beans:ref bean="UserInterceptor"/>
 		</interceptor>
 	</interceptors>

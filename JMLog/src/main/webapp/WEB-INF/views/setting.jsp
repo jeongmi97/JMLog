@@ -24,6 +24,20 @@ a { text-decoration: none; color: #000000; }
 	height: 100%;
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
+.upProfile{
+	width: 130px;
+	height: 130px;
+	border-radius: 70%;
+	overflow: hidden;
+}
+.upImg{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.row{
+	margin: auto;
+}
 </style>
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -96,22 +110,24 @@ a { text-decoration: none; color: #000000; }
 				<li><a href="${cpath }/setting/category">카테고리</a></li>
 			</ol>
 		</div>	
-		<div class="profile" style="background: #BDBDBD;">
-			<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
-			<img class="img" src="${cpath }/${login.email}/getProfileImg">
-		</div>
-		
-		<form method="POST" enctype="multipart/form-data" action="${capth }/setting">
-			<input type="hidden" id="email" name="email" value="${login.email }">
-			<!-- 이미지 아닌 파일 예외처리하기 -->
-			<label class="imgBtn" for="profileimg">이미지 업로드</label>
-			<input type="file" id="profileimg" name="profileimg" style={{display:none}}><br>
-			<label for="nickname">닉네임</label>
-			<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
-			<p id="nnamemsg"></p>
+		<div class="row" style="text-align: center;">
+			<div class="upProfile" style="background: #BDBDBD; display: block; margin: auto;">
+				<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
+				<img class="upImg" src="${cpath }/${login.email}/getProfileImg">
+			</div>
 			
-			<input type="submit" value="회원정보 수정">
-		</form>
+			<form method="POST" enctype="multipart/form-data" action="${capth }/setting">
+				<input type="hidden" id="email" name="email" value="${login.email }">
+				<!-- 이미지 아닌 파일 예외처리하기 -->
+				<label class="imgBtn" for="profileimg"><a>이미지 업로드</a></label>
+				<input type="file" id="profileimg" name="profileimg" style="display:none"><br>
+				<label for="nickname">닉네임</label>
+				<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
+				<p id="nnamemsg"></p>
+				
+				<button type="submit" class="btn btn-dark">회원정보 수정</button>
+			</form>
+		</div>
 	</div>
 </nav>
 </body>

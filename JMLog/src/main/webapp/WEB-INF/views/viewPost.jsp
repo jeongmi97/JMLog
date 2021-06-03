@@ -47,6 +47,15 @@ textarea {
 #comment{
 	resize: none;
 }
+#reply_date{
+	color: #A9A9A9;
+}
+#replyBtn{
+	color: #A9A9A9;
+}
+#nickname{
+	margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
@@ -66,6 +75,12 @@ textarea {
 		// 댓글 작성
 		$(btnReply).click(function(){
 			console.log('들어옴');
+			if('${login.email}' == ''){		// 미로그인 상태에서 댓글 작성 시도 시 
+				console.log('미로그인');
+				alert('로그인이 필요합니다!');	// 로그인 필요 알림창 띄운뒤
+				return;						// 댓글 작성 기능 수행 x
+			}
+			
 			var comment = $('#comment').val();	
 			
 			var paramData = JSON.stringify({
@@ -101,11 +116,11 @@ textarea {
 			console.log('지금 시간 : ' + nowTime);
 			var htmls = '';
 			htmls+='<div id="reply'+idx+'"><div id="nickname">' + '${login.nickname}' + '</div>';
-			htmls+='<div><span><a href="#" onclick="updateReply('+idx+')">수정</a></span>'
-			htmls+='<span><a href="#" onclick="delReply('+idx+')">삭제</a></span></div>'
 			htmls+='<p id="reply">' + $('#comment').val() + '</p>';
 			htmls+='<div id="reply_date">' + nowTime + '</div>';
-			htmls+='</div>';
+			htmls+='<div><span><a href="#" onclick="updateReply('+idx+')" id="replyBtn">수정</a></span><span id="replyBtn"> | </span>';
+			htmls+='<span><a href="#" onclick="delReply('+idx+')" id="replyBtn">삭제</a></span></div>';
+			htmls+='<hr></div>';
 			
 			$("#replyList").append(htmls);	// 댓글 리스트 영역에 추가
 		};
@@ -243,18 +258,19 @@ textarea {
 	<c:if test="${not empty reply }">	<!-- 댓글이 있을 때 -->
 		<c:forEach items="${reply }" var="reply">
 				<div id="reply${reply.idx }">
-					<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><c:out value="${reply.nickname }" /></a></div>
-					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
+					<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><strong><c:out value="${reply.nickname }" /></strong></a></div>
 					<div id="reply${reply.idx }actions">
-					<div>
-						<span><a href="#" onclick="updateReply('${reply.idx}','${reply.comment }')">수정</a></span>
-						<span><a href="#" onclick="delReply('${reply.idx}')">삭제</a></span>
-					</div>
 					<p id="reply${reply.idx }comment"><c:out value="${reply.comment }" /></p>
+					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
+					<c:if test="${login.nickname eq reply.nickname }">
+						<div>
+							<span><a href="#" onclick="updateReply('${reply.idx}','${reply.comment }')" id="replyBtn">수정</a></span><span id="replyBtn"> | </span>
+							<span><a href="#" onclick="delReply('${reply.idx}')" id="replyBtn">삭제</a></span>
+						</div>
+					</c:if>
 					</div>
-					
+					<hr>
 				</div>
-				<hr>
 		</c:forEach>
 	</c:if>
 	</div>
