@@ -31,11 +31,6 @@ public class UserController {
 	
 	@Autowired UserService us;
 	
-	@RequestMapping("/")
-	public String home() {
-		return "home";
-	}
-	
 	@RequestMapping("login")
 	public void login() {
 		System.out.println("login 페이지 이동");

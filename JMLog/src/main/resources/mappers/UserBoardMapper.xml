@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
+	<select id="getPostList" resultType="BoardVO">
+		select *
+		from board
+		order by idx desc limit 0, 9
+	</select>
+	
 	<insert id="write" parameterType="BoardVO">
 		insert into board(title, content, email, lock_post, cate) 
 		values(#{title}, #{content}, #{email}, #{lock_post}, #{cate})

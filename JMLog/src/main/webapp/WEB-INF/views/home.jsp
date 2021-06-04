@@ -27,6 +27,17 @@ a { text-decoration: none !important; color: #000000; }
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
 
+ul{
+	list-style: none;
+}
+.navi{
+	float: left;
+	font-size: 20px;
+	margin-right: 20px;
+}
+.thumbnail{
+	height: 250px;
+}
 </style>
 </head>
 <body>
@@ -34,6 +45,44 @@ a { text-decoration: none !important; color: #000000; }
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
+<script type="text/javascript">
+/*var  page = 2;
+	
+	$(function (){
+		//페이지 로드 시 데이터 가져온뒤 page 증가
+		getList(page);
+		page++;
+	});
+	
+	$(window).scroll(function(){
+		// 스크롤이 최하단으로 내려가면 리스트 조회한 뒤 page 증가
+		if($(window).scrollTop() >= $(document).height() - $(window).height()){
+			getList(page);
+			page++;
+		}
+	});
+	
+	function getList(page){
+		
+		var headers = {"Content-Type": "application/json"
+			,"X-HTTP-Method-Override": "POST"};
+		
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			data: {"page", page},
+			url: 'home/getBoard',
+			headers: headers,
+			succes: function(result){
+				var addList = '';
+				for(var i=0; i<data.length; i++){
+					addList +=
+				}
+				
+			}
+		})
+	} */
+</script>
 <header>
 	<div class="container">
 	<div class="row mt-2">
@@ -68,13 +117,31 @@ a { text-decoration: none !important; color: #000000; }
 	</div>
 </header>
 <nav>
+	<div class="container" style="margin-top: 40px; margin-bottom: 30px;">
+		<div class="row">
+			<ul>
+		  		<li class="navi" id="popular"><strong><a href="${cpath }" style="color: #6A5ACD	;">인기</a></strong></li>
+		  		<li class="navi" id="latest"><a href="#">최신</a></li>
+			</ul>
+		</div>
+	</div>
 </nav>
-<section>
-	
-</section>
-<aside>
-	
-</aside>
+<div class="container">
+	<c:forEach var="post" items="${postList }" varStatus="status">
+		<div class="row">
+			<c:forEach var="i" begin="${status.index }" end="${status.index + 2 }" step="1">
+				<div class="col-sm-4 col-md-4">
+				    <div class="thumbnail">
+				    	<div class="caption">
+				        	<h3><c:out value="${post[i].title }" /></h3>
+				        	<p>...</p>
+		      			</div>
+		      		</div>
+		    	</div>
+			</c:forEach>
+		</div>
+	</c:forEach>
+</div>
 <footer>
 	
 </footer>

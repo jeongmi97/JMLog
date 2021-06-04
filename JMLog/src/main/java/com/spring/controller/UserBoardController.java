@@ -23,6 +23,11 @@ public class UserBoardController {
 	
 	@Autowired UserBoardService ubs;
 	
+	@RequestMapping("/")
+	public ModelAndView home() {
+		return ubs.home();
+	}
+	
 	// 유저 보드 페이지
 	@GetMapping("{email:.+}")
 	public ModelAndView board(@PathVariable("email")String email

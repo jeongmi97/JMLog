@@ -62,7 +62,7 @@ public class UserService {
 		}
 		if(login != null && pwChk == true) {	// 로그인 성공
 			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
-			
+			System.out.println("프로필 이미지 체크 :::: " + login.getProfileimg());
 			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
 				System.out.println("cookie");
 				// 쿠키 생성, 로그인할때 생성된 세션의 id 쿠키에 저장
@@ -139,17 +139,20 @@ public class UserService {
 
 	// 프로필 수정
 	public ModelAndView settingUser(MultipartHttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("redirect:/setting");
+		ModelAndView mav = new ModelAndView("/setting");
 		
 		UserVO vo = new UserVO();
 		vo.setEmail(req.getParameter("email"));
 		vo.setNickname(req.getParameter("nickname"));
 		
+		String imgChk = req.getParameter("imgChk");		// 파일 선택 안했을 때 no 들어옴
+		
 		MultipartFile mfile = req.getFile("profileimg");
-		
+		System.out.println("이미지 :::: "  + mfile);
 		String imgType = mfile.getContentType();
-		
-		if(req.getFile("profileimg") != null) {	// 이미지 파일 선택 했을 때
+		System.out.println("이미지선택 체크 : " + req.getParameter("imgChk"));
+		if(imgChk == "yes" && mfile != null) {	// 이미지 파일 선택 했을 때
+			System.out.println("이미지 수정 들어옴");
 			try {
 				mfile = req.getFile("profileimg");
 				// 이메일 일치하는 유저의 프로필 사진 업데이트
@@ -163,7 +166,7 @@ public class UserService {
 			}
 		}
 		
-		dao.setNickname(vo);
+		dao.setNickname(vo);	// 닉네임 수정
 		
 		return mav;	// 수정 완료하고 다시 setting 화면으로 돌아감
 	}

@@ -8,6 +8,8 @@ import com.spring.vo.CategoryVO;
 import com.spring.vo.ReplyVO;
 
 public interface UserBoardDAO {
+	
+	List<BoardVO> getPostList();	// 전체 글 가져오기
 
 	void write(BoardVO vo);	// 글 작성
 	
@@ -47,7 +49,5 @@ public interface UserBoardDAO {
 
 	String getEmail(String nickname);	// 닉네임으로 이메일 찾기
 
-
-	
 	
 }
