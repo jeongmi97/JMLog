@@ -5,6 +5,12 @@
 	<select id="getPostList" resultType="BoardVO">
 		select *
 		from board
+		order by hit desc limit 0, 9
+	</select>
+	
+	<select id="getNewPostList" resultType="BoardVO">
+		select *
+		from board
 		order by idx desc limit 0, 9
 	</select>
 	
@@ -86,4 +92,10 @@
 		from user
 		where nickname=#{nickname}
 	</select>
+	
+	<update id="updateHit" parameterType="int">
+		update board
+		set hit=hit+1
+		where idx=#{idx}
+	</update>
 </mapper>

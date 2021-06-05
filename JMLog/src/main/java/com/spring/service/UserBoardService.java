@@ -21,7 +21,7 @@ public class UserBoardService {
 	@Autowired UserBoardDAO dao;
 	@Autowired UserDAO udao;
 	
-	// 홈 화면
+	// 홈 화면(인기순)
 	public ModelAndView home() {
 		ModelAndView mav = new ModelAndView("home");
 		
@@ -29,6 +29,16 @@ public class UserBoardService {
 		
 		return mav;
 	}
+	
+	// 홈 화면 (최신순)
+	public ModelAndView newlist() {
+		ModelAndView mav = new ModelAndView("newlist");
+		
+		mav.addObject("postList", dao.getNewPostList());
+		
+		return mav;
+	}
+	
 	// 유저 블로그로 이동
 	public ModelAndView userBoard(String email,int page, int range, String category) {
 		ModelAndView mav = new ModelAndView("userBoard");
@@ -124,6 +134,8 @@ public class UserBoardService {
 	public ModelAndView viewPost(int idx) {
 		ModelAndView mav = new ModelAndView("viewPost");
 		
+		dao.updateHit(idx);		// 게시글 이동 시 조회수 +1 업데이트
+		
 		mav.addObject("post",dao.getPost(idx));
 		mav.addObject("reply",dao.getReply(idx));
 		
@@ -188,7 +200,6 @@ public class UserBoardService {
 		
 		return mav;
 	}
-
 	
 
 }

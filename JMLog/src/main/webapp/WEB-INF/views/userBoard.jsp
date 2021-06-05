@@ -124,14 +124,14 @@ a { text-decoration: none !important; color: #000000; }
 					<div><strong>All</strong></div><hr>
 				</c:when>
 				<c:otherwise>
-					<div><strong><c:out value="${nowCate }"></c:out></strong></div><hr>
+					<div><strong><c:out value="${nowCate }" /></strong></div><hr>
 				</c:otherwise>
 			</c:choose>
 			<div class="content">
 				<c:forEach items="${uBoard}" var="uBoard"> 
 					<div><a href="${cpath }/${user.email}/${uBoard.idx }"><h3><c:out value="${uBoard.title } " /></h3></a></div>
 					<div style="table-layout:fixed"><c:out value="${uBoard.content } " escapeXml="false"/></div>
-					<div class="text-dark" id="reportDate"><c:out value="${uBoard.reporting_date }" /></div>
+					<div class="text-dark" style="color: #A9A9A9;" id="reportDate"><c:out value="${uBoard.reporting_date }" /> | <c:out value="${uBoard.hit }"/>회조회</div>
 					<hr>
 				</c:forEach>
 				<!-- 페이징 -->

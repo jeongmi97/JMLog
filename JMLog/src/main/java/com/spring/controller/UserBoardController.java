@@ -23,11 +23,17 @@ public class UserBoardController {
 	
 	@Autowired UserBoardService ubs;
 	
+	// 기본 홈 페이지(인기순)
 	@RequestMapping("/")
 	public ModelAndView home() {
 		return ubs.home();
 	}
 	
+	// 홈 페이지(최신순)
+	@RequestMapping("newlist")
+	public ModelAndView newlist() {
+		return ubs.newlist();
+	}
 	// 유저 보드 페이지
 	@GetMapping("{email:.+}")
 	public ModelAndView board(@PathVariable("email")String email
