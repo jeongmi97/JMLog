@@ -52,4 +52,6 @@ public interface UserBoardDAO {
 	String getEmail(String nickname);	// 닉네임으로 이메일 찾기
 
 	void updateHit(int idx);	// 조회수 업데이트
+
+	List<BoardVO> getBoardList(int startList);	// 스크롤 페이징(인기순)
 }

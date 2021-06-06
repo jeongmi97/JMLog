@@ -8,6 +8,12 @@
 		order by hit desc limit 0, 9
 	</select>
 	
+	<select id="getBoardList" parameterType="int" resultType="BoardVO">
+		select *
+		from board
+		order by hit desc limit #{startList}, 9
+	</select>
+	
 	<select id="getNewPostList" resultType="BoardVO">
 		select *
 		from board

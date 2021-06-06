@@ -1,6 +1,7 @@
 package com.spring.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -199,6 +200,12 @@ public class UserBoardService {
 		mav.setViewName("redirect:/"+email);
 		
 		return mav;
+	}
+	
+	// 스크롤 페이징
+	public List<BoardVO> getBoardList(int page) {
+		int startList = ((page-1)*9)+1;
+		return dao.getBoardList(startList);
 	}
 	
 

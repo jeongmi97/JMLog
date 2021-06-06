@@ -1,5 +1,7 @@
 package com.spring.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.service.UserBoardService;
+import com.spring.vo.BoardVO;
 import com.spring.vo.ReplyVO;
 
 @RestController
@@ -54,4 +57,14 @@ public class RestBoardController {
 		}
 	}
 	
+	@GetMapping(value="home/getBoardList")
+	public List<BoardVO> getBoardList(@RequestParam("page")int page){
+		System.out.println("page ::: " + page);
+		try {
+			return ubs.getBoardList(page);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

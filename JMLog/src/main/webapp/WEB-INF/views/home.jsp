@@ -37,64 +37,69 @@ ul{
 }
 .thumbnail{
 	height: 250px;
-	text-overflow: ellipsis;
 	overflow: hidden;
-	white-space: nowrap;
 	
+}
+.caption{
+	height: 240px;
 }
 .title{
 	font-weight: bold;
+}
+.thumbnail div h3{
+	text-overflow: ellipsis;	/* 텍스트가 영역을 벗어나면 '...' 나타남 */
+	overflow: hidden;			/* 영역 벗어나면 감추어짐 */
+	white-space: nowrap;		/* 텍스트의 줄바꿈이 이루어지지 않음 */
+}
+.thumbnail div p{
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 </style>
 </head>
 <body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
 <script type="text/javascript">
-/*var  page = 2;
+
+var loading = false;	// 중복실행 여부
+var  page = 2;			// 불러올 페이지
 	
-	$(function (){
-		//페이지 로드 시 데이터 가져온뒤 page 증가
-		getList(page);
-		page++;
-	});
-	
-	$(window).scroll(function(){
+	$(function(){
+		
+	$(document).scroll(function(){
 		// 스크롤이 최하단으로 내려가면 리스트 조회한 뒤 page 증가
-		if($(window).scrollTop() >= $(document).height() - $(window).height()){
-			getList(page);
-			page++;
+		if($(document).height() <= $(window).scrollTop() + $(window).height() + 100){
+			/* if(!loading){	// 실행 가능 상태 시
+				loading = true;	// 실행 불가능 상태로 변경 */
+				page++;
+				getList();
+			/* } */
 		}
 	});
 	
-	function getList(page){
-		
-		var headers = {"Content-Type": "application/json"
-			,"X-HTTP-Method-Override": "POST"};
-		
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			data: {"page", page},
-			url: 'home/getBoard',
-			headers: headers,
-			succes: function(result){
-				var addList = '';
-				for(var i=0; i<data.length; i++){
-					addList +=
-				}
-				
-			}
-		})
-	} */
 	
-	/* window.onload = function(){
-		var str = '<c:out value="${post.content }" escapeXml="false" />';
-		console.log('value = ' + str);
-		str.replace('<[^>]*>', ''); 
-	}*/
+	function getList(){
+		console.log('eee');
+		$.ajax({
+			type: 'get',
+			url: 'home/getBoardList?page='+page,
+			succes: function(data){
+				$('#postContainer').append('<p>추가됨</p>');
+				
+				loading = false;	// 실행 가능 상태
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	};
+	
+	});
 </script>
 <header>
 	<div class="container">
@@ -139,7 +144,7 @@ ul{
 		</div>
 	</div>
 </nav>
-<div class="container">
+<div id="postContainer" class="container">
 	<c:forEach var="post" items="${postList }" varStatus="status">
 		<c:if test="${status.count == 1 || status.count % 3 == 1}">
 			<div class="row">
@@ -147,7 +152,7 @@ ul{
 			<div class="col-sm-4 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
-				    	<h3 class="title"><c:out value="${post.title }" escapeXml="false" /></h3>
+				    	<h3 class="title"><a href="${cpath }/${post.email}/${post.idx}"><c:out value="${post.title }" escapeXml="false" />11111111111111111111111111111</a></h3>
 				    	<hr>
 				        <p>
 				        	<c:out value="${post.content }" escapeXml="false" />
