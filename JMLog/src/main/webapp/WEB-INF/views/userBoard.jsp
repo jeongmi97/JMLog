@@ -162,7 +162,6 @@ a { text-decoration: none !important; color: #000000; }
 
 
 <footer id="footer">
-	footer
 </footer>
 
 </div>

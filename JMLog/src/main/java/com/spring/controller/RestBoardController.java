@@ -2,15 +2,20 @@ package com.spring.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.service.UserBoardService;
 import com.spring.vo.BoardVO;
+import com.spring.vo.CategoryVO;
 import com.spring.vo.ReplyVO;
 
 @RestController
@@ -57,6 +62,32 @@ public class RestBoardController {
 		}
 	}
 	
+	// 카테고리 삭제
+	@GetMapping(value="setting/category/delCategory")
+	public String delCate(@RequestParam("idx")int idx) {
+		try {
+			ubs.delCate(idx);
+			return "ok";
+		}catch (Exception e) {
+			e.printStackTrace();
+			return "false";
+		}
+	}
+	
+	// 카테고리 수정
+	@GetMapping(value="setting/category/updateCategory")
+	public String updateCate(@RequestParam("oldcate")String oldcate,@RequestParam("idx")int idx, @RequestParam("catename")String catename,@RequestParam("email")String email) {
+		try {
+			ubs.updateCate(oldcate,idx,catename,email);
+			return catename;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return "false";
+		}
+		
+	}
+		
+	// 스크롤 페이징
 	@GetMapping(value="home/getBoardList")
 	public List<BoardVO> getBoardList(@RequestParam("page")int page){
 		System.out.println("page ::: " + page);

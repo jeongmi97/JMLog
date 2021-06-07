@@ -188,29 +188,4 @@ public class UserService {
 		return new ResponseEntity<byte[]>(profileImg, headers, HttpStatus.OK);
 	}
 
-	// 카테고리 추가
-	public ModelAndView setCategory(HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView("redirect:/category");
-		
-		String[] categorys = req.getParameterValues("catename");
-		
-		HashMap<String, Object>param = new HashMap<String, Object>();
-		param.put("email", req.getParameter("email"));
-		param.put("category", categorys);
-		
-		dao.setCategory(param);
-		
-		return mav;
-	}
-
-	// 카테고리 삭제
-	public void delCate(int idx) {
-		dao.delCate(idx);
-	}
-	
-	// 카테고리 수정
-	public void updateCate(CategoryVO category) {
-		dao.updateCate(category);
-	}
-	
 }

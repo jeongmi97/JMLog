@@ -1,19 +1,25 @@
 package com.spring.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.spring.service.UserBoardService;
 import com.spring.vo.BoardVO;
+import com.spring.vo.CategoryVO;
 import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
 
@@ -34,6 +40,7 @@ public class UserBoardController {
 	public ModelAndView newlist() {
 		return ubs.newlist();
 	}
+	
 	// 유저 보드 페이지
 	@GetMapping("{email:.+}")
 	public ModelAndView board(@PathVariable("email")String email
@@ -76,6 +83,18 @@ public class UserBoardController {
 		return ubs.about(email);
 	}
 	
+	// 소개글 작성
+	@PostMapping("{email:.+}/about")
+	public ModelAndView about(BoardVO vo) {
+		return ubs.writeAbout(vo);
+	}
+	
+	// 소개글 수정
+	@PostMapping("{email:.+}/about/update")
+	public ModelAndView updateAbout(BoardVO vo) {
+		return ubs.updateAbout(vo);
+	}
+	
 	// 게시글 수정 선택 시
 	@GetMapping("editPost")
 	public ModelAndView editPost(@RequestParam("idx")int idx,@RequestParam("mode")String mode) {
@@ -86,6 +105,12 @@ public class UserBoardController {
 	@GetMapping("delPost/{idx}")
 	public ModelAndView delPost(@PathVariable("idx")int idx,@ModelAttribute("login") UserVO login) {
 		return ubs.delPost(idx, login);
+	}
+	
+	// 카테고리 설정
+	@PostMapping(value="setting/category")
+	public ModelAndView setCategory(HttpServletRequest req) {
+		return ubs.setCategory(req);
 	}
 	
 	// 닉네임 클릭 사용한 유저보드 이동

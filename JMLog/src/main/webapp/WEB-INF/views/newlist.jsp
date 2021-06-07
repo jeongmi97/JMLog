@@ -53,48 +53,7 @@ ul{
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
 <script type="text/javascript">
-/*var  page = 2;
-	
-	$(function (){
-		//페이지 로드 시 데이터 가져온뒤 page 증가
-		getList(page);
-		page++;
-	});
-	
-	$(window).scroll(function(){
-		// 스크롤이 최하단으로 내려가면 리스트 조회한 뒤 page 증가
-		if($(window).scrollTop() >= $(document).height() - $(window).height()){
-			getList(page);
-			page++;
-		}
-	});
-	
-	function getList(page){
-		
-		var headers = {"Content-Type": "application/json"
-			,"X-HTTP-Method-Override": "POST"};
-		
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			data: {"page", page},
-			url: 'home/getBoard',
-			headers: headers,
-			succes: function(result){
-				var addList = '';
-				for(var i=0; i<data.length; i++){
-					addList +=
-				}
-				
-			}
-		})
-	} */
-	
-	/* window.onload = function(){
-		var str = '<c:out value="${post.content }" escapeXml="false" />';
-		console.log('value = ' + str);
-		str.replace('<[^>]*>', ''); 
-	}*/
+
 </script>
 <header>
 	<div class="container">

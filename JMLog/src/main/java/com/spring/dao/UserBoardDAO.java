@@ -40,11 +40,25 @@ public interface UserBoardDAO {
 	int getBoardListCnt(String email);	// 총 게시글 개수 확인
 
 	List<CategoryVO> getCategory(String email);	// 유저 카테고리 가져오기
+	
+	void writeAbout(BoardVO vo);	// 소개글 작성
+	
+	void updateAbout(BoardVO vo);	// 소개글 수정
+	
+	Object getAbout(String email);	// 소개글 가져오기
 
 	List<BoardVO> cateBoardList(HashMap<String, Object> param);	// 카테고리별 보드 리스트 가져오기
 
 	int getCateBoardList(HashMap<String, Object> param);	// 카테고리별 게시글 개수 가져오기
+	
+	void setCategory(HashMap<String, Object> param);	// 카테고리 추가
 
+	void delCate(int idx);	// 카테고리 삭제
+
+	void updateCate(HashMap<String, Object> category);	// 카테고리 수정
+
+	void updatePostCate(HashMap<String, Object> param);	// 카테고리 수정 - 게시글 카테고리 수정
+	
 	int getCateCnt(HashMap<String, Object> param);	// 선택한 카테고리 개수 가져오기
 
 	void updateCateCnt(HashMap<String, Object> param);	// 추가된 카테고리 개수 업데이트 하기
@@ -54,4 +68,7 @@ public interface UserBoardDAO {
 	void updateHit(int idx);	// 조회수 업데이트
 
 	List<BoardVO> getBoardList(int startList);	// 스크롤 페이징(인기순)
+
+
+
 }

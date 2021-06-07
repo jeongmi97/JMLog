@@ -3,6 +3,8 @@ package com.spring.service;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.dao.UserBoardDAO;
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
+import com.spring.vo.CategoryVO;
 import com.spring.vo.Pagination;
 import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
@@ -147,9 +150,30 @@ public class UserBoardService {
 	public ModelAndView about(String email) {
 		ModelAndView mav = new ModelAndView("about");
 		
+		mav.addObject("email" , email);
+		mav.addObject("content", dao.getAbout(email));
+		
 		return mav;
 	}
 
+	// 소개글 작성
+	public ModelAndView writeAbout(BoardVO vo) {
+		ModelAndView mav = new ModelAndView("redirect:/"+vo.getEmail()+"/about");
+		
+		dao.writeAbout(vo);
+		
+		return mav;
+	}
+	
+	// 소개글 수정
+	public ModelAndView updateAbout(BoardVO vo) {
+		ModelAndView mav = new ModelAndView("redirect:/"+vo.getEmail()+"/about");
+		
+		dao.updateAbout(vo);
+		
+		return mav;
+	}
+	
 	// 게시글 수정
 	public ModelAndView editPost(int idx, String mode) {
 		ModelAndView mav = new ModelAndView("write");
@@ -191,6 +215,38 @@ public class UserBoardService {
 		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
 		dao.updateReply(reply);
 	}
+	
+	// 카테고리 추가
+	public ModelAndView setCategory(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView("redirect:/category");
+		
+		String[] categorys = req.getParameterValues("catename");
+		
+		HashMap<String, Object>param = new HashMap<String, Object>();
+		param.put("email", req.getParameter("email"));
+		param.put("category", categorys);
+		
+		dao.setCategory(param);
+		
+		return mav;
+	}
+
+	// 카테고리 삭제
+	public void delCate(int idx) {
+		dao.delCate(idx);
+	}
+	
+	// 카테고리 수정
+	public void updateCate(String oldcate, int idx, String catename, String email) {
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		param.put("oldcate", oldcate);
+		param.put("email", email);
+		param.put("cate", catename);
+		param.put("idx", idx);
+		
+		dao.updateCate(param);
+		dao.updatePostCate(param);
+	}
 
 	// 닉네임 이용 해 유저보드 이동
 	public ModelAndView getEmail(String nickname) {
@@ -207,6 +263,10 @@ public class UserBoardService {
 		int startList = ((page-1)*9)+1;
 		return dao.getBoardList(startList);
 	}
+
+	
+
+	
 	
 
 }

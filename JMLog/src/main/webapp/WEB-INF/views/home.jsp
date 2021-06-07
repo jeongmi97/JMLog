@@ -71,25 +71,41 @@ var  page = 2;			// 불러올 페이지
 	
 	$(function(){
 		
-	$(document).scroll(function(){
+	/* $(document).scroll(function(){
 		// 스크롤이 최하단으로 내려가면 리스트 조회한 뒤 page 증가
 		if($(document).height() <= $(window).scrollTop() + $(window).height() + 100){
-			/* if(!loading){	// 실행 가능 상태 시
-				loading = true;	// 실행 불가능 상태로 변경 */
-				page++;
 				getList();
-			/* } */
+				page++;
+		}
+	}); */
+	
+	$(window).scroll(function(){
+		var scroll = $(window).scrollTop(); //스크롤의 현재 위치
+		var docHeight = $(document).height() //도큐먼트 높이로 고정
+		var winHeight = $(window).height() //윈도우창 높이 가변
+		
+		if(scroll == docHeight - winHeight){
+			console.log($(window).scrollTop());
+			console.log('doc height : ' + $(document).height());
+			console.log('win height : ' + $(window).height());
+			getList();
+			page++;
 		}
 	});
 	
-	
 	function getList(){
-		console.log('eee');
+		console.log('page :' + page );
 		$.ajax({
 			type: 'get',
 			url: 'home/getBoardList?page='+page,
+			dataType: 'json',
 			succes: function(data){
-				$('#postContainer').append('<p>추가됨</p>');
+				console.log('성공');
+				if(data != null){
+					for(var i in data){
+						$('#postContainer').append('<div>추가됨</div>');
+					}
+				}
 				
 				loading = false;	// 실행 가능 상태
 			},
@@ -152,7 +168,7 @@ var  page = 2;			// 불러올 페이지
 			<div class="col-sm-4 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
-				    	<h3 class="title"><a href="${cpath }/${post.email}/${post.idx}"><c:out value="${post.title }" escapeXml="false" />11111111111111111111111111111</a></h3>
+				    	<h3 class="title"><a href="${cpath }/${post.email}/${post.idx}"><c:out value="${post.title }" escapeXml="false" /></a></h3>
 				    	<hr>
 				        <p>
 				        	<c:out value="${post.content }" escapeXml="false" />

@@ -66,5 +66,4 @@ public class BoardVO {
 	public String toString() {
 		return "유저보드 date : " + getReporting_date() + ", title : " + getTitle();
 	}
-	
 }

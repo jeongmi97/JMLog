@@ -5,18 +5,21 @@
 	<select id="getPostList" resultType="BoardVO">
 		select *
 		from board
+		where not lock_post in ('a')
 		order by hit desc limit 0, 9
 	</select>
 	
 	<select id="getBoardList" parameterType="int" resultType="BoardVO">
 		select *
 		from board
+		where not lock_post in ('a')
 		order by hit desc limit #{startList}, 9
 	</select>
 	
 	<select id="getNewPostList" resultType="BoardVO">
 		select *
 		from board
+		where not lock_post in ('a')
 		order by idx desc limit 0, 9
 	</select>
 	
@@ -28,17 +31,59 @@
 	<select id="userBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
-		where email=#{email}
+		where email=#{email} and not lock_post in ('a')
 		order by idx desc limit #{startList},10
 	</select>
 	
 	<select id="cateBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
-		where email=#{email} and cate=#{cate}
+		where email=#{email} and cate=#{cate} and not lock_post in ('a')
 		order by idx desc limit #{startList},10
 	</select>
 	
+	<insert id="writeAbout" parameterType="BoardVO">
+		insert into board (title, content, email, lock_post)
+		values('userabout', #{content}, #{email}, 'a')
+	</insert>
+
+	<update id="updateAbout">
+		update board
+		set content=#{content}
+		where email=#{email} and lock_post='a'	
+	</update>
+	
+	<select id="getAbout" parameterType="String" resultType="String">
+		select content
+		from board
+		where email=#{email} and lock_post='a'
+	</select>
+	
+	<insert id="setCategory" parameterType="HashMap">
+		insert into category(email, catename)
+		values 
+		<foreach collection="category" item="catename" separator=",">
+			(#{email}, #{catename})
+		</foreach>
+	</insert>
+	
+	<delete id="delCate" parameterType="int">
+		delete from category
+		where idx=#{idx}
+	</delete>
+	
+	<update id="updateCate" parameterType="CategoryVO">
+		update category
+		set catename=#{cate}
+		where idx=#{idx}
+	</update>
+	
+	<update id="updatePostCate" parameterType="CategoryVO">
+		update board
+		set cate=#{cate}
+		where email=#{email} and cate=#{oldcate}
+	</update>
+
 	<select id="getPostnum" parameterType="String" resultType="int">
 		select idx
 		from board

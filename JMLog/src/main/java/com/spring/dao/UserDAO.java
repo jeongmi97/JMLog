@@ -29,13 +29,7 @@ public interface UserDAO {
 
 	Map<String, Object> getProfileImg(String email);
 
-	void setCategory(HashMap<String, Object> param);
-
-	List<CategoryVO> getCategory(String email);
-
-	void delCate(int idx);
-
-	void updateCate(CategoryVO category);
+	List<CategoryVO> getCategory(String email);	// 유저 카테고리 가져오기
 
 
 }

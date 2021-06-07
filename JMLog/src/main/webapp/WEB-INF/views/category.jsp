@@ -24,11 +24,27 @@ a { text-decoration: none; color: #000000; }
 	height: 100%;
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
+.categorybox{
+	margin: auto;
+	margin-bottom: 5px;
+	width: 300px;
+	height: 30px;
+}
+#namebox{
+	float: left;
+}
+#btnbox{
+	float: right;
+}
+.addBtn{
+	margin-bottom: 10px;
+}
 </style>
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
@@ -84,7 +100,7 @@ a { text-decoration: none; color: #000000; }
 		console.log("카테고리 : " + catename);
 		var catename = catename;
 		// div만 있던 해당 카테고리 행을 input이 추가된 div로 바꾸기
-		$('#cate' + idx).replaceWith('<div id="cate'+idx+'"><input type="text" name="cate'+idx+'" value="'+catename+'"><button type="button" onclick="cancelUpdate('+idx+','+catename+')">취소</button><button type="button" onclick="update('+idx+','+catename+')">확인</button></div>')
+		$('#cate' + idx).replaceWith('<div class="categorybox" id="cate'+idx+'"><span id="namebox"><input type="text" name="cate'+idx+'" value="'+catename+'"></span><span id="btnbox"><button class="btn btn-default btn-xs" type="button" onclick="cancelUpdate('+idx+','+catename+')">취소</button> <button class="btn btn-default btn-xs" type="button" onclick="update('+idx+','+catename+')">확인</button></span></div>')
 		
 		
 	};
@@ -92,34 +108,28 @@ a { text-decoration: none; color: #000000; }
 	// 수정모드 -> 취소
 	function cancelUpdate(idx,catename){
 		// input이 있는 div 다시 원래 div로 바꾸기
-		$('#cate' + idx).replaceWith('<div id="cate'+idx+'">'+catename+'<button type="button" class="updateBtn" onclick="updateBtn('+idx+', '+catename+')">수정</button><button type="button" class="deleteBtn" onclick="deleteBtn('+idx+')">삭제</button></div>')
+		$('#cate' + idx).replaceWith('<div class="categorybox" id="cate'+idx+'"><span id="namebox">'+catename+'</span><span id="btnbox"><button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('+idx+', '+catename+')">수정</button> <button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('+idx+')">삭제</button></span></div>')
 	}
 	
 	// 수정모드 -> 저장
 	function update(idx, catename){
-		updateCate = $('input[name=cate'+idx+']').val();
+		var email = '${login.email}';
+		var updateCate = $('input[name=cate'+idx+']').val();
+		var oldcate = catename;
+		console.log('원래내용: ' + oldcate);
 		console.log("수정내용 : " + updateCate);
-		var paramData = JSON.stringify({
-			"idx": idx,
-			"catename": updateCate
-		});
-		
-		var headers = {"Content-Type": "application/json"
-					,"X-HTTP-Method-Override": "POST"};
+		console.log('이메일 : ' + email);
 		
 		$.ajax({
-			type:'POST',
-			url: '${cpath}/setting/category/updateCategory',
-			headers: headers,
-			data: paramData,
-			contentType: "application/json",
+			type:'GET',
+			url: '${cpath}/setting/category/updateCategory?oldcate='+oldcate+'&idx='+idx+'&catename='+updateCate+'&email='+email,
 			success: function(data){
-				$('#cate' + idx).replaceWith('<div id="cate'+idx+'">'+data+'<button type="button" class="updateBtn" onclick="updateBtn('+idx+', '+catename+')">수정</button><button type="button" class="deleteBtn" onclick="deleteBtn('+idx+')">삭제</button></div>')
+				$('#cate' + idx).replaceWith('<div class="categorybox" id="cate'+idx+'"><span id="namebox">'+data+'</span><span id="btnbox"><button type="button" class="updateBtn" onclick="updateBtn('+idx+', '+catename+')">수정</button> <button type="button" class="deleteBtn" onclick="deleteBtn('+idx+')">삭제</button></span></div>')
 			},
 			error: function(error){
 				console.log(error);
 			}
-		})
+		});
 		
 	}
 	
@@ -185,26 +195,21 @@ a { text-decoration: none; color: #000000; }
 	</div>	
 	<div class="set_order" style="text-align: center;">
 		<div class="list_order">
-			<div class="row">
+			<div class="categorybox">
 				분류 전체보기
 			</div>
 			<form id="addCate" method="post" action="">
 				<input type="hidden" name="email" value="${login.email }">
 				<c:forEach var="category" items="${category }">
-					<div class="row">
-						<div id="cate${category.idx }">${category.catename }<button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button><button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('${category.idx}')">삭제</button></div>
-					</div>
+					<div class="categorybox" id="cate${category.idx }"><span id="namebox"><c:out value="${category.catename }" /></span><span id="btnbox"><button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button> <button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('${category.idx}')">삭제</button></span></div>
 				</c:forEach>
 			</form>
 		</div>
 		<div class="add_order">
-			<label>
-				카테고리 추가
-				<input type="button" class="addBtn" value="카테고리 추가">
-			</label>
+			<input type="button" class="addBtn btn btn-default" value="카테고리 추가">
 		</div>
 		<div>
-			<button class="saveBtn">저장</button>
+			<button class="saveBtn btn btn-default">저장</button>
 		</div>
 	</div>
 </div>

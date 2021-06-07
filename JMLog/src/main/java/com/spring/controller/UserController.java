@@ -92,34 +92,5 @@ public class UserController {
 		return us.getProfileImg(email);
 	}
 	
-	// 카테고리 설정
-	@PostMapping("setting/category")
-	public ModelAndView setCategory(HttpServletRequest req) {
-		return us.setCategory(req);
-	}
 	
-	// 카테고리 삭제
-	@GetMapping("setting/category/delCategory")
-	public @ResponseBody String delCate(@RequestParam("idx")int idx) {
-		try {
-			us.delCate(idx);
-			return "ok";
-		}catch (Exception e) {
-			e.printStackTrace();
-			return "false";
-		}
-	}
-	
-	// 카테고리 수정
-	@PostMapping("setting/category/updateCategory")
-	public @ResponseBody String updateCate(@RequestBody CategoryVO category) {
-		try {
-			us.updateCate(category);
-			return category.getCatename();
-		}catch (Exception e) {
-			e.printStackTrace();
-			return "false";
-		}
-		
-	}
 }
