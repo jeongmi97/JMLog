@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,10 @@ a { text-decoration: none !important; color: #000000; }
 	height: 100%;
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
-	
+.inputBox{
+	margin: auto;
+	text-align: center;
+}	
 </style>
 </head>
 <body>
@@ -73,5 +77,21 @@ a { text-decoration: none !important; color: #000000; }
 		</div>
 	</div>
 </nav>
+
+<div class="container">
+	<div class="inputBox">
+		<h2>Guestbook</h2>
+		<form>
+			<fieldset>
+				<div>
+					<textarea rows="5" cols="100" placeholder="소중한 글을 입력해주세요" style="resize: none;"></textarea>
+				</div>
+				<div>
+					<button type="submit">dd</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
 </body>
 </html>

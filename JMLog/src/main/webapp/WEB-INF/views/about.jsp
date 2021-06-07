@@ -103,7 +103,7 @@ a { text-decoration: none !important; color: #000000; }
 						<form method="POST">
 							<div class="modal-body">
 								<input type="hidden" name="email" value="${login.email }">	 
-								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="소개글을 작성해주세요."></textarea>
+								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="나를 소개해주세요"></textarea>
 							</div> 
 							<div class="modal-footer"> 
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-primary">작성하기</button> 

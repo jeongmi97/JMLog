@@ -151,10 +151,9 @@ public class UserService {
 		System.out.println("이미지 :::: "  + mfile);
 		String imgType = mfile.getContentType();
 		System.out.println("이미지선택 체크 : " + req.getParameter("imgChk"));
-		if(imgChk == "yes" && mfile != null) {	// 이미지 파일 선택 했을 때
+		if(imgChk.equals("yes") && mfile != null) {	// 이미지 파일 선택 했을 때
 			System.out.println("이미지 수정 들어옴");
 			try {
-				mfile = req.getFile("profileimg");
 				// 이메일 일치하는 유저의 프로필 사진 업데이트
 				HashMap<String, Object>param = new HashMap<String, Object>();
 				param.put("email", vo.getEmail());

@@ -56,4 +56,10 @@
 		from user
 		where sessionkey=#{sessionid}
 	</select>
+	
+	<update id="delimg" parameterType="String">
+		update user
+		set profileimg = null
+		where email = #{email}
+	</update>
 </mapper>

@@ -92,8 +92,8 @@ ul{
 	<div class="container" style="margin-top: 40px; margin-bottom: 30px;">
 		<div class="row">
 			<ul>
-		  		<li class="navi" id="popular"><strong><a href="${cpath }/" >인기</a></strong></li>
-		  		<li class="navi" id="latest"><a href="${cpath }/newlist" style="color: #6A5ACD;">최신</a></li>
+		  		<li class="navi" id="popular"><a href="${cpath }/">인기</a></li>
+		  		<li class="navi" id="latest"><strong><a href="${cpath }/newlist" style="color: #6A5ACD;">최신</a></strong></li>
 			</ul>
 		</div>
 	</div>

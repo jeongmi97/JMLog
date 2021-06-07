@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.dao.UserDAO;
 import com.spring.service.UserService;
 import com.spring.vo.CategoryVO;
 import com.spring.vo.UserVO;
@@ -30,6 +32,7 @@ import com.spring.vo.UserVO;
 public class UserController {
 	
 	@Autowired UserService us;
+	@Autowired UserDAO dao;
 	
 	@RequestMapping("login")
 	public void login() {
@@ -92,5 +95,9 @@ public class UserController {
 		return us.getProfileImg(email);
 	}
 	
-	
+	// 프로필 이미지 제거
+	@GetMapping("delimg")
+	public @ResponseBody void delimg(@RequestParam("email")String email) {
+		dao.delimg(email);
+	}
 }

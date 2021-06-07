@@ -186,6 +186,7 @@ a { text-decoration: none; color: #000000; }
 	</div>
 </header>
 
+<nav>
 <div class="container">
 	<div class="row">
 			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
@@ -193,6 +194,9 @@ a { text-decoration: none; color: #000000; }
 				<li><a href="${cpath }/setting/category">카테고리</a></li>
 			</ol>
 	</div>	
+</div>
+</nav>
+<div class="container">
 	<div class="set_order" style="text-align: center;">
 		<div class="list_order">
 			<div class="categorybox">
