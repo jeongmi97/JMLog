@@ -4,12 +4,12 @@
 <c:set var="cpath" value="${pageContext.request.contextPath }" />
 <html>
 <head>
-<title>Insert title here</title>
-
-<!-- 부트스트랩 -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
+<title>JMLog</title>
+<!-- 부트스트랩 & 제이쿼리-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <style type="text/css">
 
@@ -59,10 +59,6 @@ ul{
 </style>
 </head>
 <body>
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
 <script type="text/javascript">
 
@@ -71,14 +67,7 @@ var  page = 2;			// 불러올 페이지
 	
 	$(function(){
 		
-	/* $(document).scroll(function(){
-		// 스크롤이 최하단으로 내려가면 리스트 조회한 뒤 page 증가
-		if($(document).height() <= $(window).scrollTop() + $(window).height() + 100){
-				getList();
-				page++;
-		}
-	}); */
-	
+	/* // 무한스크롤
 	$(window).scroll(function(){
 		var scroll = $(window).scrollTop(); //스크롤의 현재 위치
 		var docHeight = $(document).height() //도큐먼트 높이로 고정
@@ -113,7 +102,7 @@ var  page = 2;			// 불러올 페이지
 				console.log(error);
 			}
 		});
-	};
+	}; */
 	
 	});
 </script>
@@ -181,29 +170,6 @@ var  page = 2;			// 불러올 페이지
 		</c:if>
 	</c:forEach>
 </div>
-<%-- <div class="container">
-	<c:forEach var="post" items="${postList }" varStatus="status">
-		<div class="row">
-			<c:if test="${status.index % 3 == 0}">
-				한줄
-				<div class="row">
-			</c:if>
-					<div class="col-sm-4 col-md-4">
-						<div class="thumbnail">
-							<div class="caption">
-								<c:out value="${status.index }" />
-						    	<h3><c:out value="${post.title }" /></h3>
-						        <p><c:out value="${post.content }" /></p>
-				      		</div>
-				      	</div>
-				    </div>
-		    <c:if test="${status.index != 0 && status.index % 3 == 0}">
-				</div>
-			</c:if>
-		</div>
-	</c:forEach>
-</div> --%>
-
 <footer>
 	
 </footer>

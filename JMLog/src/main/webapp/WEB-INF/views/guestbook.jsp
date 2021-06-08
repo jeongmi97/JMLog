@@ -5,9 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>guestbook</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style type="text/css">
 
 a { text-decoration: none !important; color: #000000; }
@@ -23,15 +25,44 @@ a { text-decoration: none !important; color: #000000; }
 	height: 100%;
 	object-fit: cover;	 /* 비율 그대로 유지 */
 }
-.inputBox{
-	margin: auto;
-	text-align: center;
-}	
 </style>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
+<script type="text/javascript">
+	
+	$(function(){
+		
+		// 작성 버튼 클릭 시
+		$('.btn').on('click', function(){	
+			var email = '${user.email}';
+			var nickname = '${login.nickname}';
+			var content = $('textarea').val();
+			console.log('======' + nickname + content);
+			
+			var param = JSON.stringify({
+				"email" : email,
+				"nickname" : nickname,
+				"content" : content
+			});
+			var headers = {"Content-Type" : "application/json"
+				, "X-HTTP-Method-Override" : "POST"};
+			
+			$.ajax({
+				type: 'POST',
+				url: '${cpath}/inserguest',
+				headers: headers,
+				data: paramData,
+				contentType: "application/json",
+				success: function(idx){
+					console.log('성공');
+				}
+			});
+		});
+		
+		
+	});
+	
+</script>	
 
 <header>
 	<div class="container">
@@ -79,18 +110,22 @@ a { text-decoration: none !important; color: #000000; }
 </nav>
 
 <div class="container">
-	<div class="inputBox">
-		<h2>Guestbook</h2>
-		<form>
-			<fieldset>
-				<div>
-					<textarea rows="5" cols="100" placeholder="소중한 글을 입력해주세요" style="resize: none;"></textarea>
-				</div>
-				<div>
-					<button type="submit">dd</button>
-				</div>
-			</fieldset>
-		</form>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<h2>Guestbook</h2>
+			<br>
+			<form method="POST">
+				<fieldset>
+					<div class="row">
+						<textarea class="form-control" rows="5" placeholder="소중한 글을 입력해주세요" style="resize: none;" warp="hard" required></textarea>
+					</div>
+					<br>
+					<div class="row">
+						<button class="btn" type="button">작성하기</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
 	</div>
 </div>
 </body>

@@ -32,7 +32,9 @@
 	<context:component-scan base-package="com.spring.*" />
 	
 	<!-- 인터셉터 빈 등록 -->
-	<beans:bean id="UserInterceptor" class="com.spring.interceptor.UserInterceptor"></beans:bean>
+	<beans:bean id="UserInterceptor" class="com.spring.interceptor.UserInterceptor" />
+	<beans:bean id="RememberLoginInterceptor" class="com.spring.interceptor.RememberLoginInterceptor" />
+	<beans:bean id="AfterLoginInterceptor" class="com.spring.interceptor.AfterLoginInterceptor" />
 	
 	<!-- 인터셉터 호출 위한 url mapping -->
 	<interceptors>
@@ -41,6 +43,15 @@
 			<mapping path="/setting"/>
 			<mapping path="/setting/category"/>
 			<beans:ref bean="UserInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/**/"/>
+			<beans:ref bean="RememberLoginInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/login"/>
+			<mapping path="/join"/>
+			<beans:ref bean="AfterLoginInterceptor"/>
 		</interceptor>
 	</interceptors>
 	

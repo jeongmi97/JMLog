@@ -9,6 +9,7 @@
 		<typeAlias alias="BoardVO" type="com.spring.vo.BoardVO"/>
 		<typeAlias alias="CategoryVO" type="com.spring.vo.CategoryVO"/>
 		<typeAlias alias="ReplyVO" type="com.spring.vo.ReplyVO"/>
+		<typeAlias alias="GuestbookVO" type="com.spring.vo.GuestbookVO"/>
 	</typeAliases>
 
 </configuration>

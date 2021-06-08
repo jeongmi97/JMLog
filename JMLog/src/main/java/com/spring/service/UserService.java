@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -13,22 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import com.spring.dao.UserDAO;
-import com.spring.vo.BoardVO;
-import com.spring.vo.CategoryVO;
 import com.spring.vo.UserVO;
 
 @Service
@@ -62,25 +57,20 @@ public class UserService {
 		}
 		if(login != null && pwChk == true) {	// 로그인 성공
 			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
-			System.out.println("프로필 이미지 체크 :::: " + login.getProfileimg());
 			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
 				System.out.println("cookie");
 				// 쿠키 생성, 로그인할때 생성된 세션의 id 쿠키에 저장
+				int amount = 60 * 60 * 24 * 7;	// 7일
 				Cookie loginCookie = new Cookie("loginCookie", session.getId());
-				loginCookie.setPath("/");	// 쿠키 찾을 경로 전체 경로로 변경
-				int amount = 60 * 60 * 24* 7;
-				loginCookie.setMaxAge(amount);	// 7일 유효시간 설정
-				res.addCookie(loginCookie);	// 쿠키 적용
-				// currentTimeMills()가 1/1000초 단위로 1000곱해서 더해야 한다
-				Date sessionlimit = new Date(System.currentTimeMillis() + (1000*amount));
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(amount);	// 7일
+				res.addCookie(loginCookie);
+				Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));	// 로그인 유지기간 설정
 				HashMap<String, Object>param = new HashMap<String, Object>();
-				param.put("email", login.getEmail());
-				param.put("sessionid", session.getId());
-				param.put("sessionlimit", sessionlimit);
-				// 현재 세션 id와 유효시간을 사용자 테이블에 저장
+				param.put("email", vo.getEmail()); param.put("sessionid", session.getId()); param.put("sessionLimit", sessionLimit);
+				
 				dao.keepLogin(param);
 			}
-			//mav.setViewName("redirect:/"+login.getEmail());	// 유저 블로그로 이동
 			mav.setViewName("redirect:/");		// home 페이지로 이동
 		}
 		
@@ -90,8 +80,23 @@ public class UserService {
 	// 로그아웃
 	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
 		ModelAndView mav = new ModelAndView("redirect:/");
-		
-		req.getSession().removeAttribute("login");
+		System.out.println("로그아웃::::::::");
+		Object obj = session.getAttribute("login");
+		if(obj != null) {
+			UserVO user = (UserVO) obj;
+			session.removeAttribute("login");
+			session.invalidate();
+			Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
+			System.out.println("logincookie 확인 :::" + loginCookie);
+			if(loginCookie != null) {
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(0);
+				res.addCookie(loginCookie);
+				HashMap<String , Object>param = new HashMap<String, Object>();
+				param.put("email", user.getEmail()); param.put("sessionid", null); param.put("sessionLimit", new java.util.Date());
+				dao.keepLogin(param);
+			}
+		}
 		
 		return mav;
 	}

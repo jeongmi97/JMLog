@@ -15,9 +15,9 @@ public interface UserDAO {
 
 	int emailCheck(String email);
 	
-	void keepLogin(HashMap<String, Object> param);
+	void keepLogin(HashMap<String, Object> param);	// 로그인 유지
 	
-	UserVO checkUserSession(String sessionid);
+	UserVO checkUserSession(String sessionid);		// 세션키 확인
 
 	void setProfileImg(HashMap<String, Object> param);
 

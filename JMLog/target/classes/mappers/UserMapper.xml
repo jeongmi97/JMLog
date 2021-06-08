@@ -47,11 +47,11 @@
 	
 	<update id="keepLogin" parameterType="HashMap">
 		update user
-		set sessionkey=#{sessionid}, sessionlimit=#{sessionlimit}
+		set sessionkey=#{sessionid}, sessionlimit=#{sessionLimit}
 		where email=#{email}
 	</update>
 	
-	<select id="checkUserSession">
+	<select id="checkUserSession" parameterType="String" resultType="UserVO">
 		select *
 		from user
 		where sessionkey=#{sessionid}

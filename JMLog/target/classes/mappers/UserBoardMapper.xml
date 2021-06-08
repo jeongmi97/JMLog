@@ -5,21 +5,21 @@
 	<select id="getPostList" resultType="BoardVO">
 		select *
 		from board
-		where not lock_post in ('a')
+		where not lock_post in ('a', 'y')
 		order by hit desc limit 0, 9
 	</select>
 	
 	<select id="getBoardList" parameterType="int" resultType="BoardVO">
 		select *
 		from board
-		where not lock_post in ('a')
+		where not lock_post in ('a', 'y')
 		order by hit desc limit #{startList}, 9
 	</select>
 	
 	<select id="getNewPostList" resultType="BoardVO">
 		select *
 		from board
-		where not lock_post in ('a')
+		where not lock_post in ('a', 'y')
 		order by idx desc limit 0, 9
 	</select>
 	
@@ -149,4 +149,16 @@
 		set hit=hit+1
 		where idx=#{idx}
 	</update>
+	
+	<insert id="insertguest" parameterType="GuestbookVO">
+		insert into guestbook(email, nickname, content)
+		values (#{email}, #{nickname}, #{content})
+	</insert>
+	
+	<select id="getguestidx" parameterType="String" resultType="int">
+		select * 
+		from guestbook
+		where nickname=#{nickname}
+		order by idx desc limit 1
+	</select>
 </mapper>

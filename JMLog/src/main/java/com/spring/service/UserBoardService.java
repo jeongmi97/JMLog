@@ -14,6 +14,7 @@ import com.spring.dao.UserBoardDAO;
 import com.spring.dao.UserDAO;
 import com.spring.vo.BoardVO;
 import com.spring.vo.CategoryVO;
+import com.spring.vo.GuestbookVO;
 import com.spring.vo.Pagination;
 import com.spring.vo.ReplyVO;
 import com.spring.vo.UserVO;
@@ -108,6 +109,8 @@ public class UserBoardService {
 	public ModelAndView write(BoardVO vo, String mode) {
 		ModelAndView mav = new ModelAndView();
 		
+		System.out.println("modeeeeeeeeeeeeeeeeeeee: " + mode);
+		
 		int postNum = 0;
 		
 		if(vo.getLock_post() != "y") vo.setLock_post("n");	// 비공개 체크 안했을 때 비공개 n 세팅
@@ -145,12 +148,25 @@ public class UserBoardService {
 		
 		return mav;
 	}
+	
+	// 게시글 수정
+	public ModelAndView editPost(int idx, String mode) {
+		ModelAndView mav = new ModelAndView("write");
+		
+		System.out.println("idxxxxxxxxmodeeeee : " + idx + mode);
+		
+		BoardVO post = dao.getPost(idx);
+		mav.addObject("post",post);
+		mav.addObject("mode",mode);
+		
+		return mav;
+	}
 
 	// 소개
 	public ModelAndView about(String email) {
 		ModelAndView mav = new ModelAndView("about");
 		
-		mav.addObject("email" , email);
+		mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
 		mav.addObject("content", dao.getAbout(email));
 		
 		return mav;
@@ -174,16 +190,6 @@ public class UserBoardService {
 		return mav;
 	}
 	
-	// 게시글 수정
-	public ModelAndView editPost(int idx, String mode) {
-		ModelAndView mav = new ModelAndView("write");
-		
-		BoardVO post = dao.getPost(idx);
-		mav.addObject("post",post);
-		mav.addObject("mode", mode);
-		
-		return mav;
-	}
 
 	// 게시글 삭제
 	public ModelAndView delPost(int idx, UserVO login) {
@@ -262,6 +268,25 @@ public class UserBoardService {
 	public List<BoardVO> getBoardList(int page) {
 		int startList = ((page-1)*9)+1;
 		return dao.getBoardList(startList);
+	}
+
+	// 방명록 이동
+	public ModelAndView guestbook(String email) {
+		ModelAndView mav = new ModelAndView("guestbook");
+		
+		mav.addObject("user", udao.userChk(email));	
+		
+		return mav;
+	}
+
+	// 방명록 작성
+	public void insertguest(GuestbookVO vo) {
+		dao.insertguest(vo);
+	}
+
+	// 방명록 글번호 가져오기
+	public int getguestidx(String nickname) {
+		return dao.getguestidx(nickname);
 	}
 
 	

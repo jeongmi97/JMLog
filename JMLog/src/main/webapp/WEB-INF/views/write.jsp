@@ -7,8 +7,12 @@
 <head>
 <meta charset="UTF-8">
 <title>write</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
 <style type="text/css">
 
 a{ text-decoration: none; color: #000000; }
@@ -46,14 +50,42 @@ a{ text-decoration: none; color: #000000; }
 }
 </style>
 </head>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
+
 <body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 <script type="text/javascript">
 	
 	$(document).ready(function() {
+		
+		console.log('모드: ' + $('#mode').val());
+		
+		$('.summernote').summernote({
+			height: 300,	// 에디터 높이
+			lang: "ko-KR",	// 에디터 한글 설정
+			focus : true,	// 에디터에 커서 이동
+			toolbar: [
+				// 글꼴 설정
+			    ['fontname', ['fontname']],
+			    // 글자 크기 설정
+			    ['fontsize', ['fontsize']],
+			    // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+			    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+			    // 글자색
+			    ['color', ['forecolor','color']],
+			    // 글머리 기호, 번호매기기, 문단정렬
+			    ['para', ['ul', 'ol', 'paragraph']],
+			    // 줄간격
+			    ['height', ['height']],
+			    // 그림첨부, 링크만들기
+			    ['insert',['picture','link']],
+			    // 코드보기, 확대해서보기, 도움말
+			    ['view', ['codeview', 'help']]
+			  ],
+			  // 추가한 글꼴
+			fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+			 // 추가한 폰트사이즈
+			fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']    
+		});
+		
 		// 게시글 수정 시 입력 폼 셋팅
 		var mode = '<c:out value="${mode}"/>';	// 게시글 모드 가져옴
 		
@@ -81,7 +113,6 @@ a{ text-decoration: none; color: #000000; }
 						
 				</div>
 				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
 					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
 					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
 						<img class="img" src="${cpath }/${login.email}/getProfileImg">
@@ -107,19 +138,18 @@ a{ text-decoration: none; color: #000000; }
 	<form:form method="post" modelAttribute="post" action="${cpath }/write">
 		<form:hidden path="idx"/>
 		<form:hidden path="email" value="${login.email }"/>
-		<input type="hidden" name="mode">
+		<input type="hidden" name="mode" value="${mode }">
 		
 		<form:select path="cate" id="category">
 			<option value="nocate">카테고리</option>
 			<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
 		</form:select>
 		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" />
-		<form:textarea path="content" name="content" id="content" rows="40" /><br>
+		<form:textarea path="content" class="summernote" name="content" id="content" rows="40" /><br>
 		<form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><label for="lock_post">비공개</label>
 		<input type="submit" value="작성하기">
 	</form:form>
 </div>
-<script src="/resources/js/ckeditor.js"></script>
 
 </body>
 </html>

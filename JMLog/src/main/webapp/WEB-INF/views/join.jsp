@@ -4,9 +4,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>회원가입</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<style type="text/css">
+html, body{
+	height: 100%
+}	
+h2{
+	margin-bottom: 30px;
+}
+input{
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	width: 340px;
+	height: 50px;
+	margin-bottom: 10px;
+}
+p{
+	margin: 0;
+}
+</style>
 </head>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <body>
 
 <script type="text/javascript">
@@ -15,11 +36,13 @@
 	const patternEmail = RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
 	const patternPw = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/);	// 영문자 숫자 조합 8자 이상
 	
-	
+	var btnChk = ['y', 'y', 'y', 'y'];
 	
 	
 	$(document).ready(function(){
 	
+	$('.alert').hide();
+		
 	// 이메일 정규표현식 확인 & 중복체크
 	$('#email').blur(function() {
 		const email = $('#email').val();
@@ -31,6 +54,9 @@
 			return;
 		}else if(!patternEmail.test(email)){	// 이메일 정규표현식에 맞지 않을 때
 			idmsg.text("이메일 형식에 맞게 입력해주세요");
+			btnChk[0] = 'n';
+			$('.btn').prop("disabled", true);
+			$('#idmsgAlert').show();
 			return;
 		}else{		// 이메일 정규표현식에 맞을 경우 ajax를 통해 계정 중복 테스트
 			$.ajax({
@@ -39,7 +65,15 @@
 				url: 'emailCheck?email='+email,
 				success: function(data){
 					// return값을 int값으로 받아와 select된 계정이 1개 이상이면 사용중인 계정
-					data > 0 ? idmsg.text('이미 사용중인 계정입니다') : idmsg.hide()
+					if(data > 0){
+						idmsg.text('이미 사용중인 계정입니다');
+						$('#idmsgAlert').show();
+						btnChk[0] = 'n';
+						$('.btn').prop("disabled", true);
+					}else{
+						$('#idmsgAlert').hide();
+						btnchk();
+					}
 				}
 			})
 		}
@@ -54,10 +88,14 @@
 			pwmsg.text("비밀번호를 입력해주세요");
 			return;
 		}else if(!patternPw.test(pw)){
-			pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상");
+			pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상으로 작성해주세요");
+			$('#pwmsgAlert').show();
+			btnChk[1] = 'n';
+			$('.btn').prop("disabled", true);
 			return;
 		}else{
-			pwmsg.hide();
+			$('#pwmsgAlert').hide();
+			btnchk();
 		}
 	});
 	
@@ -68,13 +106,17 @@
 		var cpwmsg = $('#cpwmsg');
 		
 		if(pwChk == ''){
-			cpwmsg.text("비밀번호 확인을 입력해주세요")
+			cpwmsg.text("비밀번호 확인을 입력해주세요");
 			return;
 		}else if(pw != pwChk){
-			cpwmsg.text("비밀번호가 일치하지 않습니다")
+			cpwmsg.text("비밀번호가 일치하지 않습니다");
+			$('#cpwmsgAlert').show();
+			btnChk[2] = 'n';
+			$('.btn').prop("disabled", true);
 			return;
 		}else{
-			cpwmsg.hide();
+			$('#cpwmsgAlert').hide();
+			btnchk();
 		}
 	});
 	
@@ -90,34 +132,69 @@
 				type: 'GET',
 				url: 'nicknameChk?nickname=' + nickname,
 				success: function(data) {
-					data > 0 ? nnamemsg.text('이미 사용중인 닉네임입니다') : nnamemsg.hide()
+					if(data > 0){
+						nnamemsg.text('이미 사용중인 닉네임입니다');
+						$('#nnamemsgAlert').show();
+						btnChk[3] = 'n';
+						$('.btn').prop("disabled", true);
+					}else{
+						$('#nnamemsgAlert').hide();
+						btnchk();
+					}
 				}
 			})
 		}
 	});
 	
+	function btnchk(){	// 인풋값들이 제약조건에 모두 성립 시 가입하기 버튼 활성화
+		var check = 'y';
+		for(var i=0; i<4; i++){
+			if(btnChk[i] == 'n')
+				check = 'n';
+		}
+		if(check == 'y')
+			$('.btn').prop("disabled", false);
+	}
+	
 	});
 </script>
 
-<form method="post">
-	<label for="email">이메일</label><br>
-	<input type="text" id="email" name="email" placeholder="example@naver.com" required><br>
-	<p id="idmsg"></p>
-	
-	<label for="pw">비밀번호</label><br>
-	<input type="password" id="pw" name="pw" placeholder="********" required><br>
-	<p id="pwmsg"></p> 
-	
-	<label for="pwChk">비밀번호 확인</label><br>
-	<input type="password" id="pwChk" name="pwChk" placeholder="********" required><br>
-	<p id="cpwmsg"></p>
-	
-	<label for="nickname">닉네임</label><br>
-	<input type="text" id="nickname" name="nickname" placeholder="홍길동" required><br>
-	<p id="nnamemsg"></p>
-	
-	<input type="submit" value="가입하기">
-</form>
-
+<div class="container h-100">
+	<div class="row d-flex align-items-center h-100">
+		<div class="col-sm-6" style="margin: auto; text-align: center">
+			<h2>JMLog 회원가입</h2>
+				<form method="post" style="display: inline-block;">
+					<div style="text-align: left;"><small><strong>이메일</strong></small></div>
+					<div><input type="text" id="email" name="email" placeholder="example@naver.com" required><br></div>
+					<div class="alert alert-danger" id="idmsgAlert" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  <p id="idmsg"></p>
+					</div>
+					<div style="text-align: left;"><small><strong>비밀번호</strong></small></div>
+					<input type="password" id="pw" name="pw" placeholder="비밀번호(영문자조합 8자이상)" required><br>
+					<div class="alert alert-danger" id="pwmsgAlert" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  <p id="pwmsg"></p>
+					</div>
+					<input type="password" id="pwChk" name="pwChk" placeholder="비밀번호 재입력" required><br>
+					<div class="alert alert-danger" id="cpwmsgAlert" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  <p id="cpwmsg"></p>
+					</div>
+					<div style="text-align: left;"><small><strong>닉네임</strong></small></div>
+					<input type="text" id="nickname" name="nickname" placeholder="홍길동" required><br>
+					<div class="alert alert-danger" id="nnamemsgAlert" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  <p id="nnamemsg"></p>
+					</div>
+					<button type="submit" class="btn btn-dark btn-lg btn-block">가입하기</button>
+				</form>
+		</div>
+	</div>
+</div>
 </body>
 </html>

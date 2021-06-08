@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.spring.vo.BoardVO;
 import com.spring.vo.CategoryVO;
+import com.spring.vo.GuestbookVO;
 import com.spring.vo.ReplyVO;
 
 public interface UserBoardDAO {
@@ -68,6 +69,10 @@ public interface UserBoardDAO {
 	void updateHit(int idx);	// 조회수 업데이트
 
 	List<BoardVO> getBoardList(int startList);	// 스크롤 페이징(인기순)
+
+	void insertguest(GuestbookVO vo);	// 방명록 작성
+
+	int getguestidx(String nickname);	// 방명록 번호 가져오기
 
 
 

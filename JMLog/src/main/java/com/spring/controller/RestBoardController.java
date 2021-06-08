@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spring.service.UserBoardService;
 import com.spring.vo.BoardVO;
 import com.spring.vo.CategoryVO;
+import com.spring.vo.GuestbookVO;
 import com.spring.vo.ReplyVO;
 
 @RestController
@@ -86,8 +87,20 @@ public class RestBoardController {
 		}
 		
 	}
-		
-	// 스크롤 페이징
+	
+	// 방명록 작성
+	@PostMapping(value="inserguest")
+	public int inserguest(@RequestBody GuestbookVO vo) {
+		try {
+			ubs.insertguest(vo);
+			return ubs.getguestidx(vo.getNickname());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	/*// 스크롤 페이징
 	@GetMapping(value="home/getBoardList")
 	public List<BoardVO> getBoardList(@RequestParam("page")int page){
 		System.out.println("page ::: " + page);
@@ -97,5 +110,5 @@ public class RestBoardController {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 }

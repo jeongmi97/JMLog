@@ -8,8 +8,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style>
 a { text-decoration: none; color: #000000; }
 
@@ -44,9 +46,6 @@ a { text-decoration: none; color: #000000; }
 </style>
 </head>
 <body>
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 <script type="text/javascript">
 
 	$(function(){
@@ -74,8 +73,6 @@ a { text-decoration: none; color: #000000; }
 					type: 'GET',
 					url: 'nicknameChk?nickname=' + nickname,
 					success: function(data) {
-						data > 0 ? $('#nnamemsg').html('이미 사용중인 닉네임입니다!') : $('#nnamemsg').html('')
-								$('#saveBtn').prop("disabled",false);
 						if(data > 0){
 							$('#nnamemsg').html('이미 사용중인 닉네임입니다!');
 							$('#saveBtn').prop("disabled",false);
@@ -132,7 +129,7 @@ a { text-decoration: none; color: #000000; }
 								<img class="img" src="${cpath }/${login.email}/getProfileImg">
 							</c:when>
 							<c:otherwise>
-								<img class="img" src="${cpath }/resources/img/default.png">
+								<img class="img" src="${cpath }/resources/img/default.jpg">
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -166,7 +163,7 @@ a { text-decoration: none; color: #000000; }
 						<img class="img" src="${cpath }/${login.email}/getProfileImg">
 					</c:when>
 					<c:otherwise>
-						<img class="img" src="${cpath }/resources/img/default.png">
+						<img class="img" src="${cpath }/resources/img/default.jpg">
 					</c:otherwise>
 				</c:choose>
 			</div>

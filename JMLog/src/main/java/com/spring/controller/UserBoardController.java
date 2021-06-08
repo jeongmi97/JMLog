@@ -30,7 +30,7 @@ public class UserBoardController {
 	@Autowired UserBoardService ubs;
 	
 	// 기본 홈 페이지(인기순)
-	@RequestMapping("/")
+	@RequestMapping(value= {"/","/home"})
 	public ModelAndView home() {
 		return ubs.home();
 	}
@@ -65,9 +65,7 @@ public class UserBoardController {
 	// 방명록
 	@RequestMapping("{email:.+}/guestbook")
 	public ModelAndView guestbook(@PathVariable("email")String email) {
-		System.out.println("방병록 페이지 이동");
-		ModelAndView mav = new ModelAndView("guestbook");
-		return mav;
+		return ubs.guestbook(email);
 		
 	}
 	

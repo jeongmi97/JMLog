@@ -6,9 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>소개</title>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style type="text/css">
 
 a { text-decoration: none !important; color: #000000; }
@@ -30,8 +32,6 @@ a { text-decoration: none !important; color: #000000; }
 </style>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>	
 
 <header>
 	<div class="container">
@@ -106,7 +106,7 @@ a { text-decoration: none !important; color: #000000; }
 								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="나를 소개해주세요"></textarea>
 							</div> 
 							<div class="modal-footer"> 
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-primary">작성하기</button> 
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-success">작성하기</button> 
 							</div> 
 						</form>
 					</div> 
@@ -140,7 +140,7 @@ a { text-decoration: none !important; color: #000000; }
 								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="소개글을 수정합니다">${content }</textarea>
 							</div> 
 							<div class="modal-footer"> 
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-primary">수정하기</button> 
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-success">수정하기</button> 
 							</div> 
 						</form>
 					</div> 

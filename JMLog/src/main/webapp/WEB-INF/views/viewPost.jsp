@@ -8,8 +8,10 @@
 <head>
 <meta charset="UTF-8">
 <title>${post.title }</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style type="text/css">
 a{ text-decoration: none; color: #000000; }
 
@@ -59,8 +61,6 @@ textarea {
 </style>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	
 	$(function(){
@@ -109,6 +109,7 @@ textarea {
 			});
 		});
 		
+		
 		// 작성한 댓글 추가
 		function listReply(idx){
 			var date = new Date();
@@ -137,6 +138,7 @@ textarea {
 			success: function(data){
 				console.log('삭제완료');
 				$('div').remove('#reply'+idx);
+				$('hr').remove('#reply'+idx);
 			},
 			error: function(error){
 				console.log(error);
@@ -146,18 +148,19 @@ textarea {
 	
 	// 댓글 수정 버튼 눌렀을 때
 	function updateReply(idx,comment){
-		$('#reply'+idx+'actions').hide();	// 댓글 다 없애고 수정 할 때 예외사항 처리하기
+		$('#reply'+idx+'actions').hide();	// 원래 댓글 내용 div 숨김
+		// 댓글 수정 폼 생성 후 표시
 		var htmls='';
-		htmls+='<div id="updateForm"><textarea id="updateComment" placeholder="댓글을 작성하세요">'+comment+'</textarea>';
-		htmls+='<div><button id="cancle" onclick="cancle('+idx+');">취소</button>';
-		htmls+='<button id="update" onclick="update('+idx+');">댓글 수정</button></div></div>';
+		htmls+='<div id="updateForm"><textarea class="form-control" id="updateComment" rows="5" cols="150" placeholder="댓글을 작성하세요" style="resize: none;">'+comment+'</textarea>';
+		htmls+='<div><button class="btn btn-link btn-sm" id="cancle" onclick="cancle('+idx+');">취소</button>';
+		htmls+='<button class="btn btn-link btn-sm" id="update" onclick="update('+idx+');">댓글 수정</button></div></div>';
 		$('#reply'+idx).append(htmls);
 	};
 	
 	// 댓글 수정 취소
 	function cancle(idx){
-		$('#updateForm').hide();
-		$('#reply'+idx+'actions').show();
+		$('#updateForm').remove();	// 댓글 생성 폼 삭제
+		$('#reply'+idx+'actions').show();	// 댓글 내용 화면에 표시
 	};
 	
 	// 댓글 수정
@@ -228,7 +231,7 @@ textarea {
 
 <div class="container">
 	<h2><strong>${post.title }</strong></h2><br>
-	<div class="hgroup">
+	<div class="hgroup row">
 		<div><span>${post.email }</span><span> | </span><span>${post.reporting_date }</span>
 			<!-- 로그인한 사용자와 글 작성자가 같을 때 수정/삭제 버튼 보이게 -->
 			<c:if test="${login.email eq post.email }">	
@@ -237,7 +240,7 @@ textarea {
 		</div>
 		<hr>
 	</div>
-	<div class="cgroup">
+	<div class="cgroup row">
 		<p>${post.content }</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
@@ -245,15 +248,17 @@ textarea {
 	</div>
 	
 	<!-- 댓글 작성 폼 -->
-	<div>
-		<textarea rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요"></textarea><br>
-		<button id="btnReply">댓글 작성</button>
-	</div>
+	<c:if test="${not empty login }">	<!-- 로그인 한 유저만 댓글 작성가능 -->
+		<div class="row">
+			<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요"></textarea><br>
+			<button id="btnReply">댓글 작성</button>
+		</div>
+	</c:if>
 	<br>
 	
 	<!-- 댓글 리스트 -->
 	
-	<div id="replyList">
+	<div class="row" id="replyList">
 	<hr>
 	<c:if test="${not empty reply }">	<!-- 댓글이 있을 때 -->
 		<c:forEach items="${reply }" var="reply">
@@ -269,8 +274,8 @@ textarea {
 						</div>
 					</c:if>
 					</div>
-					<hr>
 				</div>
+					<hr id="reply${reply.idx }">
 		</c:forEach>
 	</c:if>
 	</div>

@@ -1,6 +1,5 @@
 package com.spring.interceptor;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -8,10 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.util.WebUtils;
 
 import com.spring.dao.UserDAO;
-import com.spring.vo.UserVO;
 
 public class UserInterceptor extends HandlerInterceptorAdapter{
 	
@@ -39,7 +36,6 @@ public class UserInterceptor extends HandlerInterceptorAdapter{
 	public void postHandle(
 			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
 			throws Exception {
-		super.postHandle(request, response, handler, modelAndView);
 	}
 
 }
