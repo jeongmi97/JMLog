@@ -1,22 +1,13 @@
 package com.spring.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.service.UserBoardService;
-import com.spring.vo.BoardVO;
-import com.spring.vo.CategoryVO;
-import com.spring.vo.GuestbookVO;
 import com.spring.vo.ReplyVO;
 
 @RestController
@@ -88,15 +79,12 @@ public class RestBoardController {
 		
 	}
 	
-	// 방명록 작성
-	@PostMapping(value="inserguest")
-	public int inserguest(@RequestBody GuestbookVO vo) {
+	@GetMapping(value="{email}/guestbook/delGuest")
+	public void delGuest(@RequestParam("idx")int idx) {
 		try {
-			ubs.insertguest(vo);
-			return ubs.getguestidx(vo.getNickname());
-		}catch (Exception e) {
+			ubs.delGuest(idx);
+		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
 		}
 	}
 	

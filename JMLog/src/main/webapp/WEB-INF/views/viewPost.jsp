@@ -81,7 +81,12 @@ textarea {
 				return;						// 댓글 작성 기능 수행 x
 			}
 			
-			var comment = $('#comment').val();	
+			var comment = $('#comment').val().replace(/\n/g, "<br>");	
+			
+			if(comment == ''){				// 아무것도 입력하지 않은 채 작성 눌렀을 때
+				alert('댓글을 입력해주세요!');
+				return;
+			}
 			
 			var paramData = JSON.stringify({
 					"comment": comment,				// 댓글 내용
@@ -149,9 +154,10 @@ textarea {
 	// 댓글 수정 버튼 눌렀을 때
 	function updateReply(idx,comment){
 		$('#reply'+idx+'actions').hide();	// 원래 댓글 내용 div 숨김
+		comment = comment.replace("<br>", "\r\n");
 		// 댓글 수정 폼 생성 후 표시
 		var htmls='';
-		htmls+='<div id="updateForm"><textarea class="form-control" id="updateComment" rows="5" cols="150" placeholder="댓글을 작성하세요" style="resize: none;">'+comment+'</textarea>';
+		htmls+='<div id="updateForm"><textarea class="form-control" id="updateComment" rows="5" cols="150" placeholder="댓글을 작성하세요" style="resize: none; " escapeXml="false">'+comment+'</textarea>';
 		htmls+='<div><button class="btn btn-link btn-sm" id="cancle" onclick="cancle('+idx+');">취소</button>';
 		htmls+='<button class="btn btn-link btn-sm" id="update" onclick="update('+idx+');">댓글 수정</button></div></div>';
 		$('#reply'+idx).append(htmls);
@@ -166,7 +172,7 @@ textarea {
 	// 댓글 수정
 	function update(idx){
 		console.log($('#updateComment').val());
-		var comment = $('#updateComment').val()	// 수정할 내용 값
+		var comment = $('#updateComment').val().replace(/\n/g, "<br>")	// 수정할 내용 값
 		var paramData = JSON.stringify({
 			"comment": comment,
 			"idx": idx
@@ -250,7 +256,7 @@ textarea {
 	<!-- 댓글 작성 폼 -->
 	<c:if test="${not empty login }">	<!-- 로그인 한 유저만 댓글 작성가능 -->
 		<div class="row">
-			<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요"></textarea><br>
+			<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요" wrap="hard" required></textarea><br>
 			<button id="btnReply">댓글 작성</button>
 		</div>
 	</c:if>
@@ -265,14 +271,14 @@ textarea {
 				<div id="reply${reply.idx }">
 					<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><strong><c:out value="${reply.nickname }" /></strong></a></div>
 					<div id="reply${reply.idx }actions">
-					<p id="reply${reply.idx }comment"><c:out value="${reply.comment }" /></p>
-					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
-					<c:if test="${login.nickname eq reply.nickname }">
-						<div>
-							<span><a href="#" onclick="updateReply('${reply.idx}','${reply.comment }')" id="replyBtn">수정</a></span><span id="replyBtn"> | </span>
-							<span><a href="#" onclick="delReply('${reply.idx}')" id="replyBtn">삭제</a></span>
-						</div>
-					</c:if>
+						<p id="reply${reply.idx }comment"><c:out value="${reply.comment }" escapeXml="false" /></p>
+						<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
+						<c:if test="${login.nickname eq reply.nickname }">
+							<div>
+								<span><a href="#" onclick="updateReply('${reply.idx}','${reply.comment }')" id="replyBtn">수정</a></span><span> | </span>
+								<span><a href="#" onclick="delReply('${reply.idx}')" id="replyBtn">삭제</a></span>
+							</div>
+						</c:if>
 					</div>
 				</div>
 					<hr id="reply${reply.idx }">

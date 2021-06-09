@@ -1,10 +1,13 @@
 package com.spring.vo;
 
+import java.sql.Date;
+
 public class GuestbookVO {
 	private int idx;
 	private String email;
 	private String nickname;
 	private String content;
+	private Date guest_date;
 	
 	public int getIdx() {
 		return idx;
@@ -29,6 +32,12 @@ public class GuestbookVO {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public Date getGuest_date() {
+		return guest_date;
+	}
+	public void setGuest_date(Date guest_date) {
+		this.guest_date = guest_date;
 	}
 	
 	

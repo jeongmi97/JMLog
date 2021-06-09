@@ -72,7 +72,11 @@ public interface UserBoardDAO {
 
 	void insertguest(GuestbookVO vo);	// 방명록 작성
 
-	int getguestidx(String nickname);	// 방명록 번호 가져오기
+	List<GuestbookVO> getguestList(String email);	// 방명록 리스트 가져오기
+
+	void updateguest(GuestbookVO vo);	// 방명록 수정
+
+	void delGuest(int idx);	// 방명록 삭제
 
 
 

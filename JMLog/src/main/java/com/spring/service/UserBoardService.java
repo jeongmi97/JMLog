@@ -264,34 +264,42 @@ public class UserBoardService {
 		return mav;
 	}
 	
-	// 스크롤 페이징
-	public List<BoardVO> getBoardList(int page) {
-		int startList = ((page-1)*9)+1;
-		return dao.getBoardList(startList);
-	}
+	/*
+	 * // 스크롤 페이징 public List<BoardVO> getBoardList(int page) { int startList =
+	 * ((page-1)*9)+1; return dao.getBoardList(startList); }
+	 */
 
 	// 방명록 이동
 	public ModelAndView guestbook(String email) {
 		ModelAndView mav = new ModelAndView("guestbook");
 		
-		mav.addObject("user", udao.userChk(email));	
+		mav.addObject("user", udao.userChk(email));		// 이동 블로그 유저 정보
+		mav.addObject("guestbook", dao.getguestList(email));	// 방명록 리스트 정보
 		
 		return mav;
 	}
 
 	// 방명록 작성
-	public void insertguest(GuestbookVO vo) {
+	public ModelAndView insertguest(GuestbookVO vo) {
+		ModelAndView mav = new ModelAndView();
 		dao.insertguest(vo);
+		mav.setViewName("redirect:/" + vo.getEmail() + "/guestbook");
+		return mav;
 	}
 
-	// 방명록 글번호 가져오기
-	public int getguestidx(String nickname) {
-		return dao.getguestidx(nickname);
+	// 방명록 수정
+	public ModelAndView updateguest(GuestbookVO vo) {
+		ModelAndView mav = new ModelAndView("redirect:/" + vo.getEmail() + "/guestbook");
+		
+		dao.updateguest(vo);
+		
+		return mav;
 	}
 
-	
+	// 방명록 삭제
+	public void delGuest(int idx) {
+		dao.delGuest(idx);
+	}
 
-	
-	
 
 }

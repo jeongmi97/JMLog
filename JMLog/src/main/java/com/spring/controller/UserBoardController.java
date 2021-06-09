@@ -8,19 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.spring.service.UserBoardService;
 import com.spring.vo.BoardVO;
-import com.spring.vo.CategoryVO;
-import com.spring.vo.ReplyVO;
+import com.spring.vo.GuestbookVO;
 import com.spring.vo.UserVO;
 
 @Controller
@@ -67,6 +62,17 @@ public class UserBoardController {
 	public ModelAndView guestbook(@PathVariable("email")String email) {
 		return ubs.guestbook(email);
 		
+	}
+	
+	// 방명록 작성
+	@PostMapping("{email:.+}/guestbook")
+	public ModelAndView inserguest(GuestbookVO vo) {
+		return ubs.insertguest(vo);
+	}
+	
+	@PostMapping("{email:.+}/guestbook/update")
+	public ModelAndView updateguest(GuestbookVO vo) {
+		return ubs.updateguest(vo);
 	}
 	
 	// 게시글 이동

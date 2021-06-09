@@ -52,7 +52,13 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-		
+	
+	<!-- 404에러 시 에러페이지 이동 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/error/404error.jsp</location>
+	</error-page>
+	
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>

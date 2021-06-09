@@ -79,7 +79,8 @@ a { text-decoration: none !important; color: #000000; }
 </nav>
 <div class="container content">
 	<c:choose>
-		<c:when test="${empty content }">
+		<!-- 소개글 없을 때 -->
+		<c:when test="${empty content }">	
 			<div>
 				<p>&nbsp;</p>
 				<p>소개글이 아직 없습니다ㅠㅠ</p>
@@ -113,6 +114,7 @@ a { text-decoration: none !important; color: #000000; }
 				</div> 
 			</div>
 		</c:when>
+		<!-- 소개글 있을 때 -->
 		<c:otherwise>
 			<div>
 				<p>&nbsp;</p>

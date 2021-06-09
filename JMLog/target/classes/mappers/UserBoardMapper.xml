@@ -155,10 +155,21 @@
 		values (#{email}, #{nickname}, #{content})
 	</insert>
 	
-	<select id="getguestidx" parameterType="String" resultType="int">
-		select * 
+	<select id="getguestList" parameterType="String" resultType="GuestbookVO">
+		select *
 		from guestbook
-		where nickname=#{nickname}
-		order by idx desc limit 1
+		where email=#{email}
+		order by idx desc
 	</select>
+	
+	<update id="updateguest" parameterType="GuestbookVO">
+		update guestbook
+		set content=#{content}
+		where idx=#{idx}
+	</update>
+	
+	<delete id="delGuest">
+		delete from guestbook
+		where idx=#{idx}
+	</delete>
 </mapper>
