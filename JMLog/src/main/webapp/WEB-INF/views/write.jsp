@@ -8,27 +8,14 @@
 <meta charset="UTF-8">
 <title>write</title>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+<link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style type="text/css">
-
-a{ text-decoration: none; color: #000000; }
-
-.profile {
-	width: 40px;
-	height: 40px;
-	border-radius: 70%;	/* 테두리 원으로 */
-	overflow: hidden;	/* 넘치는 부분 안보이게 */
-}
-.img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;	 /* 비율 그대로 유지 */
-}
-
 #title{
 	border-top: 0;
 	border-left: 0;
@@ -39,15 +26,11 @@ a{ text-decoration: none; color: #000000; }
 	margin-bottom: 20px;
 	font-size: 20pt;
 }
-
 #category{
 	width: 170px;
 	height: 30px;
 }
-
-#lock_post{
-	margin-right: 8px;
-}
+#lock_post{ margin-right: 8px; }
 </style>
 </head>
 
@@ -144,8 +127,8 @@ a{ text-decoration: none; color: #000000; }
 			<option value="nocate">카테고리</option>
 			<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
 		</form:select>
-		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" />
-		<form:textarea path="content" class="summernote" name="content" id="content" rows="40" /><br>
+		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" required="required"/>
+		<form:textarea path="content" class="summernote" name="content" id="content" rows="40" required="required" /><br>
 		<form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><label for="lock_post">비공개</label>
 		<input type="submit" value="작성하기">
 	</form:form>

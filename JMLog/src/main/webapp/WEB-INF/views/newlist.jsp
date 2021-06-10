@@ -1,50 +1,9 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<c:set var="cpath" value="${pageContext.request.contextPath }" />
 <html>
 <head>
-<title>Insert title here</title>
-<!-- 부트스트랩 -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<style type="text/css">
-
-a { text-decoration: none !important; color: #000000; }
-
-.profile {
-	width: 40px;
-	height: 40px;
-	border-radius: 70%;	/* 테두리 원으로 */
-	overflow: hidden;	/* 넘치는 부분 안보이게 */
-}
-.img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;	 /* 비율 그대로 유지 */
-}
-
-ul{
-	list-style: none;
-}
-.navi{
-	float: left;
-	font-size: 20px;
-	margin-right: 20px;
-}
-.thumbnail{
-	height: 250px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
-	
-}
-.title{
-	font-weight: bold;
-}
-</style>
+<title>JMLog</title>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<link rel="stylesheet" href="${cpath }/resources/css/home.css">
 </head>
 <body>
 

@@ -1,34 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="cpath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>소개</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style type="text/css">
-
-a { text-decoration: none !important; color: #000000; }
-
-.profile {
-	width: 40px;
-	height: 40px;
-	border-radius: 70%;	/* 테두리 원으로 */
-	overflow: hidden;	/* 넘치는 부분 안보이게 */
-}
-.img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;	 /* 비율 그대로 유지 */
-}
-.content{
-	text-align: center;
-}	
+.content{ text-align: center; }	
 </style>
 </head>
 <body>
@@ -79,8 +59,7 @@ a { text-decoration: none !important; color: #000000; }
 </nav>
 <div class="container content">
 	<c:choose>
-		<!-- 소개글 없을 때 -->
-		<c:when test="${empty content }">	
+		<c:when test="${empty content }">	<!-- 소개글 없을 때 -->
 			<div>
 				<p>&nbsp;</p>
 				<p>소개글이 아직 없습니다ㅠㅠ</p>
@@ -114,8 +93,7 @@ a { text-decoration: none !important; color: #000000; }
 				</div> 
 			</div>
 		</c:when>
-		<!-- 소개글 있을 때 -->
-		<c:otherwise>
+		<c:otherwise>	<!-- 소개글 있을 때 -->
 			<div>
 				<p>&nbsp;</p>
 				<p><c:out value="${content }" /></p>

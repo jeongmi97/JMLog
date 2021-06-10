@@ -38,6 +38,8 @@ public class UserService {
 	public ModelAndView login(UserVO vo, HttpSession session, HttpServletRequest req, HttpServletResponse res) throws IOException {
 		ModelAndView mav = new ModelAndView();
 		
+		boolean pwChk = false;	// 비밀번호 일치 확인 변수 (일치 : true / 불일치 : false)
+		
 		if(session.getAttribute("login") != null) {
 			session.removeAttribute("login");	// 기존에 login 세션 존재할 시 기존값 제거
 		}
@@ -47,15 +49,16 @@ public class UserService {
 		System.out.println("로그인 유저 : " + login);
 		System.out.println("로그인유지 체크 ::::: " + req.getParameter("useCookie"));
 		
-		boolean pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
+		if(login != null)	
+			pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
 		
-		if(login == null || pwChk == false) {	// login객체가 비어있거나 비밀번호 비교가 안맞을 경우 (로그인 실패)
+		if(login == null || pwChk == false) {	// login객체가 비어있거나 pwChk가 false일 때 (로그인 실패)
 			res.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = res.getWriter();
 			out.println("<script>alert('이메일/비밀번호를 확인해 주세요'); history.go(-1);</script>");	// 알림창 띄운 뒤 다시 로그인 페이지로 이동하게 한다
 			out.close();
 		}
-		if(login != null && pwChk == true) {	// 로그인 성공
+		if(login != null && pwChk == true) {	// login 객체가 존재하고 pwChk가 true일 때 (로그인 성공)
 			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
 			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
 				System.out.println("cookie");
@@ -138,7 +141,7 @@ public class UserService {
 	}
 	
 	// 닉네임 중복 확인
-	public int nicknameChk(String nickname) {
+	public String nicknameChk(String nickname) {
 		return dao.nicknameChk(nickname);	// 입력한 닉네임과 일치하는 닉네임 개수 반환
 	}
 

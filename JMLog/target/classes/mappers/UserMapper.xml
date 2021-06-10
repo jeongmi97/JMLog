@@ -20,8 +20,8 @@
 		where email=#{email}
 	</update>
 	
-	<select id="nicknameChk" parameterType="String" resultType="int">
-		select count(nickname)
+	<select id="nicknameChk" parameterType="String" resultType="String">
+		select nickname
 		from user
 		where nickname=#{nickname}
 	</select>

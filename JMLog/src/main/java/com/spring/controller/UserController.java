@@ -76,8 +76,9 @@ public class UserController {
 	}
 	
 	@GetMapping("nicknameChk")
-	public @ResponseBody int nicknameChk(@RequestParam("nickname")String nickname) {
-		int chk = us.nicknameChk(nickname);
+	public @ResponseBody String nicknameChk(@RequestParam("nickname")String nickname) {
+		String chk = us.nicknameChk(nickname);
+		System.out.println("닉네임 체크 : " + chk);
 		return chk;
 	}
 	

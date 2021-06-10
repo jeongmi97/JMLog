@@ -1,31 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="cpath" value="${pageContext.request.contextPath }" /> 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<title>프로필 수정</title>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style>
-a { text-decoration: none; color: #000000; }
-
-.profile {
-	width: 40px;
-	height: 40px;
-	border-radius: 70%;	/* 테두리 원으로 */
-	overflow: hidden;	/* 넘치는 부분 안보이게 */
-}
-.img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;	 /* 비율 그대로 유지 */
-}
 .upProfile{
 	width: 130px;
 	height: 130px;
@@ -37,12 +20,7 @@ a { text-decoration: none; color: #000000; }
 	height: 100%;
 	object-fit: cover;
 }
-.row{
-	margin: auto;
-}
-#nnamemsg{
-	color: #B22222;
-}
+.row{ margin: auto; }
 </style>
 </head>
 <body>
@@ -59,6 +37,8 @@ a { text-decoration: none; color: #000000; }
 				$('.img').attr('src', '${cpath }/${login.email}/getProfileImg');
 		}); */
 		
+		$('.alert').hide();
+		
 		// 닉네임 중복 확인 (수정필요)
 		$('#nickname').blur(function() {
 			const nickname = $('#nickname').val();
@@ -66,18 +46,21 @@ a { text-decoration: none; color: #000000; }
 			var loginnickname = '${login.nickname}';
 			
 			if(nickname == ''){
-				$('#nnamemsg').html("닉네임을 입력해주세요!")
+				nnamemsg.text("닉네임을 입력해주세요!")
+				$('#nnamemsgAlert').show();
 				return;
 			}else if(nickname != loginnickname){
 				$.ajax({
 					type: 'GET',
 					url: 'nicknameChk?nickname=' + nickname,
 					success: function(data) {
-						if(data > 0){
-							$('#nnamemsg').html('이미 사용중인 닉네임입니다!');
+						console.log('넘어온 닉네임 : ' + data);
+						if(data == ''){
+							$('#nnamemsgAlert').hide();
 							$('#saveBtn').prop("disabled",false);
 						}else{
-							$('#nnamemsg').html('');
+							nnamemsg.text('이미 사용중인 닉네임입니다!');
+							$('#nnamemsgAlert').show();
 							$('#saveBtn').prop("disabled",true);
 						}
 					}
@@ -176,8 +159,12 @@ a { text-decoration: none; color: #000000; }
 				<label><a id="delimg" href="#">이미지 제거</a></label><br>
 				<label for="nickname">닉네임</label>
 				<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
-				<p id="nnamemsg"></p>
-				
+				<div class="alert alert-danger" id="nnamemsgAlert" role="alert">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  <span class="sr-only">Error:</span>
+				  <p id="nnamemsg"></p>
+				</div>
+				<br>
 				<button id="saveBtn" type="submit" class="btn btn-dark">회원정보 수정</button>
 			</form>
 		</div>

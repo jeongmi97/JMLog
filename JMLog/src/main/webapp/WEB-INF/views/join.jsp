@@ -36,10 +36,10 @@ p{
 	const patternEmail = RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
 	const patternPw = RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/);	// 영문자 숫자 조합 8자 이상
 	
-	var btnChk = ['y', 'y', 'y', 'y'];
-	
+	var btnChk = ['n', 'n', 'n', 'n'];
 	
 	$(document).ready(function(){
+		
 	
 	$('.alert').hide();
 		
@@ -55,7 +55,7 @@ p{
 		}else if(!patternEmail.test(email)){	// 이메일 정규표현식에 맞지 않을 때
 			idmsg.text("이메일 형식에 맞게 입력해주세요");
 			btnChk[0] = 'n';
-			$('.btn').prop("disabled", true);
+			console.log('chkkkk : ' + btnChk[0]);
 			$('#idmsgAlert').show();
 			return;
 		}else{		// 이메일 정규표현식에 맞을 경우 ajax를 통해 계정 중복 테스트
@@ -69,10 +69,10 @@ p{
 						idmsg.text('이미 사용중인 계정입니다');
 						$('#idmsgAlert').show();
 						btnChk[0] = 'n';
-						$('.btn').prop("disabled", true);
 					}else{
 						$('#idmsgAlert').hide();
-						btnchk();
+						btnChk[0] = 'y';
+						console.log('chkkkk : ' + btnChk[0]);
 					}
 				}
 			})
@@ -91,11 +91,10 @@ p{
 			pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상으로 작성해주세요");
 			$('#pwmsgAlert').show();
 			btnChk[1] = 'n';
-			$('.btn').prop("disabled", true);
 			return;
 		}else{
 			$('#pwmsgAlert').hide();
-			btnchk();
+			btnChk[1] = 'y';
 		}
 	});
 	
@@ -112,14 +111,14 @@ p{
 			cpwmsg.text("비밀번호가 일치하지 않습니다");
 			$('#cpwmsgAlert').show();
 			btnChk[2] = 'n';
-			$('.btn').prop("disabled", true);
 			return;
 		}else{
 			$('#cpwmsgAlert').hide();
-			btnchk();
+			btnChk[2] = 'y';
 		}
 	});
 	
+	// 닉네임 중복확인
 	$('#nickname').blur(function() {
 		const nickname = $('#nickname').val();
 		var nnamemsg = $('#nnamemsg');
@@ -136,27 +135,32 @@ p{
 						nnamemsg.text('이미 사용중인 닉네임입니다');
 						$('#nnamemsgAlert').show();
 						btnChk[3] = 'n';
-						$('.btn').prop("disabled", true);
 					}else{
 						$('#nnamemsgAlert').hide();
-						btnchk();
+						btnChk[3] = 'y';
 					}
 				}
 			})
 		}
 	});
 	
-	function btnchk(){	// 인풋값들이 제약조건에 모두 성립 시 가입하기 버튼 활성화
+	});
+	
+	// 인풋값들이 제약조건에 모두 성립 시 가입하기 버튼 활성화
+	function btnchk(){	
 		var check = 'y';
 		for(var i=0; i<4; i++){
 			if(btnChk[i] == 'n')
 				check = 'n';
 		}
 		if(check == 'y')
-			$('.btn').prop("disabled", false);
+			$('form').submit();
+		else{
+			alert('입력정보를 확인해주세요!');
+			return;
+		}
+		
 	}
-	
-	});
 </script>
 
 <div class="container h-100">
@@ -191,7 +195,7 @@ p{
 					  <span class="sr-only">Error:</span>
 					  <p id="nnamemsg"></p>
 					</div>
-					<button type="submit" class="btn btn-dark btn-lg btn-block">가입하기</button>
+					<button type="button" onclick="btnchk();" class="btn btn-dark btn-lg btn-block">가입하기</button>
 				</form>
 		</div>
 	</div>

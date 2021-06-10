@@ -23,7 +23,7 @@ public interface UserDAO {
 
 	void settingUser(UserVO vo);
 
-	int nicknameChk(String nickname);	// 닉네임 중복 확인
+	String nicknameChk(String nickname);	// 닉네임 중복 확인
 
 	void setNickname(UserVO vo);		// 닉네임 수정
 
