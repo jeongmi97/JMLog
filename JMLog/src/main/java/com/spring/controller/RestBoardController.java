@@ -1,5 +1,7 @@
 package com.spring.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +18,7 @@ public class RestBoardController {
 	@Autowired UserBoardService ubs;
 	
 	// 댓글 저장
-	@PostMapping(value="{email}/{idx}/saveReply")
+	@PostMapping(value="{nickname}/{idx}/saveReply")
 	public int saveReply(@RequestBody ReplyVO reply) {
 		try {
 			ubs.saveReply(reply);
@@ -29,7 +31,7 @@ public class RestBoardController {
 	}
 	
 	// 댓글 삭제
-	@GetMapping(value="{email}/{idx}/delReply")
+	@GetMapping(value="{nickname}/{idx}/delReply")
 	public String delReply(@RequestParam("idx")int idx) {
 		System.out.println("들어옴");
 		try {
@@ -42,7 +44,7 @@ public class RestBoardController {
 	}
 	
 	// 댓글 수정
-	@PostMapping(value="{email}/{idx}/updateReply")
+	@PostMapping(value="{nickname}/{idx}/updateReply")
 	public int updateReply(@RequestBody ReplyVO reply) {
 		System.out.println("수정 들어옴");
 		try {
@@ -55,10 +57,10 @@ public class RestBoardController {
 	}
 	
 	// 카테고리 삭제
-	@GetMapping(value="setting/category/delCategory")
-	public String delCate(@RequestParam("idx")int idx) {
+	@PostMapping(value="setting/category/delCategory")
+	public String delCate(@RequestParam Map<String, Object> param) {
 		try {
-			ubs.delCate(idx);
+			ubs.delCate(param);
 			return "ok";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -67,11 +69,11 @@ public class RestBoardController {
 	}
 	
 	// 카테고리 수정
-	@GetMapping(value="setting/category/updateCategory")
-	public String updateCate(@RequestParam("oldcate")String oldcate,@RequestParam("idx")int idx, @RequestParam("catename")String catename,@RequestParam("email")String email) {
+	@PostMapping(value="setting/category/updateCategory")
+	public String updateCate(@RequestParam Map<String, Object> param) {
 		try {
-			ubs.updateCate(oldcate,idx,catename,email);
-			return catename;
+			ubs.updateCate(param);
+			return (String) param.get("catename");
 		}catch (Exception e) {
 			e.printStackTrace();
 			return "false";
@@ -79,7 +81,8 @@ public class RestBoardController {
 		
 	}
 	
-	@GetMapping(value="{email}/guestbook/delGuest")
+	// 방명록 삭제
+	@GetMapping(value="{nickname}/guestbook/delGuest")
 	public void delGuest(@RequestParam("idx")int idx) {
 		try {
 			ubs.delGuest(idx);

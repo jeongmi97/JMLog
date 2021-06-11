@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>프로필 수정</title>
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style>
 .upProfile{
@@ -95,80 +95,43 @@
 	
 </script>
 <header>
-	<div class="container">
-	<div class="row mt-2">
-		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
-				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-				</div>
-				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
-					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
-						<c:choose>
-							<c:when test="${login.profileimg != null }">
-								<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
-								<img class="img" src="${cpath }/${login.email}/getProfileImg">
-							</c:when>
-							<c:otherwise>
-								<img class="img" src="${cpath }/resources/img/default.jpg">
-							</c:otherwise>
-						</c:choose>
-					</div>
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-						</ul>
-				</div>
-		
-	</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 <nav>
-	<div class="container">
-		<div class="row">
-			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
-				<li><a href="${cpath }/setting">프로필</a></li>
-				<li><a href="${cpath }/setting/category">카테고리</a></li>
-			</ol>
-		</div>
-	</div>	
+	<%@ include file="/WEB-INF/views/include/settingNav.jsp" %>
 </nav>
-	<div class="container">
-		<div class="row" style="text-align: center;">
-			<div class="upProfile" style="background: #BDBDBD; display: block; margin: auto;">
-				<c:choose>
-					<c:when test="${login.profileimg != null }">
-						<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
-						<img class="img" src="${cpath }/${login.email}/getProfileImg">
-					</c:when>
-					<c:otherwise>
-						<img class="img" src="${cpath }/resources/img/default.jpg">
-					</c:otherwise>
-				</c:choose>
-			</div>
-			
-			<form method="POST" enctype="multipart/form-data" action="${capth }/setting">
-				<input type="hidden" id="email" name="email" value="${login.email }">
-				<input type="hidden" id="imgChk" name="imgChk" value="yes">
-				<label class="imgBtn" for="profileimg"><a>이미지 업로드</a></label>
-				<input type="file" id="profileimg" name="profileimg" style="display:none" accept="image/*"><br>	<!-- 이미지파일만 업로드 가능 -->
-				<label><a id="delimg" href="#">이미지 제거</a></label><br>
-				<label for="nickname">닉네임</label>
-				<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
-				<div class="alert alert-danger" id="nnamemsgAlert" role="alert">
-				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-				  <span class="sr-only">Error:</span>
-				  <p id="nnamemsg"></p>
-				</div>
-				<br>
-				<button id="saveBtn" type="submit" class="btn btn-dark">회원정보 수정</button>
-			</form>
-		</div>
-	</div>
 
+<div class="container">
+	<div class="row" style="text-align: center;">
+		<div class="upProfile" style="background: #BDBDBD; display: block; margin: auto;">
+			<c:choose>
+				<c:when test="${login.profileimg != null }">
+					<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
+					<img class="img" src="${cpath }/${login.email}/getProfileImg">
+				</c:when>
+				<c:otherwise>
+					<img class="img" src="${cpath }/resources/img/default.jpg">
+				</c:otherwise>
+			</c:choose>
+		</div>
+		
+		<form method="POST" enctype="multipart/form-data" action="${capth }/setting">
+			<input type="hidden" id="email" name="email" value="${login.email }">
+			<input type="hidden" id="imgChk" name="imgChk" value="yes">
+			<label class="imgBtn" for="profileimg"><a>이미지 업로드</a></label>
+			<input type="file" id="profileimg" name="profileimg" style="display:none" accept="image/*"><br>	<!-- 이미지파일만 업로드 가능 -->
+			<label><a id="delimg" href="#">이미지 제거</a></label><br>
+			<label for="nickname">닉네임</label>
+			<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
+			<div class="alert alert-danger" id="nnamemsgAlert" role="alert">
+			  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			  <span class="sr-only">Error:</span>
+			  <p id="nnamemsg"></p>
+			</div>
+			<br>
+			<button id="saveBtn" type="submit" class="btn btn-dark">회원정보 수정</button>
+		</form>
+	</div>
+</div>
 </body>
 </html>

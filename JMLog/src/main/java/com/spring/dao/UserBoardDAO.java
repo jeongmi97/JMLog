@@ -2,6 +2,7 @@ package com.spring.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.spring.vo.BoardVO;
 import com.spring.vo.CategoryVO;
@@ -18,7 +19,7 @@ public interface UserBoardDAO {
 	
 	List<BoardVO> userBoardList(HashMap<String, Object> param);	// 유저 보드 리스트 가져오기
 
-	int getPostnum(String email);	// 작성한 글 번호 가져오기
+	int getPostnum(String nickname);	// 작성한 글 번호 가져오기
 	
 	BoardVO getPost(int idx);	// 게시글 가져오기
 
@@ -38,7 +39,7 @@ public interface UserBoardDAO {
 
 	void updateReply(ReplyVO reply);	// 댓글 수정
 
-	int getBoardListCnt(String email);	// 총 게시글 개수 확인
+	int getBoardListCnt(String nickname);	// 총 게시글 개수 확인
 
 	List<CategoryVO> getCategory(String email);	// 유저 카테고리 가져오기
 	
@@ -46,7 +47,11 @@ public interface UserBoardDAO {
 	
 	void updateAbout(BoardVO vo);	// 소개글 수정
 	
-	Object getAbout(String email);	// 소개글 가져오기
+	Object getAbout(String nickname);	// 소개글 가져오기
+	
+	List<BoardVO> userLockBoardList(HashMap<String, Object> param);	// 비밀글 제외 유저 보드 리스트
+
+	List<BoardVO> cateLockBoardList(HashMap<String, Object> param);	// 비밀글 제외 카테고리별 리스트
 
 	List<BoardVO> cateBoardList(HashMap<String, Object> param);	// 카테고리별 보드 리스트 가져오기
 
@@ -54,11 +59,13 @@ public interface UserBoardDAO {
 	
 	void setCategory(HashMap<String, Object> param);	// 카테고리 추가
 
-	void delCate(int idx);	// 카테고리 삭제
+	void delCate(Map<String, Object> param);	// 카테고리 삭제
+	
+	void delPostCate(Map<String, Object> param);	// 카테고리 삭제 - 게시글 카테고리 수정
 
-	void updateCate(HashMap<String, Object> category);	// 카테고리 수정
+	void updateCate(Map<String, Object> category);	// 카테고리 수정
 
-	void updatePostCate(HashMap<String, Object> param);	// 카테고리 수정 - 게시글 카테고리 수정
+	void updatePostCate(Map<String, Object> param);	// 카테고리 수정 - 게시글 카테고리 수정
 	
 	int getCateCnt(HashMap<String, Object> param);	// 선택한 카테고리 개수 가져오기
 
@@ -78,6 +85,8 @@ public interface UserBoardDAO {
 
 	void delGuest(int idx);	// 방명록 삭제
 
+	
 
+	
 
 }

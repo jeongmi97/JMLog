@@ -70,13 +70,13 @@
 		});
 		
 		// 게시글 수정 시 입력 폼 셋팅
-		var mode = '<c:out value="${mode}"/>';	// 게시글 모드 가져옴
+		var mode = '${mode}';	// 게시글 모드 가져옴
 		
 		if(mode == 'edit'){	// 수정 모드일때
-			$("input:hidden[name='idx']").val('<c:out value="${post.idx}"/>');
-			$("input:hidden[name='mode']").val('<c:out value="${mode}"/>');
-			$('#title').val('<c:out value="${post.title}"/>');
-			$('#content').val('<c:out value="${post.content}"/>');
+			$("input:hidden[name='idx']").val('${post.idx}');
+			$("input:hidden[name='mode']").val('${mode}');
+			$('#title').val('${post.title}');
+			$('#content').val('${post.content}');
 
 		}
 		
@@ -85,42 +85,14 @@
 </script>
 
 <header>
-	<div class="container">
-	<div class="row mt-2">
-		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
-		<c:choose>
-			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
-				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-						
-				</div>
-				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
-					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
-						<img class="img" src="${cpath }/${login.email}/getProfileImg">
-					</div>
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-						</ul>
-				</div>
-			</c:when>
-			<c:otherwise>	
-				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
-			</c:otherwise>
-		</c:choose>
-		
-	</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/header.jsp" %>
+	<hr>
 </header>
 
 <div class="container">
 	<form:form method="post" modelAttribute="post" action="${cpath }/write">
 		<form:hidden path="idx"/>
-		<form:hidden path="email" value="${login.email }"/>
+		<form:hidden path="nickname" value="${login.nickname }"/>
 		<input type="hidden" name="mode" value="${mode }">
 		
 		<form:select path="cate" id="category">

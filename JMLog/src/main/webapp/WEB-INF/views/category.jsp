@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리 관리</title>
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style type="text/css">
 .categorybox{
@@ -89,14 +89,25 @@
 	function update(idx, catename){
 		var email = '${login.email}';
 		var updateCate = $('input[name=cate'+idx+']').val();
-		var oldcate = catename;
-		console.log('원래내용: ' + oldcate);
 		console.log("수정내용 : " + updateCate);
 		console.log('이메일 : ' + email);
 		
+		var param = JSON.stringify({
+			"oldcate": catename,
+			"idx": idx,
+			"catename": updateCate,
+			"email": email
+		});
+		
+		var headers = {"Content-Type" : "application/json"
+			, "X-HTTP-Method-Override" : "POST"};
+		
 		$.ajax({
-			type:'GET',
-			url: '${cpath}/setting/category/updateCategory?oldcate='+oldcate+'&idx='+idx+'&catename='+updateCate+'&email='+email,
+			type:'POST',
+			url: '${cpath}/setting/category/updateCategory',
+			data: param,
+			headers: headers,
+			contentType: 'application/json',
 			success: function(data){
 				$('#cate' + idx).replaceWith('<div class="categorybox" id="cate'+idx+'"><span id="namebox">'+data+'</span><span id="btnbox"><button type="button" class="updateBtn" onclick="updateBtn('+idx+', '+catename+')">수정</button> <button type="button" class="deleteBtn" onclick="deleteBtn('+idx+')">삭제</button></span></div>')
 			},
@@ -108,12 +119,25 @@
 	}
 	
 	// 카테고리 삭제
-	function deleteBtn(idx){
+	function deleteBtn(idx, catename){
 		console.log("삭제버튼 : " + idx);
+		var email = '${login.email}';
+		
+		var param = JSON.stringify({
+			"idx": idx,
+			"cate": catename,
+			"email": email
+		});
+		
+		var headers = {"Content-Type" : "application/json"
+			, "X-HTTP-Method-Override" : "POST"};
 		
 		$.ajax({
-			type: 'GET',
-			url: '${cpath}/setting/category/delCategory?idx=' + idx,
+			type: 'POST',
+			url: '${cpath}/setting/category/delCategory',
+			data: param,
+			headers: headers,
+			contentType: 'application/json',
 			success: function(data){
 				$('div').remove('#cate' + idx);
 			},
@@ -127,48 +151,11 @@
 </script>
 
 <header>
-	<div class="container">
-	<div class="row mt-2">
-		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
-		<c:choose>
-			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
-				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-						
-				</div>
-				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
-					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
-						<img class="img" src="${cpath }/${login.email}/getProfileImg">
-					</div>
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-						</ul>
-				</div>
-			</c:when>
-			<c:otherwise>	
-				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
-			</c:otherwise>
-		</c:choose>
-		
-	</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 
 <nav>
-<div class="container">
-	<div class="row">
-			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
-				<li><a href="${cpath }/setting">프로필</a></li>
-				<li><a href="${cpath }/setting/category">카테고리</a></li>
-			</ol>
-	</div>	
-</div>
+	<%@ include file="/WEB-INF/views/include/settingNav.jsp" %>
 </nav>
 <div class="container">
 	<div class="set_order" style="text-align: center;">
@@ -179,7 +166,7 @@
 			<form id="addCate" method="post" action="">
 				<input type="hidden" name="email" value="${login.email }">
 				<c:forEach var="category" items="${category }">
-					<div class="categorybox" id="cate${category.idx }"><span id="namebox"><c:out value="${category.catename }" /></span><span id="btnbox"><button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button> <button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('${category.idx}')">삭제</button></span></div>
+					<div class="categorybox" id="cate${category.idx }"><span id="namebox"><c:out value="${category.catename }" /></span><span id="btnbox"><button type="button" class="updateBtn btn btn-default btn-xs" onclick="updateBtn('${category.idx}', '${category.catename }')">수정</button> <button type="button" class="deleteBtn btn btn-default btn-xs" onclick="deleteBtn('${category.idx}','${category.catename }')">삭제</button></span></div>
 				</c:forEach>
 			</form>
 		</div>

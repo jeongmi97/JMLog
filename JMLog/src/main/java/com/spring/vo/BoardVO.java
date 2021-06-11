@@ -9,7 +9,7 @@ public class BoardVO {
 	private String content;
 	private Date reporting_date;
 	private int hit;		// 조회수
-	private String email;	// 작성자 이메일
+	private String nickname;	// 작성자 이메일
 	private String lock_post;	// 비밀글 설정
 	private String cate;	// 카테고리
 	
@@ -43,11 +43,11 @@ public class BoardVO {
 	public void setHit(int hit) {
 		this.hit = hit;
 	}
-	public String getEmail() {
-		return email;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public String getLock_post() {
 		return lock_post;

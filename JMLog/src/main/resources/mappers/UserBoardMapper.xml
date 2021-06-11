@@ -9,13 +9,6 @@
 		order by hit desc limit 0, 9
 	</select>
 	
-	<select id="getBoardList" parameterType="int" resultType="BoardVO">
-		select *
-		from board
-		where not lock_post in ('a', 'y')
-		order by hit desc limit #{startList}, 9
-	</select>
-	
 	<select id="getNewPostList" resultType="BoardVO">
 		select *
 		from board
@@ -23,40 +16,61 @@
 		order by idx desc limit 0, 9
 	</select>
 	
+	<select id="getBoardList" parameterType="int" resultType="BoardVO">
+		select *
+		from board
+		where not lock_post in ('a', 'y')
+		order by hit desc limit #{startList}, 9
+	</select>
+	
 	<insert id="write" parameterType="BoardVO">
-		insert into board(title, content, email, lock_post, cate) 
-		values(#{title}, #{content}, #{email}, #{lock_post}, #{cate})
+		insert into board(title, content, nickname, lock_post, cate) 
+		values(#{title}, #{content}, #{nickname}, #{lock_post}, #{cate})
 	</insert>
 	
 	<select id="userBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
-		where email=#{email} and not lock_post in ('a')
+		where nickname=#{nickname} and not lock_post in ('a')
 		order by idx desc limit #{startList},10
 	</select>
 	
 	<select id="cateBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
-		where email=#{email} and cate=#{cate} and not lock_post in ('a')
+		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a')
+		order by idx desc limit #{startList},10
+	</select>
+	
+	<select id="userLockBoardList" parameterType="HashMap" resultType="BoardVO"> 
+		select *
+		from board
+		where nickname=#{nickname} and not lock_post in ('a', 'n')
+		order by idx desc limit #{startList},10
+	</select>
+	
+	<select id="cateLockBoardList" parameterType="HashMap" resultType="BoardVO">
+		select *
+		from board
+		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a', 'n')
 		order by idx desc limit #{startList},10
 	</select>
 	
 	<insert id="writeAbout" parameterType="BoardVO">
-		insert into board (title, content, email, lock_post)
-		values('userabout', #{content}, #{email}, 'a')
+		insert into board (title, content, nickname, lock_post)
+		values('userabout', #{content}, #{nickname}, 'a')
 	</insert>
 
 	<update id="updateAbout">
 		update board
 		set content=#{content}
-		where email=#{email} and lock_post='a'	
+		where nickname=#{nickname} and lock_post='a'	
 	</update>
 	
 	<select id="getAbout" parameterType="String" resultType="String">
 		select content
 		from board
-		where email=#{email} and lock_post='a'
+		where nickname=#{nickname} and lock_post='a'
 	</select>
 	
 	<insert id="setCategory" parameterType="HashMap">
@@ -67,10 +81,16 @@
 		</foreach>
 	</insert>
 	
-	<delete id="delCate" parameterType="int">
+	<delete id="delCate" parameterType="HashMap">
 		delete from category
 		where idx=#{idx}
 	</delete>
+	
+	<update id="delPostCate" parameterType="HashMap">
+		update board
+		set cate='nocate'
+		where email=#{email} and cate=#{catename}
+	</update>
 	
 	<update id="updateCate" parameterType="CategoryVO">
 		update category
@@ -81,13 +101,13 @@
 	<update id="updatePostCate" parameterType="CategoryVO">
 		update board
 		set cate=#{cate}
-		where email=#{email} and cate=#{oldcate}
+		where nickname=#{nickname} and cate=#{oldcate}
 	</update>
 
 	<select id="getPostnum" parameterType="String" resultType="int">
 		select idx
 		from board
-		where email=#{email}
+		where nickname=#{nickname}
 		order by idx desc limit 1
 	</select>
 	
@@ -111,13 +131,13 @@
 	<select id="getBoardListCnt" parameterType="String" resultType="int">
 		select count(*) as listCnt
 		from board
-		where email=#{email}
+		where nickname=#{nickname}
 	</select>
 	
 	<select id="getCateBoardList" parameterType="HashMap" resultType="int">
 		select count(*)
 		from board
-		where email=#{email} and cate=#{cate}
+		where nickname=#{nickname} and cate=#{cate}
 	</select>
 	
 	<select id="getCategory" parameterType="String" resultType="CategoryVO">
@@ -129,7 +149,7 @@
 	<select id="getCateCnt" parameterType="HashMap" resultType="int">
 		select count(*)
 		from board
-		where email=#{email} and cate=#{cate}
+		where nickname=#{nickname} and cate=#{cate}
 	</select>
 	
 	<update id="updateCateCnt" parameterType="HashMap">

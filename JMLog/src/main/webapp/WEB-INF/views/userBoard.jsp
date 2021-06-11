@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${user.nickname }</title>
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style>
 #reportDate{ margin-top: 20px; }
@@ -23,71 +23,33 @@
 		var range = range - 1; 
 		
 		// email?page=page&range=range
-		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range + '&category=${nowCate}';
+		var url = '${cpath}/${user.nickname}?page='+ page + '&range=' + range + '&category=${nowCate}';
 		
 		location.href = url;
 	}
 	
 	// 페이지 번호 클릭
 	function pagination(page, range, rangeSize){
-		var url = '${cpath}/${user.email}?page='+ page + '&range=' + range + '&category=${nowCate}';
+		var url = '${cpath}/${user.nickname}?page='+ page + '&range=' + range + '&category=${nowCate}';
 		
 		location.href = url;
 	}
 </script>
 
 <header>
-	<div class="container">
-	<div class="row mt-2">
-		<div class="col-md-8" style="margin-top: 10px"><h2><a href="${cpath }/">JMLog</a></h2></div>
-		<c:choose>
-			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
-				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-						
-				</div>
-				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
-					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
-						<img class="img" src="${cpath }/${login.email}/getProfileImg">
-					</div>
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-						</ul>
-				</div>
-			</c:when>
-			<c:otherwise>	
-				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
-			</c:otherwise>
-		</c:choose>
-		
-	</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 
 <nav>
-	<div class="container">
-		<div class="row">
-			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
-			  <li><a href="${cpath }/${user.email}">글</a></li>
-			  <li><a href="${cpath }/${user.email}/guestbook">방명록</a></li>
-			  <li><a href="${cpath }/${user.email}/about">소개</a></li>
-			</ol>
-		</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/mainNav.jsp" %>
 </nav>
 
 <div class="container">
 	<div class="row">
 		<div class="col-md-3">
-			<a href="${cpath }/${user.email}">전체보기 (${fn:length(uBoard) })</a><br><hr>
+			<a href="${cpath }/${user.nickname}">전체보기 (${fn:length(uBoard) })</a><br><hr>
 			<c:forEach items="${category }" var="category">
-				<a href="${cpath }/${user.email}?category=${category.catename }"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
+				<a href="${cpath }/${user.nickname}?category=${category.catename }"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
 			</c:forEach>
 		</div>
 		<div class="col-md-9">

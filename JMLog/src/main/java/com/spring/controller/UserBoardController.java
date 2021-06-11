@@ -1,5 +1,7 @@
 package com.spring.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,13 @@ public class UserBoardController {
 	}
 	
 	// 유저 보드 페이지
-	@GetMapping("{email:.+}")
-	public ModelAndView board(@PathVariable("email")String email
+	@GetMapping("{nickname}")
+	public ModelAndView board(@PathVariable("nickname")String nickname
+			, @ModelAttribute("login") UserVO login
 			, @RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
 			, @RequestParam(required = false, defaultValue = "1") int range
 			, @RequestParam(required = false, defaultValue = "nocate")String category) {
-		return ubs.userBoard(email, page, range, category);
+		return ubs.userBoard(nickname, login, page, range, category);
 	}
 	
 	// 글쓰기 페이지 이동
@@ -53,61 +56,61 @@ public class UserBoardController {
 	
 	// 글쓰기 실행
 	@PostMapping("write")
-	public ModelAndView write(BoardVO vo, @RequestParam("mode")String mode) {
-		return ubs.write(vo, mode);
+	public ModelAndView write(BoardVO vo, @RequestParam("mode")String mode, @ModelAttribute("login") UserVO login) throws Exception {
+		return ubs.write(vo, mode, login);
 	}
 	
 	// 방명록
-	@RequestMapping("{email:.+}/guestbook")
-	public ModelAndView guestbook(@PathVariable("email")String email) {
-		return ubs.guestbook(email);
+	@RequestMapping("{nickname}/guestbook")
+	public ModelAndView guestbook(@PathVariable("nickname")String nickname) {
+		return ubs.guestbook(nickname);
 		
 	}
 	
 	// 방명록 작성
-	@PostMapping("{email:.+}/guestbook")
-	public ModelAndView inserguest(GuestbookVO vo) {
+	@PostMapping("{nickname}/guestbook")
+	public ModelAndView inserguest(GuestbookVO vo) throws Exception {
 		return ubs.insertguest(vo);
 	}
 	
-	@PostMapping("{email:.+}/guestbook/update")
-	public ModelAndView updateguest(GuestbookVO vo) {
+	@PostMapping("{nickname}/guestbook/update")
+	public ModelAndView updateguest(GuestbookVO vo) throws Exception {
 		return ubs.updateguest(vo);
 	}
 	
 	// 게시글 이동
-	@GetMapping("{email:.+}/{idx}")
+	@GetMapping("{nickname}/{idx}")
 	public ModelAndView viewPost(@PathVariable("idx")int idx) {
 		return ubs.viewPost(idx);
 	}
 	
 	// 소개
-	@GetMapping("{email:.+}/about")
-	public ModelAndView about(@PathVariable("email")String email) {
-		return ubs.about(email);
+	@GetMapping("{nickname}/about")
+	public ModelAndView about(@PathVariable("nickname")String nickname) {
+		return ubs.about(nickname);
 	}
 	
 	// 소개글 작성
-	@PostMapping("{email:.+}/about")
-	public ModelAndView about(BoardVO vo) {
+	@PostMapping("{nickname}/about")
+	public ModelAndView about(BoardVO vo) throws Exception {
 		return ubs.writeAbout(vo);
 	}
 	
 	// 소개글 수정
-	@PostMapping("{email:.+}/about/update")
-	public ModelAndView updateAbout(BoardVO vo) {
+	@PostMapping("{nickname}/about/update")
+	public ModelAndView updateAbout(BoardVO vo) throws Exception {
 		return ubs.updateAbout(vo);
 	}
 	
 	// 게시글 수정 선택 시
 	@GetMapping("editPost")
-	public ModelAndView editPost(@RequestParam("idx")int idx,@RequestParam("mode")String mode) {
-		return ubs.editPost(idx, mode);
+	public ModelAndView editPost(@RequestParam("idx")int idx,@RequestParam("mode")String mode, @ModelAttribute("login") UserVO login) {
+		return ubs.editPost(idx, mode, login);
 	}
 	
 	// 게시글 삭제
 	@GetMapping("delPost/{idx}")
-	public ModelAndView delPost(@PathVariable("idx")int idx,@ModelAttribute("login") UserVO login) {
+	public ModelAndView delPost(@PathVariable("idx")int idx,@ModelAttribute("login") UserVO login) throws Exception {
 		return ubs.delPost(idx, login);
 	}
 	
@@ -117,9 +120,4 @@ public class UserBoardController {
 		return ubs.setCategory(req);
 	}
 	
-	// 닉네임 클릭 사용한 유저보드 이동
-	@GetMapping("reply/{nickname}")
-	public ModelAndView board(@PathVariable("nickname")String nickname) {
-		return ubs.getEmail(nickname);
-	}
 }

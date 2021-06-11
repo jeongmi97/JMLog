@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>소개</title>
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
+<%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="${cpath }/resources/css/navStyle.css">
 <style type="text/css">
 .content{ text-align: center; }	
@@ -14,48 +14,10 @@
 <body>
 
 <header>
-	<div class="container">
-	<div class="row mt-2">
-		<div class="col-md-8 "><h2><a href="${cpath }">JMLog</a></h2></div>
-		<c:choose>
-			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
-				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
-						
-				</div>
-				<div class="col-md-1 text-right" style="margin-top: 20px">
-					<%-- <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >Hello, ${login.nickname}! --%>
-					<a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
-					<div class="profile" style="background: #BDBDBD; margin-right: 0px">
-						<img class="img" src="${cpath }/${login.email}/getProfileImg">
-					</div>
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu justify-content-end" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/${login.email}">내 로그</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/setting">설정</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="${cpath }/logout">로그아웃</a></li>
-						</ul>
-				</div>
-			</c:when>
-			<c:otherwise>	
-				<div class="col-md-4 text-right" style="margin-top: 20px"><button type="button" class="btn btn-dark" onclick="location.href='${cpath}/login'">로그인</button></div>	<!-- 로그인 안 되어있을 때 -->
-			</c:otherwise>
-		</c:choose>
-		
-	</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
 <nav>
-	<div class="container">
-		<div class="row">
-			<ol class="breadcrumb" style="margin-top: 20px; text-align: center">
-			  <li><a href="${cpath }/${user.email}">글</a></li>
-			  <li><a href="${cpath }/${user.email}/guestbook">방명록</a></li>
-			  <li><a href="${cpath }/${user.email}/about">소개</a></li>
-			</ol>
-		</div>
-	</div>
+	<%@ include file="/WEB-INF/views/include/mainNav.jsp" %>
 </nav>
 <div class="container content">
 	<c:choose>
@@ -82,7 +44,7 @@
 						</div> 
 						<form method="POST">
 							<div class="modal-body">
-								<input type="hidden" name="email" value="${login.email }">	 
+								<input type="hidden" name="nickname" value="${login.nickname }">	 
 								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="나를 소개해주세요"></textarea>
 							</div> 
 							<div class="modal-footer"> 
@@ -114,9 +76,9 @@
 							<h5 class="modal-title" id="staticBackdropLabel">소개글 수정</h5> 
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> 
 						</div> 
-						<form method="POST" action="${cpath }/${login.email}/about/update">
+						<form method="POST" action="${cpath }/${login.nickname}/about/update">
 							<div class="modal-body">
-								<input type="hidden" name="email" value="${login.email }">	 
+								<input type="hidden" name="nickname" value="${login.nickname }">	 
 								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="소개글을 수정합니다">${content }</textarea>
 							</div> 
 							<div class="modal-footer"> 
