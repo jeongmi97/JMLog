@@ -23,7 +23,7 @@
 		</div>
 	</div>
 </nav>
-<div class="container">
+<div id="postContainer" class="container">
 	<c:forEach var="post" items="${postList }" varStatus="status">
 		<c:if test="${status.count == 1 || status.count % 3 == 1}">
 			<div class="row">
@@ -31,7 +31,11 @@
 			<div class="col-sm-4 col-md-4">
 				<div class="thumbnail">
 					<div class="caption">
-				    	<h3 class="title"><c:out value="${post.title }" escapeXml="false" /></h3>
+				    	<h3 class="title"><a href="${cpath }/${post.nickname}/${post.idx}"><c:out value="${post.title }" escapeXml="false" /></a></h3>
+				    	<label>
+				    		<a href="${cpath }/${post.nickname}"><span style="color: #848482;">by </span><span><c:out value="${post.nickname }" /></span></a>
+				    	</label>
+				    	<span style="color: #848482;"><c:out value="${post.reporting_date }"/></span>
 				    	<hr>
 				        <p>
 				        	<c:out value="${post.content }" escapeXml="false" />

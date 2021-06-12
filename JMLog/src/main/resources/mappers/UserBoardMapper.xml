@@ -35,6 +35,12 @@
 		order by idx desc limit #{startList},10
 	</select>
 	
+	<select id="userAllBoardCnt" parameterType="String" resultType="int">
+		select count(*)
+		from board
+		where nickname=#{nickname} and not lock_post in ('a')
+	</select>
+	
 	<select id="cateBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
@@ -45,14 +51,14 @@
 	<select id="userLockBoardList" parameterType="HashMap" resultType="BoardVO"> 
 		select *
 		from board
-		where nickname=#{nickname} and not lock_post in ('a', 'n')
+		where nickname=#{nickname} and not lock_post in ('a', 'y')
 		order by idx desc limit #{startList},10
 	</select>
 	
 	<select id="cateLockBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
-		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a', 'n')
+		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a', 'y')
 		order by idx desc limit #{startList},10
 	</select>
 	
@@ -158,6 +164,18 @@
 		where email=#{email} and catename=#{cate}
 	</update>
 	
+	<select id="getboardCate" parameterType="HashMap" resultType="String">
+		select cate
+		from board
+		where idx=#{idx}
+	</select>
+	
+	<update id="minusCateCnt" parameterType="HashMap">
+		update category
+		set catecnt=catecnt-1
+		where email=#{email} and catename=#{catename}
+	</update>
+	
 	<select id="getEmail" parameterType="String" resultType="String">
 		select email
 		from user
@@ -192,4 +210,6 @@
 		delete from guestbook
 		where idx=#{idx}
 	</delete>
+	
+	
 </mapper>

@@ -21,7 +21,7 @@ ul{
 	margin-right: 20px;
 }
 .thumbnail{
-	height: 250px;
+	height: 300px;
 	overflow: hidden;
 	
 }
@@ -36,7 +36,7 @@ ul{
 	white-space: nowrap;
 }
 .caption{
-	height: 240px;
+	height: 290px;
 }
 .title{
 	font-weight: bold;

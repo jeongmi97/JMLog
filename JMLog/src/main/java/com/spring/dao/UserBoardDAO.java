@@ -19,9 +19,12 @@ public interface UserBoardDAO {
 	
 	List<BoardVO> userBoardList(HashMap<String, Object> param);	// 유저 보드 리스트 가져오기
 
+	int userAllBoardCnt(String nickname);	// 유저의 모든 게시글 개수 가져오기
+	
 	int getPostnum(String nickname);	// 작성한 글 번호 가져오기
 	
 	BoardVO getPost(int idx);	// 게시글 가져오기
+	
 
 	void updatePost(BoardVO vo);	// 게시물 수정
 
@@ -84,6 +87,12 @@ public interface UserBoardDAO {
 	void updateguest(GuestbookVO vo);	// 방명록 수정
 
 	void delGuest(int idx);	// 방명록 삭제
+
+	String getboardCate(BoardVO vo);	// 수정 전 게시글 카테고리 가져오기
+
+	void minusCateCnt(HashMap<String, Object> param);	// 카테고리 수정 시 원래 카테고리 카운트 -1 하기
+
+	
 
 	
 

@@ -47,7 +47,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-3">
-			<a href="${cpath }/${user.nickname}">전체보기 (${fn:length(uBoard) })</a><br><hr>
+			<a href="${cpath }/${user.nickname}">전체보기 (${allCnt })</a><br><hr>
 			<c:forEach items="${category }" var="category">
 				<a href="${cpath }/${user.nickname}?category=${category.catename }"><c:out value="${category.catename }"/> (<c:out value="${category.catecnt }"/>)</a><br>
 			</c:forEach>
@@ -63,7 +63,7 @@
 			</c:choose>
 			<div class="content">
 				<c:forEach items="${uBoard}" var="uBoard"> 
-					<div><a href="${cpath }/${user.email}/${uBoard.idx }"><h3><c:out value="${uBoard.title } " /></h3></a></div>
+					<div><a href="${cpath }/${user.nickname}/${uBoard.idx }"><h3><c:out value="${uBoard.title } " /></h3></a></div>
 					<div style="table-layout:fixed"><c:out value="${uBoard.content } " escapeXml="false"/></div>
 					<div class="text-dark" style="color: #A9A9A9;" id="reportDate"><c:out value="${uBoard.reporting_date }" /> | <c:out value="${uBoard.hit }"/>회조회</div>
 					<hr>

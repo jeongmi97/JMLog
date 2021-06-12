@@ -48,6 +48,7 @@ public class UserService {
 		UserVO login = dao.userChk(vo.getEmail());	
 		System.out.println("로그인 유저 : " + login);
 		System.out.println("로그인유지 체크 ::::: " + req.getParameter("useCookie"));
+		System.out.println("이미지 체크 ::: " + login.getProfileimg());
 		
 		if(login != null)	
 			pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
@@ -173,7 +174,13 @@ public class UserService {
 			}
 		}
 		
+		String oldnickname = dao.getNickname(vo.getEmail());
+		HashMap<String, String>param = new HashMap<String, String>();
+		param.put("oldnickname", oldnickname);
+		param.put("nickname", vo.getNickname());
 		dao.setNickname(vo);	// 닉네임 수정
+		dao.updatePostNickname(param);
+		dao.updateReplyNickname(param);
 		
 		return mav;	// 수정 완료하고 다시 setting 화면으로 돌아감
 	}

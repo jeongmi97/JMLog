@@ -93,6 +93,7 @@ public class UserController {
 	// 프로필 이미지 가져오기
 	@RequestMapping("{email:.+}/getProfileImg")
 	public ResponseEntity<byte[]> getProfileImg(@PathVariable("email")String email){
+		System.out.println("이미지 가져옴");
 		return us.getProfileImg(email);
 	}
 	

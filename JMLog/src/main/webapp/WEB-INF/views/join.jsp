@@ -88,7 +88,7 @@ p{
 			pwmsg.text("비밀번호를 입력해주세요");
 			return;
 		}else if(!patternPw.test(pw)){
-			pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상으로 작성해주세요");
+			pwmsg.text("영문 대소문자, 숫자를 조합한 8자 이상");
 			$('#pwmsgAlert').show();
 			btnChk[1] = 'n';
 			return;
@@ -165,7 +165,7 @@ p{
 
 <div class="container h-100">
 	<div class="row d-flex align-items-center h-100">
-		<div class="col-sm-6" style="margin: auto; text-align: center">
+		<div class="col-sm-8" style="margin: auto; text-align: center">
 			<h2>JMLog 회원가입</h2>
 				<form method="post" style="display: inline-block;">
 					<div style="text-align: left;"><small><strong>이메일</strong></small></div>

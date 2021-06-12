@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class UserBoardService {
 	}
 	
 	// 유저 블로그로 이동
-	public ModelAndView userBoard(String nickname, UserVO login, int page, int range, String category) {
+	public ModelAndView userBoard(String nickname, HttpSession session, int page, int range, String category) {
 		ModelAndView mav = new ModelAndView("userBoard");
 		
 		System.out.println("넘어온 이메일 : " + nickname);
@@ -89,19 +90,25 @@ public class UserBoardService {
 		mav.addObject("category", dao.getCategory(email));	// 유저 카테고리 정보 가져오기
 		mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
 		
-		if(login.getEmail().equals(email)) {	// 로그인 한 유저가 자신의 게시판에 들어갈 때 비밀글 까지 보이게
-			if(category.equals("nocate"))
-				mav.addObject("uBoard",dao.userBoardList(param));	// 닉네임, 10
-			else
-				mav.addObject("uBoard",dao.cateBoardList(param));	// 카테고리 별 보드 리스트
-		}else {
+		
+		
+		if(session.getAttribute("login") != null) {	// 로그인 중
+			UserVO login = (UserVO) session.getAttribute("login");
+			if(login.getEmail().equals(email)) {	// 로그인 한 유저가 자신의 게시판에 들어갈 때 비밀글 까지 보이게
+				if(category.equals("nocate"))
+					mav.addObject("uBoard",dao.userBoardList(param));	// 닉네임, 10
+				else
+					mav.addObject("uBoard",dao.cateBoardList(param));	// 카테고리 별 보드 리스트
+			}
+		}else {		// 미로그인
 			if(category.equals("nocate"))
 				mav.addObject("uBoard",dao.userLockBoardList(param));	// 비밀글 제외 전체 리스트
 			else
 				mav.addObject("uBoard",dao.cateLockBoardList(param));	// 비밀글 제외 카테고리별 리스트
 		}
 		
-			
+		
+		mav.addObject("allCnt", dao.userAllBoardCnt(nickname));
 		mav.addObject("pagination",pagination);
 		mav.addObject("nowCate", category);
 			
@@ -127,10 +134,21 @@ public class UserBoardService {
 		
 		String nickname = URLEncoder.encode(vo.getNickname(), "UTF-8");	// 닉네임이 한글일 경우 url에 넣을때 깨지지 않게 인코딩 처리함
 		
+		if(vo.getLock_post() == null)
+			vo.setLock_post("n");
 		
 		int postNum = 0;
 		
+		HashMap<String, Object>param = new HashMap<String, Object>();
+		param.put("email", login.getEmail());
+		
 		if(mode.equals("edit")) {	// 게시물 수정모드일 때
+			String oldcate = dao.getboardCate(vo);
+			System.out.println("oldddddddddd : " + oldcate);
+			if(!vo.getCate().equals(oldcate)) {	// 카테고리 수정했을 때
+				param.put("catename", oldcate);
+				dao.minusCateCnt(param);	// 원래 카테고리 개수 -1 하기
+			}
 			dao.updatePost(vo);		// 게시물 수정
 			postNum = vo.getIdx();	// 수정한 게시물 번호
 			
@@ -141,16 +159,12 @@ public class UserBoardService {
 			postNum = dao.getPostnum(vo.getNickname());	// 작성한 게시물 번호
 		}
 		
-		if(!vo.getCate().equals("nocate")) {	// 게시글 수정이나 생성 시 카테고리 선택했을 때
-			HashMap<String, Object>param = new HashMap<String, Object>();
-			param.put("nickname", vo.getNickname());
-			param.put("cate", vo.getCate());
-			int cateCnt = dao.getCateCnt(param);	
-			System.out.println("카테고리 게시글 개수 : " + cateCnt);
-			param.put("email", login.getEmail());
-			param.put("catecnt", cateCnt);
-			dao.updateCateCnt(param);	// 카테고리별 게시글 개수 update
-		}
+		param.put("nickname", vo.getNickname());
+		param.put("cate", vo.getCate());
+		int cateCnt = dao.getCateCnt(param);	
+		System.out.println("카테고리 게시글 개수 : " + cateCnt);
+		param.put("catecnt", cateCnt);
+		dao.updateCateCnt(param);	// 카테고리별 게시글 개수 update
 		
 		mav.setViewName("redirect:/"+nickname+"/"+postNum);	// 작성자 이메일/작성(수정)한 게시물번호로 이동
 		

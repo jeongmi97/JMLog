@@ -52,6 +52,7 @@ textarea { box-shadow: none; }
 			if('${login.email}' == ''){		// 미로그인 상태에서 댓글 작성 시도 시 
 				console.log('미로그인');
 				alert('로그인이 필요합니다!');	// 로그인 필요 알림창 띄운뒤
+				$('#comment').val('');
 				return;						// 댓글 작성 기능 수행 x
 			}
 			
@@ -80,6 +81,7 @@ textarea { box-shadow: none; }
 				success: function(idx) {
 					if(idx != 0){	// 댓글 정상적으로 insert 되면 댓글 추가 메소드 실행
 						listReply(idx);
+						$('#comment').val('');
 					}
 				},
 				error: function(error){
@@ -128,7 +130,7 @@ textarea { box-shadow: none; }
 	// 댓글 수정 버튼 눌렀을 때
 	function updateReply(idx,comment){
 		$('#reply'+idx+'actions').hide();	// 원래 댓글 내용 div 숨김
-		comment = comment.replace("<br>", "\r\n");
+		comment = comment.toString().replace("<br>", "\r\n");
 		// 댓글 수정 폼 생성 후 표시
 		var htmls='';
 		htmls+='<div id="updateForm"><textarea class="form-control" id="updateComment" rows="5" cols="150" placeholder="댓글을 작성하세요" style="resize: none; " escapeXml="false">'+comment+'</textarea>';
@@ -182,7 +184,7 @@ textarea { box-shadow: none; }
 <div class="container">
 	<h2><strong>${post.title }</strong></h2><br>
 	<div class="hgroup row">
-		<div><span>${post.nickname }</span><span> | </span><span>${post.reporting_date }</span>
+		<div><span><a href="${cpath }/${post.nickname}">${post.nickname }</a></span><span> | </span><span>${post.reporting_date }</span>
 			<!-- 로그인한 사용자와 글 작성자가 같을 때 수정/삭제 버튼 보이게 -->
 			<c:if test="${login.nickname eq post.nickname }">	
 				<span> |</span><span><a href="${cpath }/editPost?idx=${post.idx}&mode=edit">수정</a></span> | <span id="delPost"><a id="btnDel" href="#">삭제</a></span>
@@ -198,12 +200,10 @@ textarea { box-shadow: none; }
 	</div>
 	
 	<!-- 댓글 작성 폼 -->
-	<c:if test="${not empty login }">	<!-- 로그인 한 유저만 댓글 작성가능 -->
-		<div class="row">
-			<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요" wrap="hard" required></textarea><br>
-			<button id="btnReply">댓글 작성</button>
-		</div>
-	</c:if>
+	<div class="row">
+		<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요" wrap="hard" required></textarea><br>
+		<button id="btnReply">댓글 작성</button>
+	</div>
 	<br>
 	
 	<!-- 댓글 리스트 -->

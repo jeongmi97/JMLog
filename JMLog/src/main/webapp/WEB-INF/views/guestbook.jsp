@@ -65,7 +65,7 @@ p{
 		$('#updateGuest').on('show.bs.modal', function(e){	// 모달 호출 버튼 눌렀을 때
 			var content = $(e.relatedTarget).data('test');	// 호출 버튼에 넣어놓은 값 가져옴(원래 방명록 내용)
 			console.log('====='+content);
-			if(content.indexOf('<br>') >= 0 )
+			if(content.toString().indexOf('<br>') >= 0 )
 				$('#updateContent').val(content.replace("<br>", "\r\n")); // <br> 태그 치환 후 textarea에 넣어줌
 		});
 	});

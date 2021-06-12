@@ -33,5 +33,11 @@ public interface UserDAO {
 
 	void delimg(String email);	// 프로필 이미지 제거
 
+	String getNickname(String email);	// 닉네임 수정 - 원래 닉네임 가져오기
+	
+	void updatePostNickname(HashMap<String, String>param);	// 닉네임 수정 - 게시글 닉네임 수정
+	
+	void updateReplyNickname(HashMap<String, String> param);// 닉네임 수정 - 댓글 닉네임 수정
+
 
 }

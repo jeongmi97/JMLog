@@ -10,7 +10,7 @@ public class UserVO {
 	private String pw;
 	private String nickname;
 	private Date reservedate;
-	private MultipartFile profileimg;
+	private byte[] profileimg;
 	private String imgtype;
 	
 	public String getEmail() {
@@ -37,10 +37,10 @@ public class UserVO {
 	public void setReservedate(Date reservedate) {
 		this.reservedate = reservedate;
 	}
-	public MultipartFile getProfileimg() {
+	public byte[] getProfileimg() {
 		return profileimg;
 	}
-	public void setProfileimg(MultipartFile profileimg) {
+	public void setProfileimg(byte[] profileimg) {
 		this.profileimg = profileimg;
 	}
 	public String getImgtype() {

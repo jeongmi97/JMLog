@@ -75,6 +75,10 @@ var  page = 2;			// 불러올 페이지
 				<div class="thumbnail">
 					<div class="caption">
 				    	<h3 class="title"><a href="${cpath }/${post.nickname}/${post.idx}"><c:out value="${post.title }" escapeXml="false" /></a></h3>
+				    	<label>
+				    		<a href="${cpath }/${post.nickname}"><span style="color: #848482;">by </span><span><c:out value="${post.nickname }" /></span></a>
+				    	</label>
+				    	<span style="color: #848482;"><c:out value="${post.reporting_date }"/></span>
 				    	<hr>
 				        <p>
 				        	<c:out value="${post.content }" escapeXml="false" />

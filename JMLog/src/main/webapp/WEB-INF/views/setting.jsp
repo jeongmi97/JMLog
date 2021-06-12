@@ -87,11 +87,21 @@
 				type: 'GET',
 				url: 'delimg?email=' + '${login.email}',
 				success: function(){
-					$('.img').attr('src', 'resources/img/default.png');
+					$('.img').attr('src', 'resources/img/default.jpg');
 				}
 			});
 		});
 	})
+	
+	// 회원 탈퇴
+	function delUser(){
+		var delconfirm = confirm('정말 탈퇴하시겠습니까?');
+		if(delconfirm == true){		// 확인 눌렀을 때 탈퇴 기능 수행
+			
+		}else{						// 취소 눌렀을 때 되돌아가기
+			return;
+		}
+	}
 	
 </script>
 <header>
@@ -120,7 +130,7 @@
 			<input type="hidden" id="imgChk" name="imgChk" value="yes">
 			<label class="imgBtn" for="profileimg"><a>이미지 업로드</a></label>
 			<input type="file" id="profileimg" name="profileimg" style="display:none" accept="image/*"><br>	<!-- 이미지파일만 업로드 가능 -->
-			<label><a id="delimg" href="#">이미지 제거</a></label><br>
+			<label><a id="delimg" href="#" style="color: #6A5ACD;">이미지 제거</a></label><br>
 			<label for="nickname">닉네임</label>
 			<input type="text" id="nickname" name="nickname" value="${login.nickname }" required>
 			<div class="alert alert-danger" id="nnamemsgAlert" role="alert">
@@ -128,7 +138,8 @@
 			  <span class="sr-only">Error:</span>
 			  <p id="nnamemsg"></p>
 			</div>
-			<br>
+			<br><br>
+			<button type="button" class="btn btn-danger" onclick="delUser();" style="margin-right: 10px;">회원탈퇴</button>
 			<button id="saveBtn" type="submit" class="btn btn-dark">회원정보 수정</button>
 		</form>
 	</div>

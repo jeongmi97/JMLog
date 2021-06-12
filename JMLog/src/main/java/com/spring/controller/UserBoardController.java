@@ -3,6 +3,7 @@ package com.spring.controller;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,11 +42,11 @@ public class UserBoardController {
 	// 유저 보드 페이지
 	@GetMapping("{nickname}")
 	public ModelAndView board(@PathVariable("nickname")String nickname
-			, @ModelAttribute("login") UserVO login
+			, HttpSession session
 			, @RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
 			, @RequestParam(required = false, defaultValue = "1") int range
 			, @RequestParam(required = false, defaultValue = "nocate")String category) {
-		return ubs.userBoard(nickname, login, page, range, category);
+		return ubs.userBoard(nickname, session, page, range, category);
 	}
 	
 	// 글쓰기 페이지 이동
@@ -73,6 +74,7 @@ public class UserBoardController {
 		return ubs.insertguest(vo);
 	}
 	
+	// 방명록 수정
 	@PostMapping("{nickname}/guestbook/update")
 	public ModelAndView updateguest(GuestbookVO vo) throws Exception {
 		return ubs.updateguest(vo);
@@ -84,7 +86,7 @@ public class UserBoardController {
 		return ubs.viewPost(idx);
 	}
 	
-	// 소개
+	// 소개글 이동
 	@GetMapping("{nickname}/about")
 	public ModelAndView about(@PathVariable("nickname")String nickname) {
 		return ubs.about(nickname);

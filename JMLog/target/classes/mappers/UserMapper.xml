@@ -62,4 +62,22 @@
 		set profileimg = null
 		where email = #{email}
 	</update>
+	
+	<select id="getNickname" parameterType="String" resultType="String">
+		select nickname
+		from user
+		where email=#{email}
+	</select>
+	
+	<update id="updatePostNickname" parameterType="UserVO">
+		update board
+		set nickname=#{nickname}
+		where nickname=#{oldnickname}
+	</update>
+	
+	<update id="updateReplyNickname" parameterType="UserVO">
+		update reply
+		set nickname=#{nickname}
+		where nickname=#{oldnickname}
+	</update>
 </mapper>

@@ -28,7 +28,7 @@
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</div>
-			<c:if test="${email eq login.email }">
+			<c:if test="${user.nickname eq login.nickname }">
 				<div>
 					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#writeAbout">소개 글 작성하기</button>
 				</div>
@@ -62,7 +62,7 @@
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</div>
-			<c:if test="${email eq login.email }">
+			<c:if test="${user.nickname eq login.nickname }">
 				<div>
 					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#updateAbout">소개 글 수정하기</button>
 				</div>

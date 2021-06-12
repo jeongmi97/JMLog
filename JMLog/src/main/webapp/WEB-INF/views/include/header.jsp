@@ -6,7 +6,7 @@
 		<c:choose>
 			<c:when test="${not empty login }">		<!-- 로그인 되어있을 때 -->
 				<div class="col-md-3 text-right" style="margin-top: 20px">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<!-- <span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
 					<button type="button" class="btn btn-dark" style="margin-left: 5px; margin-right: 5px" onclick="location.href='${cpath}/write'">새글쓰기</button>
 				</div>
 				<div class="col-md-1 text-right" style="margin-top: 20px">
@@ -16,7 +16,7 @@
 						<c:choose>
 							<c:when test="${login.profileimg != null }">
 								<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
-								<img class="img" src="${cpath }/${login.nickname}/getProfileImg">
+								<img class="img" src="${cpath }/${login.email}/getProfileImg">
 							</c:when>
 							<c:otherwise>
 								<img class="img" src="${cpath }/resources/img/default.jpg">
