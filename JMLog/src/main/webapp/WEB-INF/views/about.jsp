@@ -12,7 +12,7 @@
 </style>
 </head>
 <body>
-
+ㅇ
 <header>
 	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
