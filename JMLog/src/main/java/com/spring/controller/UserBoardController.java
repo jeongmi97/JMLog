@@ -1,7 +1,5 @@
 package com.spring.controller;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -28,15 +26,17 @@ public class UserBoardController {
 	@Autowired UserBoardService ubs;
 	
 	// 기본 홈 페이지(인기순)
-	@RequestMapping(value= {"/","/home"})
-	public ModelAndView home() {
-		return ubs.home();
+	@GetMapping(value= {"/","/home"})
+	public ModelAndView home(@RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
+							, @RequestParam(required = false, defaultValue = "1") int range) {
+		return ubs.home(page, range);
 	}
 	
 	// 홈 페이지(최신순)
-	@RequestMapping("newlist")
-	public ModelAndView newlist() {
-		return ubs.newlist();
+	@GetMapping("newlist")
+	public ModelAndView newlist(@RequestParam(required = false, defaultValue = "1") int page	// 화면에서 안넘어 왔을 때 기본값 1
+							, @RequestParam(required = false, defaultValue = "1") int range) {
+		return ubs.newlist(page, range);
 	}
 	
 	// 유저 보드 페이지

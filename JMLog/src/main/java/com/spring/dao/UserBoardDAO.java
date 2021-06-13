@@ -7,13 +7,14 @@ import java.util.Map;
 import com.spring.vo.BoardVO;
 import com.spring.vo.CategoryVO;
 import com.spring.vo.GuestbookVO;
+import com.spring.vo.Pagination;
 import com.spring.vo.ReplyVO;
 
 public interface UserBoardDAO {
 	
-	List<BoardVO> getPostList();	// 인기순 전체 글 가져오기
+	List<BoardVO> getPostList(Pagination vo);	// 인기순 전체 글 가져오기
 	
-	List<BoardVO> getNewPostList(); // 최신순 전체 글 가져오기
+	List<BoardVO> getNewPostList(Pagination vo); // 최신순 전체 글 가져오기
 
 	void write(BoardVO vo);	// 글 작성
 	
@@ -24,7 +25,6 @@ public interface UserBoardDAO {
 	int getPostnum(String nickname);	// 작성한 글 번호 가져오기
 	
 	BoardVO getPost(int idx);	// 게시글 가져오기
-	
 
 	void updatePost(BoardVO vo);	// 게시물 수정
 
@@ -91,6 +91,8 @@ public interface UserBoardDAO {
 	String getboardCate(BoardVO vo);	// 수정 전 게시글 카테고리 가져오기
 
 	void minusCateCnt(HashMap<String, Object> param);	// 카테고리 수정 시 원래 카테고리 카운트 -1 하기
+
+	int getListCnt();	// 전체 게시글 개수 가져오기
 
 	
 

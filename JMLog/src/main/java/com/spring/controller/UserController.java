@@ -102,4 +102,11 @@ public class UserController {
 	public @ResponseBody void delimg(@RequestParam("email")String email) {
 		dao.delimg(email);
 	}
+	
+	@GetMapping("deuser")
+	public @ResponseBody void deluser(@RequestParam("nickname")String nickname, HttpSession session) {
+		us.deluser(nickname, session);
+		
+		
+	}
 }

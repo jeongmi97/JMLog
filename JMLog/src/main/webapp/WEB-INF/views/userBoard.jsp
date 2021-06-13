@@ -34,6 +34,17 @@
 		
 		location.href = url;
 	}
+	
+	//다음 버튼 이벤트
+	function fn_next(page, range, rangeSize) {
+		var page = parseInt((range * rangeSize)) + 1;
+		var range = parseInt(range) + 1;
+
+		var url = '${cpath}/${user.nickname}?page='+ page + '&range=' + range + '&category=${nowCate}';
+
+		location.href = url;
+	}
+
 </script>
 
 <header>
@@ -69,7 +80,7 @@
 					<hr>
 				</c:forEach>
 				<!-- 페이징 -->
-				<div style="text-align: center">
+				<div style="text-align: center;">
 						<!-- 이전 버튼 -->
 						<c:if test="${pagination.prev}">
 							<span>

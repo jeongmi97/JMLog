@@ -9,17 +9,17 @@ import com.spring.vo.UserVO;
 
 public interface UserDAO {
 	
-	UserVO userChk(String email);
+	UserVO userChk(String email);	// 유저 유무 체크
 
-	int join(UserVO vo);
+	int join(UserVO vo);	// 회원가입
 
-	int emailCheck(String email);
+	int emailCheck(String email);	// 이메일 중복 체크
 	
 	void keepLogin(HashMap<String, Object> param);	// 로그인 유지
 	
 	UserVO checkUserSession(String sessionid);		// 세션키 확인
 
-	void setProfileImg(HashMap<String, Object> param);
+	void setProfileImg(HashMap<String, Object> param);	// 프로필 이미지 저장
 
 	void settingUser(UserVO vo);
 
@@ -38,6 +38,12 @@ public interface UserDAO {
 	void updatePostNickname(HashMap<String, String>param);	// 닉네임 수정 - 게시글 닉네임 수정
 	
 	void updateReplyNickname(HashMap<String, String> param);// 닉네임 수정 - 댓글 닉네임 수정
+
+	void delUserReply(String nickname);		// 회원 탈퇴 - 댓글 삭제
+
+	void delUserBoard(String nickname);		// 회원 탈퇴 - 게시글 삭제
+
+	void deluser(String nickname);			// 회원 탈퇴 
 
 
 }

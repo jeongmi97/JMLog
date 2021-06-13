@@ -2,25 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
-	<select id="getPostList" resultType="BoardVO">
+	<select id="getPostList" parameterType="Pagination" resultType="BoardVO">
 		select *
 		from board
 		where not lock_post in ('a', 'y')
-		order by hit desc limit 0, 9
+		order by hit desc limit #{startList}, #{listSize}
 	</select>
 	
-	<select id="getNewPostList" resultType="BoardVO">
+	<select id="getNewPostList" parameterType="Pagination" resultType="BoardVO">
 		select *
 		from board
 		where not lock_post in ('a', 'y')
-		order by idx desc limit 0, 9
+		order by idx desc limit #{startList}, #{listSize}
+	</select>
+	
+	<select id="getListCnt" resultType="int">
+		select count(*)
+		from board
+		where not lock_post in ('a', 'y')
 	</select>
 	
 	<select id="getBoardList" parameterType="int" resultType="BoardVO">
 		select *
 		from board
 		where not lock_post in ('a', 'y')
-		order by hit desc limit #{startList}, 9
+		order by hit desc limit #{startList}, #{listSize}
 	</select>
 	
 	<insert id="write" parameterType="BoardVO">
@@ -32,7 +38,7 @@
 		select *
 		from board
 		where nickname=#{nickname} and not lock_post in ('a')
-		order by idx desc limit #{startList},10
+		order by idx desc limit #{startList},#{listSize}
 	</select>
 	
 	<select id="userAllBoardCnt" parameterType="String" resultType="int">
@@ -45,21 +51,21 @@
 		select *
 		from board
 		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a')
-		order by idx desc limit #{startList},10
+		order by idx desc limit #{startList},#{listSize}
 	</select>
 	
 	<select id="userLockBoardList" parameterType="HashMap" resultType="BoardVO"> 
 		select *
 		from board
 		where nickname=#{nickname} and not lock_post in ('a', 'y')
-		order by idx desc limit #{startList},10
+		order by idx desc limit #{startList},#{listSize}
 	</select>
 	
 	<select id="cateLockBoardList" parameterType="HashMap" resultType="BoardVO">
 		select *
 		from board
 		where nickname=#{nickname} and cate=#{cate} and not lock_post in ('a', 'y')
-		order by idx desc limit #{startList},10
+		order by idx desc limit #{startList},#{listSize}
 	</select>
 	
 	<insert id="writeAbout" parameterType="BoardVO">
@@ -210,6 +216,7 @@
 		delete from guestbook
 		where idx=#{idx}
 	</delete>
+	
 	
 	
 </mapper>

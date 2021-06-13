@@ -202,4 +202,20 @@ public class UserService {
 		return new ResponseEntity<byte[]>(profileImg, headers, HttpStatus.OK);
 	}
 
+	// 회원탈퇴
+	public void deluser(String nickname, HttpSession session) {
+		
+		UserVO login = (UserVO) session.getAttribute("login");
+		
+		if(login != null) {		// 로그인 중인 세션 없애기
+			session.removeAttribute("login");
+			session.invalidate();
+		}
+		
+		// 탈퇴하는 유저와 관련된 데이터 삭제
+		dao.delUserReply(nickname);
+		dao.delUserBoard(nickname);
+		dao.deluser(nickname);
+	}
+
 }

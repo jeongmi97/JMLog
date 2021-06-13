@@ -31,19 +31,33 @@ public class UserBoardService {
 	@Autowired UserDAO udao;
 	
 	// 홈 화면(인기순)
-	public ModelAndView home() {
+	public ModelAndView home(int page, int range) {
 		ModelAndView mav = new ModelAndView("home");
 		
-		mav.addObject("postList", dao.getPostList());
+		// 페이징 정보 셋팅
+		int listCnt = dao.getListCnt();
+		
+		Pagination pagination = new Pagination();	
+		pagination.pageInfo(page, range, listCnt);
+		
+		mav.addObject("pagination",pagination);
+		mav.addObject("postList", dao.getPostList(pagination));
 		
 		return mav;
 	}
 	
 	// 홈 화면 (최신순)
-	public ModelAndView newlist() {
+	public ModelAndView newlist(int page, int range) {
 		ModelAndView mav = new ModelAndView("newlist");
 		
-		mav.addObject("postList", dao.getNewPostList());
+		// 페이징 정보 셋팅
+		int listCnt = dao.getListCnt();
+		
+		Pagination pagination = new Pagination();	
+		pagination.pageInfo(page, range, listCnt);
+
+		mav.addObject("pagination",pagination);
+		mav.addObject("postList", dao.getNewPostList(pagination));
 		
 		return mav;
 	}
@@ -68,28 +82,16 @@ public class UserBoardService {
 			
 		// 페이징 정보 셋팅
 		Pagination pagination = new Pagination();	
-		pagination.setPage(page); pagination.setRange(range); pagination.setListCnt(listCnt);
-		pagination.setPageCnt((int)Math.ceil((double)(listCnt)/(double)pagination.getListSize()));	// 총 개시물 개수/10(올림)
-		System.out.println("pagecnt : " + pagination.getPageCnt());
-		pagination.setStartPage((range-1) * pagination.getRangeSize() + 1);	// 시작 페이지
-		pagination.setStartList((page-1) * pagination.getListSize());
-		pagination.setEndPage(range * pagination.getRangeSize()); 			// 끝 페이지
-		pagination.setPrev(range == 1 ? false : true);
-		pagination.setNext(pagination.getEndPage() > pagination.getPageCnt() ? false : true);
-		System.out.println("endPage&pageCnt : " + pagination.getEndPage() + "," + pagination.getPageCnt());
-		if(pagination.getEndPage() > pagination.getPageCnt()) {
-			pagination.setEndPage(pagination.getPageCnt());
-			pagination.setNext(false);
-		}
+		pagination.pageInfo(page, range, listCnt);
 			
 		HashMap<String, Object> param = new HashMap<String, Object>();	// 해당 계정의 포스트 10개씩 가져오기 위해 param 설정
 		param.put("nickname", nickname);
 		param.put("cate", category);
 		param.put("startList", pagination.getStartList());
+		param.put("listSize", pagination.getListSize());
 			
 		mav.addObject("category", dao.getCategory(email));	// 유저 카테고리 정보 가져오기
 		mav.addObject("user", udao.userChk(email));			// 계정 정보 넣기
-		
 		
 		
 		if(session.getAttribute("login") != null) {	// 로그인 중

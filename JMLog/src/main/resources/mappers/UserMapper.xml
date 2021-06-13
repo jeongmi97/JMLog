@@ -80,4 +80,20 @@
 		set nickname=#{nickname}
 		where nickname=#{oldnickname}
 	</update>
+	
+	<delete id="delUserReply">
+		delete from reply
+		where nickname=#{nickname}
+	</delete>
+	
+	<delete id="delUserBoard">
+		delete from board
+		where nickname=#{nickname}
+	</delete>
+	
+	<delete id="deluser">
+		delete from user
+		where nickname=#{nickname}
+	</delete>
+	
 </mapper>

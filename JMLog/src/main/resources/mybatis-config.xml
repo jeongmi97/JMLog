@@ -10,6 +10,7 @@
 		<typeAlias alias="CategoryVO" type="com.spring.vo.CategoryVO"/>
 		<typeAlias alias="ReplyVO" type="com.spring.vo.ReplyVO"/>
 		<typeAlias alias="GuestbookVO" type="com.spring.vo.GuestbookVO"/>
+		<typeAlias alias="Pagination" type="com.spring.vo.Pagination"/>
 	</typeAliases>
 
 </configuration>
