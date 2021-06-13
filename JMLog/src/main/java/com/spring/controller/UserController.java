@@ -34,47 +34,54 @@ public class UserController {
 	@Autowired UserService us;
 	@Autowired UserDAO dao;
 	
+	// 로그인 페이지 이동
 	@RequestMapping("login")
 	public void login() {
-		System.out.println("login 페이지 이동");
 	}
 	
+	// 로그인 기능 실행
 	@PostMapping("login")
 	public ModelAndView login(UserVO vo, HttpSession session, HttpServletRequest req ,HttpServletResponse res) throws IOException {
 		return us.login(vo, session, req, res);
 	}
 	
+	// 로그아웃 기능 실행
 	@RequestMapping("logout")
 	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
 		return us.logout(session, req, res);
 	}
 	
+	// 회원가입 페이지 이동
 	@RequestMapping("join")
 	public void join() {
-		System.out.println("join 페이지 이동");
 	}
 	
+	// 회원가입 기능 실행
 	@PostMapping("join")
 	public ModelAndView join(UserVO vo) {
 		return us.join(vo);
 	}
 	
+	// 이메일 중복 확인 
 	@GetMapping("emailCheck")
 	public @ResponseBody int emailCheck(@RequestParam("email")String email) {
 		int chk = us.emailCheck(email);
 		return chk;
 	}
 	
+	// 유저 설정 페이지 이동
 	@GetMapping("setting")
 	public ModelAndView setting(HttpSession session) {
 		return us.setting(session);
 	}
 	
+	// 유저 카테고리 설정 페이지 이동
 	@GetMapping("setting/category")
 	public ModelAndView category(HttpSession session) {
 		return us.category(session);
 	}
 	
+	// 닉네임 중복 체크
 	@GetMapping("nicknameChk")
 	public @ResponseBody String nicknameChk(@RequestParam("nickname")String nickname) {
 		String chk = us.nicknameChk(nickname);
@@ -87,6 +94,7 @@ public class UserController {
 	public ModelAndView updateProfileImg(MultipartHttpServletRequest req){
 		System.out.println("img : " + req.getFile("profileimg"));
 		System.out.println("email : " + req.getParameter("email"));
+		System.out.println("수정 들어옴");
 		return us.settingUser(req);
 	}
 	
@@ -103,10 +111,9 @@ public class UserController {
 		dao.delimg(email);
 	}
 	
-	@GetMapping("deuser")
+	// 회원 탈퇴 기능 실행
+	@GetMapping("deluser")
 	public @ResponseBody void deluser(@RequestParam("nickname")String nickname, HttpSession session) {
 		us.deluser(nickname, session);
-		
-		
 	}
 }

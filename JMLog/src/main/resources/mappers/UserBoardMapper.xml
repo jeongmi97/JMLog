@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.dao.UserBoardDAO">
 	
+	<!-- 메인 페이지 리스트 가져오기 (인기순) -->
 	<select id="getPostList" parameterType="Pagination" resultType="BoardVO">
 		select *
 		from board
@@ -9,6 +10,7 @@
 		order by hit desc limit #{startList}, #{listSize}
 	</select>
 	
+	<!-- 메인 페이지 리스트 가져오기 (최신순) -->
 	<select id="getNewPostList" parameterType="Pagination" resultType="BoardVO">
 		select *
 		from board

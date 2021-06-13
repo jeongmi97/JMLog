@@ -40,16 +40,19 @@
 	
 	<!-- 인터셉터 호출 위한 url mapping -->
 	<interceptors>
+		<!-- 부적절한 url을 통한 허용되지 않은 페이지 이동을 막는다 -->
 		<interceptor>
 			<mapping path="/write"/>
 			<mapping path="/setting"/>
 			<mapping path="/setting/category"/>
 			<beans:ref bean="UserInterceptor"/>
 		</interceptor>
+		<!-- 로그인쿠키 확인 후 자동로그인 실행 -->
 		<interceptor>
 			<mapping path="/**/"/>
 			<beans:ref bean="RememberLoginInterceptor"/>
 		</interceptor>
+		<!-- 로그인 한 상태에서 로그인이나 회원가입 페이지로 이동 막는다 -->
 		<interceptor>
 			<mapping path="/login"/>
 			<mapping path="/join"/>

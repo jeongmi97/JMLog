@@ -59,7 +59,7 @@
 			    // 줄간격
 			    ['height', ['height']],
 			    // 그림첨부, 링크만들기
-			    ['insert',['picture','link']],
+			    ['insert',['link']], //'picture',
 			    // 코드보기, 확대해서보기, 도움말
 			    ['view', ['codeview', 'help']]
 			  ],

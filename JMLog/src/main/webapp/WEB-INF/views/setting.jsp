@@ -108,7 +108,7 @@
 		if(delconfirm == true){		// 확인 눌렀을 때 탈퇴 기능 수행
 			$.ajax({
 				type: 'get',
-				url: 'deuser?nickname='+'${login.nickname}',
+				url: 'deluser?nickname='+'${login.nickname}',
 				success: function(){
 					alert('탈퇴가 완료되었습니다.');
 					location.replace('/');
@@ -134,7 +134,7 @@
 			<div class="col-md-3 col-md-offset-3" style="border-right: 1px solid #A9A9A9;">
 				<div class="upProfile">
 					<c:choose>
-						<c:when test="${login.profileimg != null }">
+						<c:when test="${login.imgtype != null }">
 							<!-- img태그의 src 경로는 profileImg 가져오는 컨트롤러 호출함(/email/getProfileImg) -->
 							<img class="img" src="${cpath }/${login.email}/getProfileImg">
 						</c:when>

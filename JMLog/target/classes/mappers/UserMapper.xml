@@ -45,6 +45,7 @@
 		order by idx
 	</select>
 	
+	<!-- 로그인 유지 세션 내용 저장 -->
 	<update id="keepLogin" parameterType="HashMap">
 		update user
 		set sessionkey=#{sessionid}, sessionlimit=#{sessionLimit}
@@ -59,7 +60,7 @@
 	
 	<update id="delimg" parameterType="String">
 		update user
-		set profileimg = null
+		set profileimg = null, imgtype = null
 		where email = #{email}
 	</update>
 	

@@ -46,9 +46,6 @@ public class UserService {
 		
 		// 입력한 이메일이 있으면 login객체에 유저 정보 넣기
 		UserVO login = dao.userChk(vo.getEmail());	
-		System.out.println("로그인 유저 : " + login);
-		System.out.println("로그인유지 체크 ::::: " + req.getParameter("useCookie"));
-		System.out.println("이미지 체크 ::: " + login.getProfileimg());
 		
 		if(login != null)	
 			pwChk = pwEncoder.matches(vo.getPw(), login.getPw());	// 입력한 비밀번호 암호화 한 뒤 유저 정보의 비밀번호와 비교
@@ -62,22 +59,19 @@ public class UserService {
 		if(login != null && pwChk == true) {	// login 객체가 존재하고 pwChk가 true일 때 (로그인 성공)
 			session.setAttribute("login", login);	// login새션에 유저 정보 넣기
 			if(req.getParameter("useCookie") != null) {		// 로그인 유지에 체크 했을 때
-				System.out.println("cookie");
 				// 쿠키 생성, 로그인할때 생성된 세션의 id 쿠키에 저장
 				int amount = 60 * 60 * 24 * 7;	// 7일
 				Cookie loginCookie = new Cookie("loginCookie", session.getId());
 				loginCookie.setPath("/");
-				loginCookie.setMaxAge(amount);	// 7일
+				loginCookie.setMaxAge(amount);
 				res.addCookie(loginCookie);
 				Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));	// 로그인 유지기간 설정
 				HashMap<String, Object>param = new HashMap<String, Object>();
 				param.put("email", vo.getEmail()); param.put("sessionid", session.getId()); param.put("sessionLimit", sessionLimit);
-				
 				dao.keepLogin(param);
 			}
 			mav.setViewName("redirect:/");		// home 페이지로 이동
 		}
-		
 		return mav;
 	}
 	

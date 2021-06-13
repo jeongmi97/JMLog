@@ -21,7 +21,7 @@ function prev(page, range, rangeSize){
 }
 
 // 페이지 번호 클릭
-function pagination(page, range, rangeSize){
+function pagination(page, range){
 	var url = '${cpath}/?page='+ page + '&range=' + range;
 	
 	location.href = url;
@@ -132,7 +132,9 @@ var  page = 2;			// 불러올 페이지
 		
 		<!-- 페이지 -->
 		<c:forEach begin="${pagination.startPage }" end="${pagination.endPage }" var="idx">
+			<c:if test="${pagination.page == idx}"><strong></c:if>
 				<a href="#" onclick="pagination(${idx}, ${pagination.range }, ${pagination.rangeSize })"> ${idx }</a>
+			<c:if test="${pagination.page == idx}"></strong></c:if>
 		</c:forEach>
 		
 		<!-- 다음 버튼 -->
