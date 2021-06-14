@@ -344,6 +344,9 @@
 > >	return mav;
 > >}
 > > ```
+> > <sub>null값과 현재시간으로 설정된 sessionkey와 sessionlimit 컬럼</sub>
+> > ![로그아웃세션](https://user-images.githubusercontent.com/67229566/121923360-cf6fa400-cd75-11eb-89b4-26c8f32841d1.PNG)
+>
 5.게시글
 > 게시글 작성 시 유저가 만들어놓은 카테고리를 설정할 수 있고, 비공개 체크 시 비밀글로 작성이 되어 작성한 유저만 해당 글을 볼 수 있습니다.
 > 게시글 작성이 완료되면 바로 작성한 글 열람 페이지로 이동합니다.
@@ -589,6 +592,9 @@
 > >	return mav;
 > >}
 > > ```
+> > <sub>이미지 정보를 저장하고 있는 profileimg와 imgtype</sub>
+> > ![이미지 확인](https://user-images.githubusercontent.com/67229566/121923921-5fade900-cd76-11eb-80ed-fbcf80651fa0.PNG)
+> >
 > > 이미지 제거는 DB의 이미지값에 null로 업데이트되게 하였으며 ajax를 사용하여 페이지 이동 없이 실행 될 수 있게 하였습니다.
 > > **setting.js**
 > > ```js
@@ -636,9 +642,61 @@
 > >	}
 > >});
 > > ```
-> 
-
-
+8. 카테고리 설정
+> 유저만의 카테고리를 추가, 삭제하고 카테고리명을 수정할 수 있습니다.
+> ![카테고리](https://user-images.githubusercontent.com/67229566/121924567-fd091d00-cd76-11eb-896b-6fa2517ff043.PNG)
+9. Interceptor
+> 비회원인 경우 게시글 조회 외의 기능은 사용할 수 없습니다. 부적절한 url으로 인한 허가되지 않은 페이지 접근을 막습니다.
+> > **UserInterseptor.java**
+> > ```java
+> > // preHandle() 컨트롤러보다 먼저 수행된다
+> >@Override
+> >public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+> >        throws Exception {
+> >	
+> >	HttpSession session = request.getSession();		// session 객체 가져옴
+> >	Object obj = session.getAttribute("login");		// 사용자 정보 담고 있는 객체 가져옴
+> >	
+> >	if(obj == null) {		// 로그인 된 세션 없는 경우
+> >		response.sendRedirect("/login");	// 로그인 페이지로 이동
+> >		return false;	// 컨트롤러 요청으로 가지 않도록 false 반환
+> >	}
+> >	// 요청받은 페이지로 이동
+> >	return true;
+> >}
+> > ```
+> 로그인중인 유저가 로그인 페이지나 회원가입 페이지로 이동하는 행위를 막습니다.
+> > **AfterLoginInterceptor**
+> > ```java
+> > @Override
+> >public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+> >		throws Exception {
+> >	// 로그인 후 로그인 페이지 or 회원가입 페이지 이동 할 경우
+> >	HttpSession session = request.getSession();
+> >	if(session.getAttribute("login") != null) {	// 로그인 세션 있을 경우
+> >		response.sendRedirect("/home");	// 메인 페이지로 이동
+> >		return false;
+> >	}
+> >	return true;	// 없으면 요청한 페이지로 이동
+> >}
+### 클라우드 서비스 (aws)<br>
+ 클라우드 서비스에 데이터베이스와 서버를 올려놓으면 나의 로컬 컴퓨터에서 뿐만 아니라 어디에서든 프로젝트 조작이 가능하다는 장점이 있어 aws를 사용하게 되었습니다.
+ 1. RDS
+ > 데이터베이스는 MySQL 프리티어를 사용하였습니다.
+ >![rds](https://user-images.githubusercontent.com/67229566/121930625-8cb1ca00-cd7d-11eb-9ab3-1cdebd87d4f4.PNG)
+ 2. EC2
+ > 완성된 프로젝트는 EC2를 사용하여 배포하였으며, 탄력적 ip를 할당받아 고정 ip를 사용합니다.<br>
+ > 인스턴스 생성 시 사용된 OS는 Ubuntu입니다.
+ > ![ec2](https://user-images.githubusercontent.com/67229566/121930984-ff22aa00-cd7d-11eb-9fcb-81c4523e733b.PNG)
+## 개선사항
+ * mail api를 이용해 사용자 이메일에 임시비밀번호를 발송해주고 이것을 이용해 다시 비밀번호를 설정할 수 있게 하는 비밀번호 찾기 기능
+ * 사용자가 원하는 게시글을 찾아 열람할 수 있게 검색 기능
+ * 게시글 작성 시 이미지 파일을 추가하는 기능
+ * 메인 페이지 일반 페이징이 아닌 무한 스크롤 페이징 적용
+## 느낀점
+한달안에 완성시키자 라는 생각으로 프로젝트를 시작했지만 혼자서 진행하다 보니 새로운 기술을 적용 시키거나 에러 메시지가 나올 때면 해결하기 위해 검색하느라 생각보다 시간이 많이 들었고, 한달이란 시간은 촉박했습니다. 잘 작동된다고 확인하고 넘어갔던 기능들이 테스트 과정에서 전혀 다른 결과나 에러가 나올때면 지치고 그만두고 싶기도 했지만 제가 몰랐던 새로운 기술들을 알게 되고 문제를 해결할 때면 뿌듯함과 해냈다는 성취감에 아직 완벽하진 않지만 프로젝트를 완성 시킬 수 있었습니다.
+ 
+ 이 프로젝트를 진행 하면서 배운것도 정말 많고 아쉬운점도 많습니다. 시간이 부족해 구현하지 못한 기능들은 계속 수정을 거치며 추가할 예정이며 새로운 것에 도전해 보는 프로젝트도 계획중에 있습니다. 
 
 
 
