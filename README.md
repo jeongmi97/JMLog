@@ -230,7 +230,7 @@
 > >	``` 
 3. 로그인
 > 로그인 시 로그인 유지를 체크하면 다음번 접속 시 자동으로 로그인됩니다.<br>
-> *비밀번호 찾기는 구현 예정입니다ㅠㅠ*
+> *비밀번호 찾기는 구현 예정입니다*
 > ![로그인](https://user-images.githubusercontent.com/67229566/121816896-45fa9c00-ccb9-11eb-8a5e-3df775188db5.PNG)
 > > **UserService.java**
 > > ```java
@@ -318,9 +318,74 @@
 > >		</interceptor>
 > > ```
 4.게시글
-> 
->
-~~내용 수정중입니다ㅠㅠ~~
+> 게시글 작성 시 유저가 만들어놓은 카테고리를 설정할 수 있고, 비공개 체크 시 비밀글로 작성이 되어 작성한 유저만 해당 글을 볼 수 있습니다.
+>![글쓰기](https://user-images.githubusercontent.com/67229566/121847819-2187d980-cd24-11eb-8bd2-9e6c8a699233.PNG)
+> > 내용을 좀더 편리하게 작성할 수 있도록 부트스트랩을 기반으로 둔 웹 에디터인 썸머노트를 CDN방식으로 적용하였습니다.
+> > **write.jsp**
+> > ```html
+> > <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
+> > <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+> > <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+> > ... 생략 ...
+> > <form:form method="post" modelAttribute="post" action="${cpath }/write">
+> >		<form:hidden path="idx"/>	<!-- 포스트 번호 -->
+> >		<form:hidden path="nickname" value="${login.nickname }"/>	<!-- 작성자 닉네임 -->
+> >		<input type="hidden" name="mode" value="${mode }">	<!-- 신규 생성 & 수정 확인 값 -->
+> >		
+> >		<!-- 카테고리 선택 -->
+> >		<form:select path="cate" id="category">
+> >			<option value="nocate">카테고리</option>
+> >			<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
+> >		</form:select>
+> >		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" required="required"/>
+> >		<form:textarea path="content" class="summernote" name="content" id="content" rows="40" required="required" /><br>
+> >		<form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><label for="lock_post">비공개</label>
+> >		<input type="submit" value="작성하기">
+> >	</form:form>
+> > ```
+> 게시글 생성이나 수정모드를 확인하여 각각 다른 메소드들을 실행합니다.
+> > **UserBoardService.java**
+> > ```java
+> > // 글 쓰기
+> >	public ModelAndView write(BoardVO vo, String mode, UserVO login) throws Exception {
+> >		ModelAndView mav = new ModelAndView();
+> >		
+> >		String nickname = URLEncoder.encode(vo.getNickname(), "UTF-8");	// 닉네임이 한글일 경우 url에 넣을때 깨지지 않게 인코딩 처리함
+> >		
+> >		if(vo.getLock_post() == null)	// 비공개 체크 안했을 때
+> >			vo.setLock_post("n");		// 비공개 no
+> >		
+> >		int postNum = 0;
+> >		
+> >		HashMap<String, Object>param = new HashMap<String, Object>();
+> >		param.put("email", login.getEmail());
+> >		
+> >		if(mode.equals("edit")) {	// 게시물 수정모드일 때
+> >			String oldcate = dao.getboardCate(vo);
+> >			if(!vo.getCate().equals(oldcate)) {	// 카테고리 수정했을 때
+> >				param.put("catename", oldcate);
+> >				dao.minusCateCnt(param);	// 수정 전 카테고리 개수 -1 하기
+> >			}
+> >			dao.updatePost(vo);		// 게시물 update
+> >			postNum = vo.getIdx();	// 수정한 게시물 번호
+> >			
+> >		}else {						// 새로운 게시물 생성 시
+> >			dao.write(vo);			// 게시물 insert
+> >			postNum = dao.getPostnum(vo.getNickname());	// 작성한 게시물 번호
+> >		}
+> >		
+> >		param.put("nickname", vo.getNickname());
+> >		param.put("cate", vo.getCate());
+> >		int cateCnt = dao.getCateCnt(param);	// 카테고리별 게시글 개수 가져오기
+> >		param.put("catecnt", cateCnt);
+> >		dao.updateCateCnt(param);	// 카테고리별 게시글 개수 update
+> >		
+> >		mav.setViewName("redirect:/"+nickname+"/"+postNum);	// 작성자 닉네임/작성(수정)한 게시물번호로 이동
+> >		
+> >		return mav;
+> >	}
+ > >```
+~~내용 수정중입니다~~
 
 
 
