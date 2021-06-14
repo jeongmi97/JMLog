@@ -3,7 +3,7 @@
 > *서버 중지 상태 시 사이트 접속이 안 될 수 있습니다.*
 ------------
 ## 프로젝트 계획
-> 웹 프로그래밍의 기본적인 CRUD 기능을 공부하기위해 이번 프로젝트를 계획하였습니다. CRUD 기능을 가장 잘 사용할 수 있는 블로그라는 주제를 선택하였고, 제가 자주 들어가는 사이트인 velog와 티스토리 블로그를 참고하였습니다. 계획을 하면서 단순한 나만의 블로그 관리에서 유저간의 교류가 가능한 블로그 플랫폼으로 만들기위해 자연스럽게 기능들을 추가하게 되었고 처음으로 혼자 계획하고 완성한 프로젝트가 되었습니다.
+> 웹 프로그래밍의 기본적인 CRUD 기능을 공부하기위해 이번 프로젝트를 계획하였습니다. CRUD 기능을 가장 잘 사용할 수 있는 블로그라는 주제를 선택하였고, 평소 자주 들어가는 사이트중 [velog](https://velog.io/)와 티스토리 블로그를 참고하였습니다. 프로젝트 계획을 하면서 단순한 혼자만의 게시판 관리가 아닌 유저간의 교류가 가능한 블로그 플랫폼을 만들기 위해 aws에 배포 후 다른 유저들과의 테스트까지 진행한 뒤 프로젝트를 완성하였습니다.
 ## 프로젝트 소개
 1.프로젝트 기능
 
@@ -49,7 +49,8 @@
 
 ## 프로젝트 구성
 ### 데이터베이스 테이블 설계<br>
- ![JMLog Diagram](https://user-images.githubusercontent.com/67229566/121813092-8819e280-cca5-11eb-946f-aa05908adfe4.PNG)<br>
+ ![ERD](https://user-images.githubusercontent.com/67229566/121874157-104dc580-cd42-11eb-91e8-447636c51b27.PNG)<br>
+ <sub>테이블 설계서</sub><br>
    **user** : 회원가입한 유저들을 관리하는 user테이블은 *email*과 *nickname*을 기본키로 설정해 중복을 방지하고 각 유저를 구분해 다른 테이블과의 관계설정에 쓰입니다. 프로필 이미지의 데이터를 저장하기위해 *profileimg*를 longblob타입으로 설정하였고 *imgtype*은 파일 확장자를 저장합니다. 자동로그인 수행 시 필요한 *sessionkey*와 *sessionlimit*는 로그인세션id와 세션기간을 저장합니다. *pw*는 비밀번호, *reservedate*는 가입일을 나타냅니다.<br>
  **board** : 게시물 테이블입니다. *idx*는 게시글 번호로 기본키로 설정되어있습니다. *nickname*은 user테이블의 nickname을 참조하고있습니다. *cate*는 카테고리이름으로 category테이블의 catename을 참조합니다. *title*은 제목, *content*는 내용, *reportin_date*는 작성일, *hit*는 조회수, *lock_post*는 비밀글 체크 여부를 저장하며 {a : 소개글, n : 공개글, y : 비밀글}의 세 값을 가지게 됩니다.<br>
  **reply** : 게시글에 대한 댓글 테이블입니다. *idx*는 댓글 번호로 기본키로 설정되어있습니다. *post_num*은 board테이블의 idx를 참조하며, *nickname*은 user테이블의 nickname을 참조하고있습니다. *comment*는 댓글내용, *reply_date*는 댓글 작성일을 나타냅니다.<br>
@@ -229,7 +230,7 @@
 > >	``` 
 3. 로그인
 > 로그인 시 로그인 유지를 체크하면 다음번 접속 시 자동으로 로그인됩니다.<br>
-> *비밀번호 찾기는 구현 예정입니다ㅠㅠ*
+> *비밀번호 찾기는 구현 예정입니다*
 > ![로그인](https://user-images.githubusercontent.com/67229566/121816896-45fa9c00-ccb9-11eb-8a5e-3df775188db5.PNG)
 > > **UserService.java**
 > > ```java
@@ -296,7 +297,6 @@
 > >		HttpSession session = request.getSession();
 > >		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");	// 해당 사이트의 로그인 쿠키 받아옴
 > >		if(loginCookie != null) {	// 로그인 쿠키가 있을 경우
-> >			System.out.println("login : " + loginCookie.getValue());
 > >			UserVO user = dao.checkUserSession(loginCookie.getValue());	// 로그인 쿠키의 세션키값을 이용해 해당 유저 정보 가져옴
 > >			if(user != null) {	// 해당 유저 있을 경우
 > >				session.setAttribute("login", user);	// 로그인 세션에 저장
@@ -317,12 +317,386 @@
 > >			<beans:ref bean="RememberLoginInterceptor"/>
 > >		</interceptor>
 > > ```
-4.게시글
+4. 로그아웃
+> 로그아웃 시 로그인세션 뿐 아니라 자동로그인을 위해 생성된 쿠키 여부도 체크 후 삭제합니다.
+> > **UserService.java**
+> > ```java
+> > // 로그아웃
+> >public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
+> >	ModelAndView mav = new ModelAndView("redirect:/");	// 로그아웃 한 뒤 메인 페이지로 이동
+> >	Object obj = session.getAttribute("login");	
+> >	if(obj != null) {	// 로그인 세션 존재 시
+> >		UserVO user = (UserVO) obj;
+> >		session.removeAttribute("login");	// 세션 제거
+> >		session.invalidate();
+> >		// 현재 브라우저의 자동 로그인 쿠키 가져옴
+> >		Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
+> >		if(loginCookie != null) {	// 자동로그인 시 생성된 로그인 쿠키 있으면 해당 쿠키 삭제
+> >			loginCookie.setPath("/");
+> >			loginCookie.setMaxAge(0);
+> >			res.addCookie(loginCookie);
+> >			HashMap<String , Object>param = new HashMap<String, Object>();
+> >			// sessionid는 null, sessionLimit는 현재 시간으로 설정한다
+> >			param.put("email", user.getEmail()); param.put("sessionid", null); param.put("sessionLimit", new java.util.Date());
+> >			dao.keepLogin(param);
+> >		}
+> >	}
+> >	return mav;
+> >}
+> > ```
+> > <sub>null값과 현재시간으로 설정된 sessionkey와 sessionlimit 컬럼</sub>
+> > ![로그아웃세션](https://user-images.githubusercontent.com/67229566/121923360-cf6fa400-cd75-11eb-89b4-26c8f32841d1.PNG)
 >
->
-~~내용 수정중입니다ㅠㅠ~~
-
-
+5.게시글
+> 게시글 작성 시 유저가 만들어놓은 카테고리를 설정할 수 있고, 비공개 체크 시 비밀글로 작성이 되어 작성한 유저만 해당 글을 볼 수 있습니다.
+> 게시글 작성이 완료되면 바로 작성한 글 열람 페이지로 이동합니다.
+>![글쓰기](https://user-images.githubusercontent.com/67229566/121847819-2187d980-cd24-11eb-8bd2-9e6c8a699233.PNG)
+> > 내용을 좀더 편리하게 작성할 수 있도록 부트스트랩을 기반으로 둔 웹 에디터인 썸머노트를 CDN방식으로 적용하였습니다.
+> > **write.jsp**
+> > ```html
+> > <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
+> > <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+> > <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+> > ... 생략 ...
+> > <form:form method="post" modelAttribute="post" action="${cpath }/write">
+> >		<form:hidden path="idx"/>	<!-- 포스트 번호 -->
+> >		<form:hidden path="nickname" value="${login.nickname }"/>	<!-- 작성자 닉네임 -->
+> >		<input type="hidden" name="mode" value="${mode }">	<!-- 신규 생성 & 수정 확인 값 -->
+> >		
+> >		<!-- 카테고리 선택 -->
+> >		<form:select path="cate" id="category">
+> >			<option value="nocate">카테고리</option>
+> >			<form:options items="${category }" itemLabel="catename" itemValue="catename"/>
+> >		</form:select>
+> >		<form:input path="title" type="text" name="title" id="title" placeholder="제목을 입력하세요" required="required"/>
+> >		<form:textarea path="content" class="summernote" name="content" id="content" rows="40" required="required" /><br>
+> >		<form:checkbox path="lock_post" value="y" name="lock_post" id="lock_post"/><label for="lock_post">비공개</label>
+> >		<input type="submit" value="작성하기">
+> >	</form:form>
+> > ```
+> 게시글 생성이나 수정모드를 확인하여 각각 다른 메소드들을 실행합니다.
+> > **UserBoardService.java**
+> > ```java
+> > // 글 쓰기
+> >	public ModelAndView write(BoardVO vo, String mode, UserVO login) throws Exception {
+> >		ModelAndView mav = new ModelAndView();
+> >		
+> >		String nickname = URLEncoder.encode(vo.getNickname(), "UTF-8");	// 닉네임이 한글일 경우 url에 넣을때 깨지지 않게 인코딩 처리함
+> >		
+> >		if(vo.getLock_post() == null)	// 비공개 체크 안했을 때
+> >			vo.setLock_post("n");		// 비공개 no
+> >		
+> >		int postNum = 0;
+> >		
+> >		HashMap<String, Object>param = new HashMap<String, Object>();
+> >		param.put("email", login.getEmail());
+> >		
+> >		if(mode.equals("edit")) {	// 게시물 수정모드일 때
+> >			String oldcate = dao.getboardCate(vo);
+> >			if(!vo.getCate().equals(oldcate)) {	// 카테고리 수정했을 때
+> >				param.put("catename", oldcate);
+> >				dao.minusCateCnt(param);	// 수정 전 카테고리 개수 -1 하기
+> >			}
+> >			dao.updatePost(vo);		// 게시물 update
+> >			postNum = vo.getIdx();	// 수정한 게시물 번호
+> >			
+> >		}else {						// 새로운 게시물 생성 시
+> >			dao.write(vo);			// 게시물 insert
+> >			postNum = dao.getPostnum(vo.getNickname());	// 작성한 게시물 번호
+> >		}
+> >		
+> >		param.put("nickname", vo.getNickname());
+> >		param.put("cate", vo.getCate());
+> >		int cateCnt = dao.getCateCnt(param);	// 카테고리별 게시글 개수 가져오기
+> >		param.put("catecnt", cateCnt);
+> >		dao.updateCateCnt(param);	// 카테고리별 게시글 개수 update
+> >		
+> >		mav.setViewName("redirect:/"+nickname+"/"+postNum);	// 작성자 닉네임/작성(수정)한 게시물번호로 이동
+> >		
+> >		return mav;
+> >	}
+> >```
+> 유저는 다른 유저의 게시글과 댓글을 열람할 수 있으며, 직접 댓글을 달 수 있습니다.
+> > ![댓글](https://user-images.githubusercontent.com/67229566/121900043-f1f6c280-cd5f-11eb-968b-5fe186a6ffca.PNG)
+> > 
+> > **viewPost.jsp**
+> > ```html
+> > <!-- 댓글 작성 폼 -->
+> ><div class="row">
+> >	<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요" wrap="hard" required></textarea><br>
+> >	<button id="btnReply">댓글 작성</button>
+> ></div>
+> ><br>
+> >
+> ><!-- 댓글 리스트 -->
+> ><div class="row" id="replyList">
+> ><hr>
+> ><c:if test="${not empty reply }">	<!-- 댓글이 있을 때 -->
+> >	<c:forEach items="${reply }" var="reply">
+> >			<div id="reply${reply.idx }">
+> >				<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><strong><c:out value="${reply.nickname }" /></strong></a></div>
+> >				<div id="reply${reply.idx }actions">
+> >					<p id="reply${reply.idx }comment"><c:out value="${reply.comment }" escapeXml="false" /></p>	<!-- 화면에 그대로 나오는 태그를 제거하기 위해 escapeXml에 false값을 준다 -->
+> >					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
+> >					<!-- 로그인중인 유저와 댓글 작성자가 같으면 수정, 삭제 버튼 보이게 함 -->
+> >					<c:if test="${login.nickname eq reply.nickname }">
+> >						<div>
+> >							<!-- 댓글 수정과 삭제 시 js 함수를 호출하여 처리한다 -->
+> >							<span><a class="replyBtn" href="#" onclick="updateReply('${reply.idx}','${reply.comment }')" id="replyBtn${reply.idx }">수정</a></span><span> | </span>
+> >							<span><a class="replyBtn" href="#" onclick="delReply('${reply.idx}')">삭제</a></span>
+> >						</div>
+> >					</c:if>
+> >				</div>
+> >			</div>
+> >			<hr id="reply${reply.idx }">
+> >	</c:forEach>
+> ></c:if>
+> ></div>
+> > ```
+> 댓글 조작 후 ajax를 통해 페이지를 새로고침하지 않고 변경하도록 하였습니다.<br>
+> > **viewPost.js**
+> > ```js
+> > // 댓글 작성
+> >$(btnReply).click(function(){
+> >	if('${login.email}' == ''){		// 미로그인 상태에서 댓글 작성 시도 시 
+> >		alert('로그인이 필요합니다!');	// 로그인 필요 알림창 띄운뒤
+> >		$('#comment').val('');
+> >		return;						// 댓글 작성 기능 수행 x
+> >	}
+> >	
+> >	var comment = $('#comment').val().replace(/\n/g, "<br>");	// 줄바꿈 db에 넣기 위해 <br>로 치환한다
+> >	
+> >	if(comment == ''){		// 아무것도 입력하지 않은 채 작성 눌렀을 때
+> >		alert('댓글을 입력해주세요!');	// 알림 표시 후 return
+> >		return;
+> >	}
+> >	
+> >	var paramData = JSON.stringify({
+> >			"comment": comment,		// 댓글 내용
+> >			"post_num": '${post.idx}',	// 게시글 번호
+> >			"nickname": '${login.nickname}'	// 작성자 닉네임
+> >	});
+> >	
+> >	var headers = {"Content-Type" : "application/json"
+> >				, "X-HTTP-Method-Override" : "POST"};
+> >	
+> >	$.ajax({
+> >		type:'POST',
+> >		url: '${cpath}/${post.nickname}/${post.idx}/saveReply',
+> >		headers: headers,
+> >		data: paramData,
+> >		contentType: "application/json",
+> >		success: function(idx) {
+> >			if(idx != 0){	// 댓글 정상적으로 insert 되면 댓글 추가 메소드 실행
+> >				listReply(idx, comment);
+> >				$('#comment').val('');	// 댓글 작성 폼의 값은 없애준다
+> >			}
+> >		},
+> >		error: function(error){
+> >			console.log(error);
+> >		}
+> >	});
+> >});
+> >
+> > // 작성한 댓글 추가
+> >function listReply(idx, comment){
+> >	var date = new Date();
+> >	var nowTime = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate(); // 댓글 작성 시간 구하기 yyyy-mm-dd
+> >	var htmls = '';		// 추가할 영역에 댓글 형식에 맞게 만들어서 넣어준다 
+> >	htmls+='<div id="reply'+idx+'"><div id="nickname">' + '${login.nickname}' + '</div><div id="reply'+idx+'actions">';
+> >	htmls+='<p id="reply'+idx+'comment">' + comment + '</p>';
+> >	htmls+='<div id="reply_date">' + nowTime + '</div>';
+> >	htmls+='<div><span><a class="replyBtn" href="#" onclick="updateReply('+idx+',\''+comment+'\')" id="replyBtn'+idx+'">수정</a></span><span id="replyBtn"> | </span>';
+> >	htmls+='<span><a class="replyBtn" href="#" onclick="delReply('+idx+')">삭제</a></span></div>';
+> >	htmls+='</div></div><hr id="reply'+idx+'">';
+> >	
+> >	$("#replyList").append(htmls);	// 댓글 리스트 영역에 추가
+> >};
+> > ```
+6. 소개글
+> 간단하게 자신을 소개하는 글로 따로 테이블을 만들지 않고 board 테이블의 lock_post 컬럼에 'a'라는 값으로 저장되어 일반 게시글 리스트를 조회할 때 제외되도록 하였습니다. 
+>![소개완](https://user-images.githubusercontent.com/67229566/121903401-39cb1900-cd63-11eb-8c4d-d06771cbe066.PNG)
+>![소개글](https://user-images.githubusercontent.com/67229566/121903194-04bec680-cd63-11eb-906b-307d36c876ee.PNG)
+> > 부트스트랩의 모달을 이용하여 내용을 입력 할 수 있도록 하였습니다.<br>
+> > **about.jsp**
+> > ```html
+> >	<c:choose>
+> >		<c:when test="${empty content }">	<!-- 소개글 없을 때 -->
+> >			<div>
+> >				<p>&nbsp;</p>
+> >				<p>소개글이 아직 없습니다ㅠㅠ</p>
+> >				<p>&nbsp;</p>
+> >				<p>&nbsp;</p>
+> >			</div>
+> >			<!-- 로그인 유저와 블로그 주인이 같을 때 작성 가능 하도록 -->
+> >			<c:if test="${user.nickname eq login.nickname }">
+> >				<div>
+> >					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#writeAbout">소개 글 작성하기</button>
+> >				</div>
+> >			</c:if>
+> >			
+> >			<!-- 소개글 작성 모달 -->
+> >			<div class="modal fade" id="writeAbout" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+> >				<div class="modal-dialog" role="document"> 
+> >					<div class="modal-content"> 
+> >						<div class="modal-header"> 
+> >							<h5 class="modal-title" id="staticBackdropLabel">소개글 작성</h5> 
+> >							<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> 
+> >						</div> 
+> >						<form method="POST">
+> >							<div class="modal-body">
+> >								<input type="hidden" name="nickname" value="${login.nickname }">	 
+> >								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="나를 소개해주세요"></textarea>
+> >							</div> 
+> >							<div class="modal-footer"> 
+> >								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-success">작성하기</button> 
+> >							</div> 
+> >						</form>
+> >					</div> 
+> >				</div> 
+> >			</div>
+> >		</c:when>
+> >```
+7. 유저 설정
+> 프로필 이미지 설정과 닉네임을 바꿀 수 있습니다. 회원정보 수정 버튼을 클릭해야 수정 내용이 저장됩니다. 회원탈퇴는 버튼을 누르면 확인창 나타낸 후 탈퇴 기능을 실행합니다.<br>
+>![유저 설정](https://user-images.githubusercontent.com/67229566/121912615-b104ab00-cd6b-11eb-99cf-7dd31d3a6d02.PNG)
+> 프로필 이미지 설정<br>
+> > **UserService.java**
+> > ```java
+> > // 프로필 수정
+> >public ModelAndView settingUser(MultipartHttpServletRequest req) {
+> >	ModelAndView mav = new ModelAndView("/setting"); // 수정 완료되면 다시 유저 설정페이지로 이동
+> >	
+> >	UserVO vo = new UserVO();
+> >	vo.setEmail(req.getParameter("email")); // 유저 이메일
+> >	vo.setNickname(req.getParameter("nickname")); // 유저 닉네임
+> >	
+> >	String imgChk = req.getParameter("imgChk");		// 파일 선택 안했을 때 no 들어옴
+> >	
+> >	MultipartFile mfile = req.getFile("profileimg");// 이미지 파일 데이터
+> >	String imgType = mfile.getContentType();	// 이미지 파일 확장자
+> >	
+> >	// 이미지 파일 선택 했거나(yes) 파일 데이터가 null이 아니면
+> >	if(imgChk.equals("yes") && mfile != null) {	
+> >		try {
+> >			// 이메일 일치하는 유저의 프로필 사진 업데이트
+> >			HashMap<String, Object>param = new HashMap<String, Object>();
+> >			param.put("email", vo.getEmail());
+> >			param.put("img", mfile.getBytes());	// byte 데이터 map 형식으로 넣으면 blob 컬럼에 그냥 들어가진다
+> >			param.put("imgtype", imgType);
+> >			dao.setProfileImg(param);	// 유저 이미지 업데이트 쿼리 실행
+> >		} catch (Exception e) {
+> >			e.printStackTrace();
+> >		}
+> >	}
+> >	return mav;
+> >}
+> > ```
+> > <sub>이미지 정보를 저장하고 있는 profileimg와 imgtype</sub>
+> > ![이미지 확인](https://user-images.githubusercontent.com/67229566/121923921-5fade900-cd76-11eb-80ed-fbcf80651fa0.PNG)
+> >
+> > 이미지 제거는 DB의 이미지값에 null로 업데이트되게 하였으며 ajax를 사용하여 페이지 이동 없이 실행 될 수 있게 하였습니다.
+> > **setting.js**
+> > ```js
+> > // 프로필 이미지 제거
+> >$('#delimg').click(function(){
+> >	$.ajax({
+> >		type: 'GET',
+> >		url: 'delimg?email=' + '${login.email}',
+> >		success: function(){
+> >			// 프로젝트 내 폴더에 있는 기본 이미지 보여줌
+> >			$('.img').attr('src', 'resources/img/default.jpg');
+> >		}
+> >	});
+> >});
+> > ```
+> 닉네임 중복 값을 방지하기 위해 중복 체크 후 중복이 아닐 때만 닉네임을 수정할 수 있도록 버튼을 활성화/비활성화 시킵니다.
+> > **setting.js**
+> > ```js
+> > // 닉네임 중복 확인
+> >$('#nickname').blur(function() {	// 닉네임 입력창 벗어나면
+> >	const nickname = $('#nickname').val();	// 입력한 닉네임 값
+> >	var nnamemsg = $('#nnamemsg');
+> >	var loginnickname = '${login.nickname}';	// 로그인중인 유저 닉네임
+> >	
+> >	if(nickname == ''){	// 아무것도 입력 안했을 때
+> >		nnamemsg.text("닉네임을 입력해주세요!")
+> >		$('#nnamemsgAlert').show(); // 경고 알림 나타내기
+> >		$('#saveBtn').prop("disabled",false);	// 수정 버튼 비활성화
+> >		return;
+> >	}else if(nickname != loginnickname){	// 입력한 닉네임과 유저 닉네임이 같지 않을 때
+> >		$.ajax({
+> >			type: 'GET',
+> >			url: 'nicknameChk?nickname=' + nickname,
+> >			success: function(data) {	// 중복된 닉네임이 존재하면 select된 값 넘어옴
+> >				if(data == ''){		// 넘어온 값이 없을때(중복x)
+> >					$('#nnamemsgAlert').hide();				// 경고 알림창 숨김
+> >					$('#saveBtn').prop("disabled",false);	// 수정 버튼 활성화
+> >				}else{	// 넘어온 값이 있을 때(중복o)
+> >					nnamemsg.text('이미 사용중인 닉네임입니다!');
+> >					$('#nnamemsgAlert').show();				// 경고 알림창 나타냄
+> >					$('#saveBtn').prop("disabled",true);	// 수정 버튼 비활성화
+> >				}
+> >			}
+> >		})
+> >	}
+> >});
+> > ```
+8. 카테고리 설정
+> 유저만의 카테고리를 추가, 삭제하고 카테고리명을 수정할 수 있습니다.
+> ![카테고리](https://user-images.githubusercontent.com/67229566/121924567-fd091d00-cd76-11eb-896b-6fa2517ff043.PNG)
+9. Interceptor
+> 비회원인 경우 게시글 조회 외의 기능은 사용할 수 없습니다. 부적절한 url으로 인한 허가되지 않은 페이지 접근을 막습니다.
+> > **UserInterseptor.java**
+> > ```java
+> > // preHandle() 컨트롤러보다 먼저 수행된다
+> >@Override
+> >public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+> >        throws Exception {
+> >	
+> >	HttpSession session = request.getSession();		// session 객체 가져옴
+> >	Object obj = session.getAttribute("login");		// 사용자 정보 담고 있는 객체 가져옴
+> >	
+> >	if(obj == null) {		// 로그인 된 세션 없는 경우
+> >		response.sendRedirect("/login");	// 로그인 페이지로 이동
+> >		return false;	// 컨트롤러 요청으로 가지 않도록 false 반환
+> >	}
+> >	// 요청받은 페이지로 이동
+> >	return true;
+> >}
+> > ```
+> 로그인중인 유저가 로그인 페이지나 회원가입 페이지로 이동하는 행위를 막습니다.
+> > **AfterLoginInterceptor**
+> > ```java
+> > @Override
+> >public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+> >		throws Exception {
+> >	// 로그인 후 로그인 페이지 or 회원가입 페이지 이동 할 경우
+> >	HttpSession session = request.getSession();
+> >	if(session.getAttribute("login") != null) {	// 로그인 세션 있을 경우
+> >		response.sendRedirect("/home");	// 메인 페이지로 이동
+> >		return false;
+> >	}
+> >	return true;	// 없으면 요청한 페이지로 이동
+> >}
+### 클라우드 서비스 (aws)<br>
+ 클라우드 서비스에 데이터베이스와 서버를 올려놓으면 나의 로컬 컴퓨터에서 뿐만 아니라 어디에서든 프로젝트 조작이 가능하다는 장점이 있어 aws를 사용하게 되었습니다.
+ 1. RDS
+ > 데이터베이스는 MySQL 프리티어를 사용하였습니다.
+ >![rds](https://user-images.githubusercontent.com/67229566/121930625-8cb1ca00-cd7d-11eb-9ab3-1cdebd87d4f4.PNG)
+ 2. EC2
+ > 완성된 프로젝트는 EC2를 사용하여 배포하였으며, 탄력적 ip를 할당받아 고정 ip를 사용합니다.<br>
+ > 인스턴스 생성 시 사용된 OS는 Ubuntu입니다.
+ > ![ec2](https://user-images.githubusercontent.com/67229566/121930984-ff22aa00-cd7d-11eb-9fcb-81c4523e733b.PNG)
+## 개선사항
+ * mail api를 이용해 사용자 이메일에 임시비밀번호를 발송해주고 이것을 이용해 다시 비밀번호를 설정할 수 있게 하는 비밀번호 찾기 기능
+ * 사용자가 원하는 게시글을 찾아 열람할 수 있게 검색 기능
+ * 게시글 작성 시 이미지 파일을 추가하는 기능
+ * 메인 페이지 일반 페이징이 아닌 무한 스크롤 페이징 적용
+## 느낀점
+한달안에 완성시키자 라는 생각으로 프로젝트를 시작했지만 혼자서 진행하다 보니 새로운 기술을 적용 시키거나 에러 메시지가 나올 때면 해결하기 위해 검색하느라 생각보다 시간이 많이 들었고, 한달이란 시간은 촉박했습니다. 잘 작동된다고 확인하고 넘어갔던 기능들이 테스트 과정에서 전혀 다른 결과나 에러가 나올때면 지치고 그만두고 싶기도 했지만 제가 몰랐던 새로운 기술들을 알게 되고 문제를 해결할 때면 뿌듯함과 해냈다는 성취감에 아직 완벽하진 않지만 프로젝트를 완성 시킬 수 있었습니다.
+ 
+ 이 프로젝트를 진행 하면서 배운것도 정말 많고 아쉬운점도 많습니다. 시간이 부족해 구현하지 못한 기능들은 계속 수정을 거치며 추가할 예정이며 새로운 것에 도전해 보는 프로젝트도 계획중에 있습니다. 
 
 
 
