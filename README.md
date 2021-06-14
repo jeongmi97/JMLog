@@ -385,7 +385,88 @@
 > >		return mav;
 > >	}
 > >```
-> 
+> 유저는 다른 유저의 게시글과 댓글을 열람할 수 있으며, 직접 댓글을 달 수 있습니다.
+> > ![댓글](https://user-images.githubusercontent.com/67229566/121900043-f1f6c280-cd5f-11eb-968b-5fe186a6ffca.PNG)
+> > 
+> > **viewPost.jsp**
+> > ```html
+> > <!-- 댓글 작성 폼 -->
+> ><div class="row">
+> >	<textarea class="form-control" rows="5" cols="150" id="comment" placeholder="댓글을 작성하세요" wrap="hard" required></textarea><br>
+> >	<button id="btnReply">댓글 작성</button>
+> ></div>
+> ><br>
+> >
+> ><!-- 댓글 리스트 -->
+> ><div class="row" id="replyList">
+> ><hr>
+> ><c:if test="${not empty reply }">	<!-- 댓글이 있을 때 -->
+> >	<c:forEach items="${reply }" var="reply">
+> >			<div id="reply${reply.idx }">
+> >				<div id="nickname"><a href="${cpath }/reply/${reply.nickname}"><strong><c:out value="${reply.nickname }" /></strong></a></div>
+> >				<div id="reply${reply.idx }actions">
+> >					<p id="reply${reply.idx }comment"><c:out value="${reply.comment }" escapeXml="false" /></p>	<!-- 화면에 그대로 나오는 태그를 제거하기 위해 escapeXml에 false값을 준다 -->
+> >					<div id="reply_date"><c:out value="${reply.reply_date }"/></div>
+> >					<!-- 로그인중인 유저와 댓글 작성자가 같으면 수정, 삭제 버튼 보이게 함 -->
+> >					<c:if test="${login.nickname eq reply.nickname }">
+> >						<div>
+> >							<!-- 댓글 수정과 삭제 시 js 함수를 호출하여 처리한다 -->
+> >							<span><a class="replyBtn" href="#" onclick="updateReply('${reply.idx}','${reply.comment }')" id="replyBtn${reply.idx }">수정</a></span><span> | </span>
+> >							<span><a class="replyBtn" href="#" onclick="delReply('${reply.idx}')">삭제</a></span>
+> >						</div>
+> >					</c:if>
+> >				</div>
+> >			</div>
+> >			<hr id="reply${reply.idx }">
+> >	</c:forEach>
+> ></c:if>
+> ></div>
+> > ```
+> > 댓글 조작 후 ajax를 통해 페이지를 새로고침하지 않고 변경하도록 하였습니다.<br>
+> > **viewPost.js**
+> > ```js
+> > // 댓글 작성
+> >$(btnReply).click(function(){
+> >	if('${login.email}' == ''){		// 미로그인 상태에서 댓글 작성 시도 시 
+> >		alert('로그인이 필요합니다!');	// 로그인 필요 알림창 띄운뒤
+> >		$('#comment').val('');
+> >		return;						// 댓글 작성 기능 수행 x
+> >	}
+> >	
+> >	var comment = $('#comment').val().replace(/\n/g, "<br>");	// 줄바꿈 db에 넣기 위해 <br>로 치환한다
+> >	
+> >	if(comment == ''){				// 아무것도 입력하지 않은 채 작성 눌렀을 때
+> >		alert('댓글을 입력해주세요!');	// 알림 표시 후 return
+> >		return;
+> >	}
+> >	
+> >	var paramData = JSON.stringify({
+> >			"comment": comment,		// 댓글 내용
+> >			"post_num": '${post.idx}',	// 게시글 번호
+> >			"nickname": '${login.nickname}'	// 작성자 닉네임
+> >	});
+> >	
+> >	var headers = {"Content-Type" : "application/json"
+> >				, "X-HTTP-Method-Override" : "POST"};
+> >	
+> >	$.ajax({
+> >		type:'POST',
+> >		url: '${cpath}/${post.nickname}/${post.idx}/saveReply',
+> >		headers: headers,
+> >		data: paramData,
+> >		contentType: "application/json",
+> >		success: function(idx) {
+> >			if(idx != 0){	// 댓글 정상적으로 insert 되면 댓글 추가 메소드 실행
+> >				listReply(idx, comment);
+> >				$('#comment').val('');	// 댓글 작성 폼의 값은 없애준다
+> >			}
+> >		},
+> >		error: function(error){
+> >			console.log(error);
+> >		}
+> >	});
+> >});
+> > ```
 ~~내용 수정중입니다~~
 
 
