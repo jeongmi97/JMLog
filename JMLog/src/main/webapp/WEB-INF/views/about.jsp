@@ -12,7 +12,6 @@
 </style>
 </head>
 <body>
-ㅇ
 <header>
 	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
@@ -28,6 +27,7 @@
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</div>
+			<!-- 로그인 유저와 블로그 주인이 같을 때 작성 가능 하도록 -->
 			<c:if test="${user.nickname eq login.nickname }">
 				<div>
 					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#writeAbout">소개 글 작성하기</button>
@@ -62,6 +62,7 @@
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</div>
+			<!-- 로그인 유저와 블로그 주인이 같을 때 수정 가능 하도록 -->
 			<c:if test="${user.nickname eq login.nickname }">
 				<div>
 					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#updateAbout">소개 글 수정하기</button>

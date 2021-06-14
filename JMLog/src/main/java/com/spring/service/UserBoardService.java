@@ -130,14 +130,10 @@ public class UserBoardService {
 	public ModelAndView write(BoardVO vo, String mode, UserVO login) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		
-		System.out.println("modeeeeeeeeeeeeeeeeeeee: " + mode);
-		System.out.println("닉네임 확인 : " + vo.getNickname());
-		System.out.println("비공개 확인 : " + vo.getLock_post());
-		
 		String nickname = URLEncoder.encode(vo.getNickname(), "UTF-8");	// 닉네임이 한글일 경우 url에 넣을때 깨지지 않게 인코딩 처리함
 		
-		if(vo.getLock_post() == null)
-			vo.setLock_post("n");
+		if(vo.getLock_post() == null)	// 비공개 체크 안했을 때
+			vo.setLock_post("n");		// 비공개 no
 		
 		int postNum = 0;
 		
@@ -146,29 +142,25 @@ public class UserBoardService {
 		
 		if(mode.equals("edit")) {	// 게시물 수정모드일 때
 			String oldcate = dao.getboardCate(vo);
-			System.out.println("oldddddddddd : " + oldcate);
 			if(!vo.getCate().equals(oldcate)) {	// 카테고리 수정했을 때
 				param.put("catename", oldcate);
-				dao.minusCateCnt(param);	// 원래 카테고리 개수 -1 하기
+				dao.minusCateCnt(param);	// 수정 전 카테고리 개수 -1 하기
 			}
 			dao.updatePost(vo);		// 게시물 수정
 			postNum = vo.getIdx();	// 수정한 게시물 번호
 			
 		}else {						// 새로운 게시물 생성 시
-			if(vo.getLock_post() == null)	// 비공개 선택 안했을 때
-				vo.setLock_post("n");		// 비공개 no
 			dao.write(vo);			// 게시물 insert
 			postNum = dao.getPostnum(vo.getNickname());	// 작성한 게시물 번호
 		}
 		
 		param.put("nickname", vo.getNickname());
 		param.put("cate", vo.getCate());
-		int cateCnt = dao.getCateCnt(param);	
-		System.out.println("카테고리 게시글 개수 : " + cateCnt);
+		int cateCnt = dao.getCateCnt(param);	// 카테고리별 게시글 개수 가져오기
 		param.put("catecnt", cateCnt);
 		dao.updateCateCnt(param);	// 카테고리별 게시글 개수 update
 		
-		mav.setViewName("redirect:/"+nickname+"/"+postNum);	// 작성자 이메일/작성(수정)한 게시물번호로 이동
+		mav.setViewName("redirect:/"+nickname+"/"+postNum);	// 작성자 닉네임/작성(수정)한 게시물번호로 이동
 		
 		return mav;
 	}

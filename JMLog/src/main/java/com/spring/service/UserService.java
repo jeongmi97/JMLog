@@ -77,25 +77,24 @@ public class UserService {
 	
 	// 로그아웃
 	public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
-		ModelAndView mav = new ModelAndView("redirect:/");
-		System.out.println("로그아웃::::::::");
-		Object obj = session.getAttribute("login");
-		if(obj != null) {
+		ModelAndView mav = new ModelAndView("redirect:/");	// 로그아웃 한 뒤 메인 페이지로 이동
+		Object obj = session.getAttribute("login");	
+		if(obj != null) {	// 로그인 세션 존재 시
 			UserVO user = (UserVO) obj;
-			session.removeAttribute("login");
+			session.removeAttribute("login");	// 세션 제거
 			session.invalidate();
+			// 현재 브라우저의 자동 로그인 쿠키 가져옴
 			Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
-			System.out.println("logincookie 확인 :::" + loginCookie);
-			if(loginCookie != null) {
+			if(loginCookie != null) {	// 자동로그인 시 생성된 로그인 쿠키 있으면 해당 쿠키 삭제
 				loginCookie.setPath("/");
 				loginCookie.setMaxAge(0);
 				res.addCookie(loginCookie);
 				HashMap<String , Object>param = new HashMap<String, Object>();
+				// sessionid는 null, sessionLimit는 현재 시간으로 설정한다
 				param.put("email", user.getEmail()); param.put("sessionid", null); param.put("sessionLimit", new java.util.Date());
 				dao.keepLogin(param);
 			}
 		}
-		
 		return mav;
 	}
 	
@@ -150,25 +149,24 @@ public class UserService {
 		
 		String imgChk = req.getParameter("imgChk");		// 파일 선택 안했을 때 no 들어옴
 		
-		MultipartFile mfile = req.getFile("profileimg");
-		System.out.println("이미지 :::: "  + mfile);
-		String imgType = mfile.getContentType();
-		System.out.println("이미지선택 체크 : " + req.getParameter("imgChk"));
-		if(imgChk.equals("yes") && mfile != null) {	// 이미지 파일 선택 했을 때
-			System.out.println("이미지 수정 들어옴");
+		MultipartFile mfile = req.getFile("profileimg");// 이미지 파일 데이터
+		String imgType = mfile.getContentType();		// 이미지 파일 확장자
+		
+		// 이미지 파일 선택 했거나(yes) 파일 데이터가 null이 아니면
+		if(imgChk.equals("yes") && mfile != null) {	
 			try {
 				// 이메일 일치하는 유저의 프로필 사진 업데이트
 				HashMap<String, Object>param = new HashMap<String, Object>();
 				param.put("email", vo.getEmail());
 				param.put("img", mfile.getBytes());	// byte 데이터 map 형식으로 넣으면 blob 컬럼에 그냥 들어가진다
-				param.put("imgtype", mfile.getContentType());	// 파일 확장자
-				dao.setProfileImg(param);
+				param.put("imgtype", imgType);
+				dao.setProfileImg(param);	// 유저 이미지 업데이트 쿼리 실행
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
-		String oldnickname = dao.getNickname(vo.getEmail());
+		String oldnickname = dao.getNickname(vo.getEmail());	// 수정 전 닉네임
 		HashMap<String, String>param = new HashMap<String, String>();
 		param.put("oldnickname", oldnickname);
 		param.put("nickname", vo.getNickname());

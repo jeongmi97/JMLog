@@ -35,90 +35,6 @@
 <body>
 <script type="text/javascript">
 
-	$(function(){
-		
-		/* $(document).ready(function(){
-			var loginimg = '${login.profileimg}';
-			console.log('이미지체크::::' + loginimg);
-			if(loginimg == '')
-				$('.img').attr('src', '/resources/img/default.png');
-			else
-				$('.img').attr('src', '${cpath }/${login.email}/getProfileImg');
-		}); */
-		
-		$('.alert').hide();
-		
-		// 닉네임 중복 확인 (수정필요)
-		$('#nickname').blur(function() {
-			const nickname = $('#nickname').val();
-			var nnamemsg = $('#nnamemsg');
-			var loginnickname = '${login.nickname}';
-			
-			if(nickname == ''){
-				nnamemsg.text("닉네임을 입력해주세요!")
-				$('#nnamemsgAlert').show();
-				return;
-			}else if(nickname != loginnickname){
-				$.ajax({
-					type: 'GET',
-					url: 'nicknameChk?nickname=' + nickname,
-					success: function(data) {
-						console.log('넘어온 닉네임 : ' + data);
-						if(data == ''){
-							$('#nnamemsgAlert').hide();
-							$('#saveBtn').prop("disabled",false);
-						}else{
-							nnamemsg.text('이미 사용중인 닉네임입니다!');
-							$('#nnamemsgAlert').show();
-							$('#saveBtn').prop("disabled",true);
-						}
-					}
-				})
-			}
-		});
-		
-		// 프로필 이미지 선택 미리보기
-		$('#profileimg').on("change", function(){
-			var file = $(this).prop('files')[0];
-			console.log('files : ' + file);
-			console.log('선택 : ' + $('#profileimg').val());
-			if($('#profileimg').val() == '')
-				$('#imgChk').val('no');		// 파일 선택 취소했을 때 프로필 사진 안바뀌게 no 전해줌
-			console.log('imgchk : ' + $('#imgChk').val());
-			blobURL = window.URL.createObjectURL(file);
-			$('.img').attr('src', blobURL);
-		});
-		
-		// 프로필 이미지 제거
-		$('#delimg').click(function(){
-			console.log('이미지 제거 클릭');
-			$.ajax({
-				type: 'GET',
-				url: 'delimg?email=' + '${login.email}',
-				success: function(){
-					$('.img').attr('src', 'resources/img/default.jpg');
-				}
-			});
-		});
-	})
-	
-	// 회원 탈퇴
-	function delUser(){
-		var delconfirm = confirm('관련 데이터들은 복구되지 않습니다. 정말 탈퇴하시겠습니까?');
-		if(delconfirm == true){		// 확인 눌렀을 때 탈퇴 기능 수행
-			$.ajax({
-				type: 'get',
-				url: 'deluser?nickname='+'${login.nickname}',
-				success: function(){
-					alert('탈퇴가 완료되었습니다.');
-					location.replace('/');
-				}
-			})
-		}else{						// 취소 눌렀을 때 되돌아가기
-			return;
-		}
-	}
-	
 </script>
 <header>
 	<%@ include file="/WEB-INF/views/include/header.jsp" %>
@@ -167,5 +83,6 @@
 		</form>
 	</div>
 </div>
+<script src="${cpath }/resources/js/setting.js"></script>
 </body>
 </html>

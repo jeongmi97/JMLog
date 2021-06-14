@@ -4,20 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.spring.dao.UserDAO;
-
 public class UserInterceptor extends HandlerInterceptorAdapter{
-	
-	@Autowired UserDAO dao;
 	
 	// preHandle() 컨트롤러보다 먼저 수행된다
 	@Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+	        throws Exception {
 		
 		HttpSession session = request.getSession();		// session 객체 가져옴
 		Object obj = session.getAttribute("login");		// 사용자 정보 담고 있는 객체 가져옴
@@ -26,7 +21,6 @@ public class UserInterceptor extends HandlerInterceptorAdapter{
 			response.sendRedirect("/login");	// 로그인 페이지로 이동
 			return false;	// 컨트롤러 요청으로 가지 않도록 false 반환
 		}
-		
 		// 요청받은 페이지로 이동
 		return true;
 	}
