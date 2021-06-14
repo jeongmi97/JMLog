@@ -317,7 +317,34 @@
 > >			<beans:ref bean="RememberLoginInterceptor"/>
 > >		</interceptor>
 > > ```
-4.게시글
+4. 로그아웃
+> 로그아웃 시 로그인세션 뿐 아니라 자동로그인을 위해 생성된 쿠키 여부도 체크 후 삭제합니다.
+> > **UserService.java**
+> > ```java
+> > // 로그아웃
+> >public ModelAndView logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
+> >	ModelAndView mav = new ModelAndView("redirect:/");	// 로그아웃 한 뒤 메인 페이지로 이동
+> >	Object obj = session.getAttribute("login");	
+> >	if(obj != null) {	// 로그인 세션 존재 시
+> >		UserVO user = (UserVO) obj;
+> >		session.removeAttribute("login");	// 세션 제거
+> >		session.invalidate();
+> >		// 현재 브라우저의 자동 로그인 쿠키 가져옴
+> >		Cookie loginCookie = WebUtils.getCookie(req, "loginCookie");
+> >		if(loginCookie != null) {	// 자동로그인 시 생성된 로그인 쿠키 있으면 해당 쿠키 삭제
+> >			loginCookie.setPath("/");
+> >			loginCookie.setMaxAge(0);
+> >			res.addCookie(loginCookie);
+> >			HashMap<String , Object>param = new HashMap<String, Object>();
+> >			// sessionid는 null, sessionLimit는 현재 시간으로 설정한다
+> >			param.put("email", user.getEmail()); param.put("sessionid", null); param.put("sessionLimit", new java.util.Date());
+> >			dao.keepLogin(param);
+> >		}
+> >	}
+> >	return mav;
+> >}
+> > ```
+5.게시글
 > 게시글 작성 시 유저가 만들어놓은 카테고리를 설정할 수 있고, 비공개 체크 시 비밀글로 작성이 되어 작성한 유저만 해당 글을 볼 수 있습니다.
 > 게시글 작성이 완료되면 바로 작성한 글 열람 페이지로 이동합니다.
 >![글쓰기](https://user-images.githubusercontent.com/67229566/121847819-2187d980-cd24-11eb-8bd2-9e6c8a699233.PNG)
@@ -483,11 +510,11 @@
 > >	$("#replyList").append(htmls);	// 댓글 리스트 영역에 추가
 > >};
 > > ```
-5. 소개글
+6. 소개글
 > 간단하게 자신을 소개하는 글로 따로 테이블을 만들지 않고 board 테이블의 lock_post 컬럼에 'a'라는 값으로 저장되어 일반 게시글 리스트를 조회할 때 제외되도록 하였습니다. 
 >![소개완](https://user-images.githubusercontent.com/67229566/121903401-39cb1900-cd63-11eb-8c4d-d06771cbe066.PNG)
 >![소개글](https://user-images.githubusercontent.com/67229566/121903194-04bec680-cd63-11eb-906b-307d36c876ee.PNG)
-> > 부트스트랩의 모달을 이용하여 내용을 입력 할 수 있도록 하였습니다.
+> > 부트스트랩의 모달을 이용하여 내용을 입력 할 수 있도록 하였습니다.<br>
 > > **about.jsp**
 > > ```html
 > >	<c:choose>
@@ -527,10 +554,89 @@
 > >			</div>
 > >		</c:when>
 > >```
-6. 유저 설정
-> 프로필 이미지 설정과 닉네임을 바꿀 수 있습니다.
-> ==프로필 이미지==
-~~내용 수정중입니다~~
+7. 유저 설정
+> 프로필 이미지 설정과 닉네임을 바꿀 수 있습니다. 회원정보 수정 버튼을 클릭해야 수정 내용이 저장됩니다. 회원탈퇴는 버튼을 누르면 확인창 나타낸 후 탈퇴 기능을 실행합니다.<br>
+>![유저 설정](https://user-images.githubusercontent.com/67229566/121912615-b104ab00-cd6b-11eb-99cf-7dd31d3a6d02.PNG)
+> 프로필 이미지 설정<br>
+> > **UserService.java**
+> > ```java
+> > // 프로필 수정
+> >public ModelAndView settingUser(MultipartHttpServletRequest req) {
+> >	ModelAndView mav = new ModelAndView("/setting"); // 수정 완료되면 다시 유저 설정페이지로 이동
+> >	
+> >	UserVO vo = new UserVO();
+> >	vo.setEmail(req.getParameter("email")); // 유저 이메일
+> >	vo.setNickname(req.getParameter("nickname")); // 유저 닉네임
+> >	
+> >	String imgChk = req.getParameter("imgChk");		// 파일 선택 안했을 때 no 들어옴
+> >	
+> >	MultipartFile mfile = req.getFile("profileimg");// 이미지 파일 데이터
+> >	String imgType = mfile.getContentType();	// 이미지 파일 확장자
+> >	
+> >	// 이미지 파일 선택 했거나(yes) 파일 데이터가 null이 아니면
+> >	if(imgChk.equals("yes") && mfile != null) {	
+> >		try {
+> >			// 이메일 일치하는 유저의 프로필 사진 업데이트
+> >			HashMap<String, Object>param = new HashMap<String, Object>();
+> >			param.put("email", vo.getEmail());
+> >			param.put("img", mfile.getBytes());	// byte 데이터 map 형식으로 넣으면 blob 컬럼에 그냥 들어가진다
+> >			param.put("imgtype", imgType);
+> >			dao.setProfileImg(param);	// 유저 이미지 업데이트 쿼리 실행
+> >		} catch (Exception e) {
+> >			e.printStackTrace();
+> >		}
+> >	}
+> >	return mav;
+> >}
+> > ```
+> > 이미지 제거는 DB의 이미지값에 null로 업데이트되게 하였으며 ajax를 사용하여 페이지 이동 없이 실행 될 수 있게 하였습니다.
+> > **setting.js**
+> > ```js
+> > // 프로필 이미지 제거
+> >$('#delimg').click(function(){
+> >	$.ajax({
+> >		type: 'GET',
+> >		url: 'delimg?email=' + '${login.email}',
+> >		success: function(){
+> >			// 프로젝트 내 폴더에 있는 기본 이미지 보여줌
+> >			$('.img').attr('src', 'resources/img/default.jpg');
+> >		}
+> >	});
+> >});
+> > ```
+> 닉네임 중복 값을 방지하기 위해 중복 체크 후 중복이 아닐 때만 닉네임을 수정할 수 있도록 버튼을 활성화/비활성화 시킵니다.
+> > **setting.js**
+> > ```js
+> > // 닉네임 중복 확인
+> >$('#nickname').blur(function() {	// 닉네임 입력창 벗어나면
+> >	const nickname = $('#nickname').val();	// 입력한 닉네임 값
+> >	var nnamemsg = $('#nnamemsg');
+> >	var loginnickname = '${login.nickname}';	// 로그인중인 유저 닉네임
+> >	
+> >	if(nickname == ''){	// 아무것도 입력 안했을 때
+> >		nnamemsg.text("닉네임을 입력해주세요!")
+> >		$('#nnamemsgAlert').show(); // 경고 알림 나타내기
+> >		$('#saveBtn').prop("disabled",false);	// 수정 버튼 비활성화
+> >		return;
+> >	}else if(nickname != loginnickname){	// 입력한 닉네임과 유저 닉네임이 같지 않을 때
+> >		$.ajax({
+> >			type: 'GET',
+> >			url: 'nicknameChk?nickname=' + nickname,
+> >			success: function(data) {	// 중복된 닉네임이 존재하면 select된 값 넘어옴
+> >				if(data == ''){		// 넘어온 값이 없을때(중복x)
+> >					$('#nnamemsgAlert').hide();				// 경고 알림창 숨김
+> >					$('#saveBtn').prop("disabled",false);	// 수정 버튼 활성화
+> >				}else{	// 넘어온 값이 있을 때(중복o)
+> >					nnamemsg.text('이미 사용중인 닉네임입니다!');
+> >					$('#nnamemsgAlert').show();				// 경고 알림창 나타냄
+> >					$('#saveBtn').prop("disabled",true);	// 수정 버튼 비활성화
+> >				}
+> >			}
+> >		})
+> >	}
+> >});
+> > ```
+> 
 
 
 
