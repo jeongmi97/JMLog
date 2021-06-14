@@ -3,7 +3,7 @@
 > *서버 중지 상태 시 사이트 접속이 안 될 수 있습니다.*
 ------------
 ## 프로젝트 계획
-> 웹 프로그래밍의 기본적인 CRUD 기능을 공부하기위해 이번 프로젝트를 계획하였습니다. CRUD 기능을 가장 잘 사용할 수 있는 블로그라는 주제를 선택하였고, 제가 자주 들어가는 사이트인 velog와 티스토리 블로그를 참고하였습니다. 계획을 하면서 단순한 나만의 블로그 관리에서 유저간의 교류가 가능한 블로그 플랫폼으로 만들기위해 자연스럽게 기능들을 추가하게 되었고 처음으로 혼자 계획하고 완성한 프로젝트가 되었습니다.
+> 웹 프로그래밍의 기본적인 CRUD 기능을 공부하기위해 이번 프로젝트를 계획하였습니다. CRUD 기능을 가장 잘 사용할 수 있는 블로그라는 주제를 선택하였고, 제가 자주 들어가는 사이트인 [velog](https://velog.io/)와 티스토리 블로그를 참고하였습니다. 계획을 하면서 단순한 나만의 블로그 관리에서 유저간의 교류가 가능한 블로그 플랫폼으로 만들기위해 자연스럽게 기능들을 추가하게 되었고 처음으로 혼자 계획하고 완성한 프로젝트가 되었습니다.
 ## 프로젝트 소개
 1.프로젝트 기능
 
@@ -296,7 +296,6 @@
 > >		HttpSession session = request.getSession();
 > >		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");	// 해당 사이트의 로그인 쿠키 받아옴
 > >		if(loginCookie != null) {	// 로그인 쿠키가 있을 경우
-> >			System.out.println("login : " + loginCookie.getValue());
 > >			UserVO user = dao.checkUserSession(loginCookie.getValue());	// 로그인 쿠키의 세션키값을 이용해 해당 유저 정보 가져옴
 > >			if(user != null) {	// 해당 유저 있을 경우
 > >				session.setAttribute("login", user);	// 로그인 세션에 저장
