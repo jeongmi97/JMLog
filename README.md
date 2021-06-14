@@ -319,6 +319,7 @@
 > > ```
 4.게시글
 > 게시글 작성 시 유저가 만들어놓은 카테고리를 설정할 수 있고, 비공개 체크 시 비밀글로 작성이 되어 작성한 유저만 해당 글을 볼 수 있습니다.
+> 게시글 작성이 완료되면 바로 작성한 글 열람 페이지로 이동합니다.
 >![글쓰기](https://user-images.githubusercontent.com/67229566/121847819-2187d980-cd24-11eb-8bd2-9e6c8a699233.PNG)
 > > 내용을 좀더 편리하게 작성할 수 있도록 부트스트랩을 기반으로 둔 웹 에디터인 썸머노트를 CDN방식으로 적용하였습니다.
 > > **write.jsp**
@@ -422,7 +423,7 @@
 > ></c:if>
 > ></div>
 > > ```
-> > 댓글 조작 후 ajax를 통해 페이지를 새로고침하지 않고 변경하도록 하였습니다.<br>
+> 댓글 조작 후 ajax를 통해 페이지를 새로고침하지 않고 변경하도록 하였습니다.<br>
 > > **viewPost.js**
 > > ```js
 > > // 댓글 작성
@@ -435,7 +436,7 @@
 > >	
 > >	var comment = $('#comment').val().replace(/\n/g, "<br>");	// 줄바꿈 db에 넣기 위해 <br>로 치환한다
 > >	
-> >	if(comment == ''){				// 아무것도 입력하지 않은 채 작성 눌렀을 때
+> >	if(comment == ''){		// 아무것도 입력하지 않은 채 작성 눌렀을 때
 > >		alert('댓글을 입력해주세요!');	// 알림 표시 후 return
 > >		return;
 > >	}
@@ -466,7 +467,69 @@
 > >		}
 > >	});
 > >});
+> >
+> > // 작성한 댓글 추가
+> >function listReply(idx, comment){
+> >	var date = new Date();
+> >	var nowTime = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate(); // 댓글 작성 시간 구하기 yyyy-mm-dd
+> >	var htmls = '';		// 추가할 영역에 댓글 형식에 맞게 만들어서 넣어준다 
+> >	htmls+='<div id="reply'+idx+'"><div id="nickname">' + '${login.nickname}' + '</div><div id="reply'+idx+'actions">';
+> >	htmls+='<p id="reply'+idx+'comment">' + comment + '</p>';
+> >	htmls+='<div id="reply_date">' + nowTime + '</div>';
+> >	htmls+='<div><span><a class="replyBtn" href="#" onclick="updateReply('+idx+',\''+comment+'\')" id="replyBtn'+idx+'">수정</a></span><span id="replyBtn"> | </span>';
+> >	htmls+='<span><a class="replyBtn" href="#" onclick="delReply('+idx+')">삭제</a></span></div>';
+> >	htmls+='</div></div><hr id="reply'+idx+'">';
+> >	
+> >	$("#replyList").append(htmls);	// 댓글 리스트 영역에 추가
+> >};
 > > ```
+5. 소개글
+> 간단하게 자신을 소개하는 글로 따로 테이블을 만들지 않고 board 테이블의 lock_post 컬럼에 'a'라는 값으로 저장되어 일반 게시글 리스트를 조회할 때 제외되도록 하였습니다. 
+>![소개완](https://user-images.githubusercontent.com/67229566/121903401-39cb1900-cd63-11eb-8c4d-d06771cbe066.PNG)
+>![소개글](https://user-images.githubusercontent.com/67229566/121903194-04bec680-cd63-11eb-906b-307d36c876ee.PNG)
+> > 부트스트랩의 모달을 이용하여 내용을 입력 할 수 있도록 하였습니다.
+> > **about.jsp**
+> > ```html
+> >	<c:choose>
+> >		<c:when test="${empty content }">	<!-- 소개글 없을 때 -->
+> >			<div>
+> >				<p>&nbsp;</p>
+> >				<p>소개글이 아직 없습니다ㅠㅠ</p>
+> >				<p>&nbsp;</p>
+> >				<p>&nbsp;</p>
+> >			</div>
+> >			<!-- 로그인 유저와 블로그 주인이 같을 때 작성 가능 하도록 -->
+> >			<c:if test="${user.nickname eq login.nickname }">
+> >				<div>
+> >					<button class="saveBtn btn btn-default" data-toggle="modal" data-target="#writeAbout">소개 글 작성하기</button>
+> >				</div>
+> >			</c:if>
+> >			
+> >			<!-- 소개글 작성 모달 -->
+> >			<div class="modal fade" id="writeAbout" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+> >				<div class="modal-dialog" role="document"> 
+> >					<div class="modal-content"> 
+> >						<div class="modal-header"> 
+> >							<h5 class="modal-title" id="staticBackdropLabel">소개글 작성</h5> 
+> >							<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> 
+> >						</div> 
+> >						<form method="POST">
+> >							<div class="modal-body">
+> >								<input type="hidden" name="nickname" value="${login.nickname }">	 
+> >								<textarea class="form-control" rows="10" cols="60" name="content" style="border: none; resize: none;" placeholder="나를 소개해주세요"></textarea>
+> >							</div> 
+> >							<div class="modal-footer"> 
+> >								<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button> <button type="submit" class="btn btn-success">작성하기</button> 
+> >							</div> 
+> >						</form>
+> >					</div> 
+> >				</div> 
+> >			</div>
+> >		</c:when>
+> >```
+6. 유저 설정
+> 프로필 이미지 설정과 닉네임을 바꿀 수 있습니다.
+> ==프로필 이미지==
 ~~내용 수정중입니다~~
 
 
