@@ -50,8 +50,7 @@
 ## 프로젝트 구성
 ### 데이터베이스 테이블 설계<br>
  ![JMLog Diagram](https://user-images.githubusercontent.com/67229566/121813092-8819e280-cca5-11eb-946f-aa05908adfe4.PNG)<br>
- <center><sub>테이블 설계서</sub><center>
- <br>
+ <sub>테이블 설계서</sub><br>
    **user** : 회원가입한 유저들을 관리하는 user테이블은 *email*과 *nickname*을 기본키로 설정해 중복을 방지하고 각 유저를 구분해 다른 테이블과의 관계설정에 쓰입니다. 프로필 이미지의 데이터를 저장하기위해 *profileimg*를 longblob타입으로 설정하였고 *imgtype*은 파일 확장자를 저장합니다. 자동로그인 수행 시 필요한 *sessionkey*와 *sessionlimit*는 로그인세션id와 세션기간을 저장합니다. *pw*는 비밀번호, *reservedate*는 가입일을 나타냅니다.<br>
  **board** : 게시물 테이블입니다. *idx*는 게시글 번호로 기본키로 설정되어있습니다. *nickname*은 user테이블의 nickname을 참조하고있습니다. *cate*는 카테고리이름으로 category테이블의 catename을 참조합니다. *title*은 제목, *content*는 내용, *reportin_date*는 작성일, *hit*는 조회수, *lock_post*는 비밀글 체크 여부를 저장하며 {a : 소개글, n : 공개글, y : 비밀글}의 세 값을 가지게 됩니다.<br>
  **reply** : 게시글에 대한 댓글 테이블입니다. *idx*는 댓글 번호로 기본키로 설정되어있습니다. *post_num*은 board테이블의 idx를 참조하며, *nickname*은 user테이블의 nickname을 참조하고있습니다. *comment*는 댓글내용, *reply_date*는 댓글 작성일을 나타냅니다.<br>
