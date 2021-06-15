@@ -6,36 +6,19 @@
 		select * from user where email=#{email}
 	</select>
 	
+	<!-- 로그인 유지 세션 내용 저장 -->
+	<update id="keepLogin" parameterType="HashMap">
+		update user
+		set sessionkey=#{sessionid}, sessionlimit=#{sessionLimit}
+		where email=#{email}
+	</update>
+	
 	<insert id="join" parameterType="UserVO">
 		insert into user(email, pw, nickname) values(#{email}, #{pw}, #{nickname})
 	</insert>
 	
 	<select id="emailCheck" parameterType="String" resultType="int">
 		select count(email) from user where email=#{email}
-	</select>
-	
-	<update id="setProfileImg" parameterType="HashMap">
-		update user
-		set	profileimg=#{img}, imgtype=#{imgtype}
-		where email=#{email}
-	</update>
-	
-	<select id="nicknameChk" parameterType="String" resultType="String">
-		select nickname
-		from user
-		where nickname=#{nickname}
-	</select>
-	
-	<update id="setNickname" parameterType="UserVO">
-		update user
-		set nickname=#{nickname}
-		where email=#{email}
-	</update>
-	
-	<select id="getProfileImg" parameterType="String" resultType="java.util.Map">
-		select profileimg, imgtype
-		from user 
-		where email=#{email}
 	</select>
 	
 	<select id="getCategory" parameterType="String" resultType="CategoryVO">
@@ -45,23 +28,16 @@
 		order by idx
 	</select>
 	
-	<!-- 로그인 유지 세션 내용 저장 -->
-	<update id="keepLogin" parameterType="HashMap">
-		update user
-		set sessionkey=#{sessionid}, sessionlimit=#{sessionLimit}
-		where email=#{email}
-	</update>
-	
-	<select id="checkUserSession" parameterType="String" resultType="UserVO">
-		select *
+	<select id="nicknameChk" parameterType="String" resultType="String">
+		select nickname
 		from user
-		where sessionkey=#{sessionid}
+		where nickname=#{nickname}
 	</select>
 	
-	<update id="delimg" parameterType="String">
+	<update id="setProfileImg" parameterType="HashMap">
 		update user
-		set profileimg = null, imgtype = null
-		where email = #{email}
+		set	profileimg=#{img}, imgtype=#{imgtype}
+		where email=#{email}
 	</update>
 	
 	<select id="getNickname" parameterType="String" resultType="String">
@@ -69,6 +45,12 @@
 		from user
 		where email=#{email}
 	</select>
+	
+	<update id="setNickname" parameterType="UserVO">
+		update user
+		set nickname=#{nickname}
+		where email=#{email}
+	</update>
 	
 	<update id="updatePostNickname" parameterType="UserVO">
 		update board
@@ -81,6 +63,12 @@
 		set nickname=#{nickname}
 		where nickname=#{oldnickname}
 	</update>
+	
+	<select id="getProfileImg" parameterType="String" resultType="java.util.Map">
+		select profileimg, imgtype
+		from user 
+		where email=#{email}
+	</select>
 	
 	<delete id="delUserReply">
 		delete from reply
@@ -96,5 +84,17 @@
 		delete from user
 		where nickname=#{nickname}
 	</delete>
+	
+	<select id="checkUserSession" parameterType="String" resultType="UserVO">
+		select *
+		from user
+		where sessionkey=#{sessionid}
+	</select>
+	
+	<update id="delimg" parameterType="String">
+		update user
+		set profileimg = null, imgtype = null
+		where email = #{email}
+	</update>
 	
 </mapper>

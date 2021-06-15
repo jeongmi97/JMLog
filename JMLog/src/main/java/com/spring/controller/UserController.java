@@ -32,7 +32,6 @@ import com.spring.vo.UserVO;
 public class UserController {
 	
 	@Autowired UserService us;
-	@Autowired UserDAO dao;
 	
 	// 로그인 페이지 이동
 	@RequestMapping("login")
@@ -62,13 +61,6 @@ public class UserController {
 		return us.join(vo);
 	}
 	
-	// 이메일 중복 확인 
-	@GetMapping("emailCheck")
-	public @ResponseBody int emailCheck(@RequestParam("email")String email) {
-		int chk = us.emailCheck(email);
-		return chk;
-	}
-	
 	// 유저 설정 페이지 이동
 	@GetMapping("setting")
 	public ModelAndView setting(HttpSession session) {
@@ -81,39 +73,16 @@ public class UserController {
 		return us.category(session);
 	}
 	
-	// 닉네임 중복 체크
-	@GetMapping("nicknameChk")
-	public @ResponseBody String nicknameChk(@RequestParam("nickname")String nickname) {
-		String chk = us.nicknameChk(nickname);
-		System.out.println("닉네임 체크 : " + chk);
-		return chk;
-	}
-	
 	// 프로필 수정
 	@PostMapping("setting")
 	public ModelAndView updateProfileImg(MultipartHttpServletRequest req){
-		System.out.println("img : " + req.getFile("profileimg"));
-		System.out.println("email : " + req.getParameter("email"));
-		System.out.println("수정 들어옴");
 		return us.settingUser(req);
 	}
 	
 	// 프로필 이미지 가져오기
 	@RequestMapping("{email:.+}/getProfileImg")
 	public ResponseEntity<byte[]> getProfileImg(@PathVariable("email")String email){
-		System.out.println("이미지 가져옴");
 		return us.getProfileImg(email);
 	}
 	
-	// 프로필 이미지 제거
-	@GetMapping("delimg")
-	public @ResponseBody void delimg(@RequestParam("email")String email) {
-		dao.delimg(email);
-	}
-	
-	// 회원 탈퇴 기능 실행
-	@GetMapping("deluser")
-	public @ResponseBody void deluser(@RequestParam("nickname")String nickname, HttpSession session) {
-		us.deluser(nickname, session);
-	}
 }

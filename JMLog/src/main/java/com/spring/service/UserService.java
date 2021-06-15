@@ -106,7 +106,6 @@ public class UserService {
 		vo.setPw(enPw);	// 암호화 한 비밀번호 유저객체의 비밀번호에 셋팅
 		
 		if(dao.join(vo) != 1) {	// 유저정보 insert 실패 시
-			System.out.println("회원가입 실패");
 			mav.setViewName("redirect:/join");	// 회원가입 페이지로 다시 이동
 		}
 		return mav;

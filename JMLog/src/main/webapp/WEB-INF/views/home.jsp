@@ -7,81 +7,6 @@
 </head>
 <body>
 
-<script type="text/javascript">
-
-//이전 버튼 이벤트
-function prev(page, range, rangeSize){
-	var page = ((range)-2 * rangeSize) + 1;	// 무조건 이전 페이지 범위의 가장 앞 페이지로 이동하기 위해 처리
-	var range = range - 1; 
-	
-	// email?page=page&range=range
-	var url = '${cpath}/?page='+ page + '&range=' + range;
-	
-	location.href = url;
-}
-
-// 페이지 번호 클릭
-function pagination(page, range){
-	var url = '${cpath}/?page='+ page + '&range=' + range;
-	
-	location.href = url;
-}
-
-//다음 버튼 이벤트
-function fn_next(page, range, rangeSize) {
-	var page = parseInt((range * rangeSize)) + 1;
-	var range = parseInt(range) + 1;
-
-	var url = '${cpath}/?page='+ page + '&range=' + range;
-
-	location.href = url;
-}
-
-
-var loading = false;	// 중복실행 여부
-var  page = 2;			// 불러올 페이지
-	
-	$(function(){
-		
-	/* // 무한스크롤
-	$(window).scroll(function(){
-		var scroll = $(window).scrollTop(); //스크롤의 현재 위치
-		var docHeight = $(document).height() //도큐먼트 높이로 고정
-		var winHeight = $(window).height() //윈도우창 높이 가변
-		
-		if(scroll == docHeight - winHeight){
-			console.log($(window).scrollTop());
-			console.log('doc height : ' + $(document).height());
-			console.log('win height : ' + $(window).height());
-			getList();
-			page++;
-		}
-	});
-	
-	function getList(){
-		console.log('page :' + page );
-		$.ajax({
-			type: 'get',
-			url: 'home/getBoardList?page='+page,
-			dataType: 'json',
-			succes: function(data){
-				console.log('성공');
-				if(data != null){
-					for(var i in data){
-						$('#postContainer').append('<div>추가됨</div>');
-					}
-				}
-				
-				loading = false;	// 실행 가능 상태
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	}; */
-	
-	});
-</script>
 <header>
 	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
@@ -146,5 +71,6 @@ var  page = 2;			// 불러올 페이지
 	</div>
 </div>
 
+<script src="${cpath }/resources/js/home.js"></script>
 </body>
 </html>

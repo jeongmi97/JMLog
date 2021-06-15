@@ -33,7 +33,6 @@ public class RestBoardController {
 	// 댓글 삭제
 	@GetMapping(value="{nickname}/{idx}/delReply")
 	public String delReply(@RequestParam("idx")int idx) {
-		System.out.println("들어옴");
 		try {
 			ubs.delReply(idx);
 			return "ok";
@@ -46,7 +45,6 @@ public class RestBoardController {
 	// 댓글 수정
 	@PostMapping(value="{nickname}/{idx}/updateReply")
 	public int updateReply(@RequestBody ReplyVO reply) {
-		System.out.println("수정 들어옴");
 		try {
 			ubs.updateReply(reply);
 			return reply.getIdx();
@@ -91,15 +89,4 @@ public class RestBoardController {
 		}
 	}
 	
-	/*// 스크롤 페이징
-	@GetMapping(value="home/getBoardList")
-	public List<BoardVO> getBoardList(@RequestParam("page")int page){
-		System.out.println("page ::: " + page);
-		try {
-			return ubs.getBoardList(page);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}*/
 }

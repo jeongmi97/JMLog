@@ -66,7 +66,6 @@ public class UserBoardService {
 	public ModelAndView userBoard(String nickname, HttpSession session, int page, int range, String category) {
 		ModelAndView mav = new ModelAndView("userBoard");
 		
-		System.out.println("넘어온 이메일 : " + nickname);
 		String email = dao.getEmail(nickname);
 			
 		int listCnt = dao.getBoardListCnt(nickname);	// 계정 전체 게시글 개수
@@ -78,8 +77,6 @@ public class UserBoardService {
 			listCnt = dao.getCateBoardList(param);		// 계정 & 카테고리별 게시글 개수
 		}
 				
-		System.out.println("listCnt: " + listCnt + "page&range : " + page + "&" + range);
-			
 		// 페이징 정보 셋팅
 		Pagination pagination = new Pagination();	
 		pagination.pageInfo(page, range, listCnt);
@@ -181,8 +178,6 @@ public class UserBoardService {
 	public ModelAndView editPost(int idx, String mode, UserVO login) {
 		ModelAndView mav = new ModelAndView("write");
 		
-		System.out.println("idxxxxxxxxmodeeeee : " + idx + mode);
-		
 		BoardVO post = dao.getPost(idx);
 		mav.addObject("post",post);
 		mav.addObject("mode",mode);
@@ -258,7 +253,6 @@ public class UserBoardService {
 
 	// 댓글 수정
 	public void updateReply(ReplyVO reply) {
-		System.out.println("댓글 번호 : "+reply.getIdx()+"댓글 수정 내용 : " + reply.getComment());
 		dao.updateReply(reply);
 	}
 	
@@ -288,11 +282,6 @@ public class UserBoardService {
 		dao.updateCate(param);
 		dao.updatePostCate(param);
 	}
-
-	/*
-	 * // 스크롤 페이징 public List<BoardVO> getBoardList(int page) { int startList =
-	 * ((page-1)*9)+1; return dao.getBoardList(startList); }
-	 */
 
 	// 방명록 이동
 	public ModelAndView guestbook(String nickname) {

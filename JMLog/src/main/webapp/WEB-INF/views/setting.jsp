@@ -33,9 +33,6 @@
 </style>
 </head>
 <body>
-<script type="text/javascript">
-
-</script>
 <header>
 	<%@ include file="/WEB-INF/views/include/header.jsp" %>
 </header>
