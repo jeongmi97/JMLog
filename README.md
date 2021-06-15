@@ -666,7 +666,7 @@
 > >}
 > > ```
 > 로그인중인 유저가 로그인 페이지나 회원가입 페이지로 이동하는 행위를 막습니다.
-> > **AfterLoginInterceptor**
+> > **AfterLoginInterceptor.java**
 > > ```java
 > > @Override
 > >public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
